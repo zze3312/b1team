@@ -54,6 +54,11 @@ void join() {
         strcat(folderPath, joinInfo.id.c_str());
         mkdir(folderPath, 0777);
 
+        strcat(folderPath, "/joinFin.txt");
+        fp = fopen(folderPath, "at");
+        fprintf(fp, "회원가입완료!");
+
+
         cout << "회원가입이 되셨습니다";
 
     }else {
