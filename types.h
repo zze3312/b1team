@@ -17,7 +17,7 @@ typedef struct{
 
 typedef struct{
     std::string id;
-    int pwd;
+    std::string pwd;
 } Login;
 
 typedef struct{
