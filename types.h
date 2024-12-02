@@ -3,11 +3,11 @@
 
 #include <iostream>
 
-#define EQUIP_MASK 0; //머리
-#define EQUIP_ARMOR 1; //갑바
-#define EQUIP_SHOES 2; //신발
-#define EQUIP_GLOVES 3; //장갑
-#define EQUIP_CLOAK 4; //망토
+const int EQUIP_MASK = 0; //머리
+const int EQUIP_ARMOR = 1; //갑바
+const int EQUIP_SHOES = 2; //신발
+const int EQUIP_GLOVES = 3; //장갑
+const int EQUIP_CLOAK = 4; //망토
 
 
 typedef struct{
