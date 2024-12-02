@@ -16,12 +16,12 @@ typedef struct{
 } Position;
 
 typedef struct{
-    int id;
+    std::string id;
     int pwd;
 } Login;
 
 typedef struct{
-    int id;
+    std::string id;
     std::string nickname;
     int lvl;
     int exp;
