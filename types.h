@@ -1,6 +1,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#include <iostream>
+
 #define EQUIP_MASK 0; //머리
 #define EQUIP_ARMOR 1; //갑바
 #define EQUIP_SHOES 2; //신발
