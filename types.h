@@ -3,12 +3,15 @@
 
 #include <iostream>
 
+using namespace std;
+
 const int EQUIP_MASK = 0; //머리
 const int EQUIP_ARMOR = 1; //갑바
 const int EQUIP_SHOES = 2; //신발
 const int EQUIP_GLOVES = 3; //장갑
 const int EQUIP_CLOAK = 4; //망토
 
+const string ROOT_PATH = "/home/lms/project/b1team/data/";
 
 typedef struct{
     int row;
@@ -16,13 +19,13 @@ typedef struct{
 } Position;
 
 typedef struct{
-    std::string id;
-    std::string pwd;
+    string id;
+    string pwd;
 } Login;
 
 typedef struct{
-    std::string id;
-    std::string nickname;
+    string id;
+    string nickname;
     int lvl;
     int exp;
     int nowEquipment[5];
@@ -36,7 +39,7 @@ typedef struct{
 
 typedef struct{
     int id;
-    std::string name;
+    string name;
     int hp;
     int appearanceProbability; //등장확률
     Position pos;
@@ -44,7 +47,7 @@ typedef struct{
 
 typedef struct {
     int id;
-    std::string  name;
+    string  name;
     double damage;
     int coolTime;
     int useSp;
@@ -52,21 +55,21 @@ typedef struct {
 
 typedef struct {
     int id;
-    std::string name;
+    string name;
     Skill skillId[5];
 } Job;
 
 typedef struct {
     int id;
-    std::string  name;
+    string  name;
     int minLevel;
     int useJobId;
 } EquipmentItem;
 
 typedef struct {
     int id;
-    std::string name;
-    std::string explanation;
+    string name;
+    string explanation;
 } ConsumptionItem;
 
 #endif // TYPES_H

@@ -7,7 +7,7 @@
 
 
 void join();
-using namespace std;
+
 
 int main(){
     join();
@@ -24,7 +24,8 @@ void join() {
     cout << "비밀번호 : ";
     cin >> joinInfo.pwd;
 
-    char folderPath[100] = "/home/lms/CLionProjects/b1team/data/";
+    char folderPath[100] = "";
+    strcat(folderPath, ROOT_PATH.c_str());
     strcat(folderPath, "userInfo.txt");
     char buffer[100] = "";
     char flag = 'Y';
@@ -49,7 +50,7 @@ void join() {
         fprintf(fp, "%s,%s\n", joinInfo.id.c_str(), joinInfo.pwd.c_str());
         fclose(fp);
 
-        strcpy(folderPath, "/home/lms/CLionProjects/b1team/data/");
+        strcpy(folderPath, ROOT_PATH.c_str());
         strcat(folderPath, "userData/");
         strcat(folderPath, joinInfo.id.c_str());
         mkdir(folderPath, 0777);
