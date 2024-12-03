@@ -46,13 +46,13 @@ typedef struct{
     int id;
     string name;
     int hp;
-    int appearanceProbability; //등장확률
+    int exp;
     Position pos;
 } Monster;
 
 typedef struct {
     int id;
-    string  name;
+    string name;
     double damage;
     int coolTime;
     int useSp;
@@ -66,7 +66,7 @@ typedef struct {
 
 typedef struct {
     int id;
-    string  name;
+    string name;
     int minLevel;
     int useJobId;
 } EquipmentItem;
