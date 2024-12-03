@@ -28,9 +28,10 @@ typedef struct{
     string nickname;
     int lvl;
     int exp;
-    int nowEquipment[5];
-    int nowWeapon;
+    int nowEquipmentId[5];
+    int nowWeaponId;
     int jobId;
+    string jobName;
     int hp;
     int sp;
     Position pos;
