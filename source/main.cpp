@@ -1,5 +1,7 @@
 #include "header/types.h"
 #include "header/UserClass.h"
+#include "header/MapClass.h"
+#include "header/MonsterClass.h"
 
 int main(){
     srand(time(NULL));
@@ -64,6 +66,20 @@ int main(){
             // 프로그램 종료
             exit(0);
         break;
+        case 4:
+            system("clear");
+            cout << "맵테스트" << endl;
+            MapClass mapFunc;
+            char map[ROW_SIZE][COL_SIZE] = {0};
+            string mapNumber = "0";
+            mapFunc.mapInit(map, mapNumber);
+            mapFunc.mapPrint(map);
+        break;
+        case 5:
+            system("clear");
+            cout << "전투테스트" << endl;
+            MonsterClass msFunc;
+
     }
     sleep(1);
 }
