@@ -19,7 +19,9 @@ int main(){
 }
 
 void mainMenu(){
-    Login loginUser;
+    Login *loginUser = new Login();
+    User *loginCharacter = new User();
+
     char selectMenu = NULL;
     system("clear");
     cout << "메인화면" << endl;
@@ -33,26 +35,26 @@ void mainMenu(){
     switch (selectMenu - '0') {
         case 1:
 
-            if (loginAccount(&loginUser)) {
+            if (loginAccount(loginUser)) {
                 system("clear");
-                cout << "현재 로그인 정보 : " << loginUser.id << endl;
-                User loginCharacter;
-                if (characterSelect(&loginUser, &loginCharacter)) {
+                cout << "현재 로그인 정보 : " << loginUser -> id << endl;
+
+                if (characterSelect(loginUser, loginCharacter)) {
                     system("clear");
                     cout << "캐릭터 선택 성공\n";
-                    cout << "접속한 캐릭터명 : " << loginCharacter.nickname << endl;
-                    // cout << "접속한 캐릭터레벨 : " << loginCharacter.lvl << endl;
-                    // cout << "접속한 캐릭터경험치 : " << loginCharacter.exp << endl;
-                    // cout << "접속한 캐릭터장비1 : " << loginCharacter.nowEquipmentId[0] << endl;
-                    // cout << "접속한 캐릭터장비2 : " << loginCharacter.nowEquipmentId[1] << endl;
-                    // cout << "접속한 캐릭터장비3 : " << loginCharacter.nowEquipmentId[2] << endl;
-                    // cout << "접속한 캐릭터장비4 : " << loginCharacter.nowEquipmentId[3] << endl;
-                    // cout << "접속한 캐릭터장비5 : " << loginCharacter.nowEquipmentId[4] << endl;
-                    // cout << "접속한 캐릭터무기 : " << loginCharacter.nowWeaponId << endl;
-                    // cout << "접속한 캐릭터체력 : " << loginCharacter.hp << endl;
-                    // cout << "접속한 캐릭터스킬포인트 : " << loginCharacter.sp << endl;
-                    // cout << "접속한 캐릭터row : " << loginCharacter.pos.row << endl;
-                    // cout << "접속한 캐릭터col : " << loginCharacter.pos.col << endl;
+                    cout << "접속한 캐릭터명 : " << loginCharacter -> nickname << endl;
+                    // cout << "접속한 캐릭터레벨 : " << loginCharacter -> lvl << endl;
+                    // cout << "접속한 캐릭터경험치 : " << loginCharacter -> exp << endl;
+                    // cout << "접속한 캐릭터장비1 : " << loginCharacter -> nowEquipmentId[0] << endl;
+                    // cout << "접속한 캐릭터장비2 : " << loginCharacter -> nowEquipmentId[1] << endl;
+                    // cout << "접속한 캐릭터장비3 : " << loginCharacter -> nowEquipmentId[2] << endl;
+                    // cout << "접속한 캐릭터장비4 : " << loginCharacter -> nowEquipmentId[3] << endl;
+                    // cout << "접속한 캐릭터장비5 : " << loginCharacter -> nowEquipmentId[4] << endl;
+                    // cout << "접속한 캐릭터무기 : " << loginCharacter -> nowWeaponId << endl;
+                    // cout << "접속한 캐릭터체력 : " << loginCharacter -> hp << endl;
+                    // cout << "접속한 캐릭터스킬포인트 : " << loginCharacter -> sp << endl;
+                    // cout << "접속한 캐릭터row : " << loginCharacter.pos -> row << endl;
+                    // cout << "접속한 캐릭터col : " << loginCharacter.pos -> col << endl;
                 }else {
 
                     cout << "캐릭터 선택 실패" << endl;
@@ -66,6 +68,8 @@ void mainMenu(){
         break;
         case 3:
             cout << "게임을 종료합니다." << endl;
+            delete loginUser;
+            delete loginCharacter;
             exit(0);
         break;
 
