@@ -1,83 +1,6 @@
-#include <cstring>
-#include <unistd.h>
+#include "../header/UserClass.h"
 
-#include "header/types.h"
-#include <sys/stat.h>
-#include <sys/types.h>
-
-void join();
-void mainMenu();
-bool loginAccount(Login *) ;
-bool characterSelect(Login *, User *);
-void characterAccount(Login *);
-
-int main(){
-
-    mainMenu();
-
-    return 0;
-}
-
-void mainMenu(){
-    Login *loginUser = new Login();
-    User *loginCharacter = new User();
-
-    char selectMenu = NULL;
-    system("clear");
-    cout << "메인화면" << endl;
-    cout << "1. 로그인" << endl;
-    cout << "2. 회원가입" << endl;
-    cout << "3. 종료" << endl;
-    cout << "실행하실 메뉴를 선택해주세요" << endl;
-
-    cin >> selectMenu;
-
-    switch (selectMenu - '0') {
-        case 1:
-
-            if (loginAccount(loginUser)) {
-                system("clear");
-                cout << "현재 로그인 정보 : " << loginUser -> id << endl;
-
-                if (characterSelect(loginUser, loginCharacter)) {
-                    system("clear");
-                    cout << "캐릭터 선택 성공\n";
-                    cout << "접속한 캐릭터명 : " << loginCharacter -> nickname << endl;
-                    // cout << "접속한 캐릭터레벨 : " << loginCharacter -> lvl << endl;
-                    // cout << "접속한 캐릭터경험치 : " << loginCharacter -> exp << endl;
-                    // cout << "접속한 캐릭터장비_머리 : " << loginCharacter -> nowEquipmentId[EQUIP_MASK] << endl;
-                    // cout << "접속한 캐릭터장비_갑바 : " << loginCharacter -> nowEquipmentId[EQUIP_ARMOR] << endl;
-                    // cout << "접속한 캐릭터장비_신발 : " << loginCharacter -> nowEquipmentId[EQUIP_SHOES] << endl;
-                    // cout << "접속한 캐릭터장비_장갑 : " << loginCharacter -> nowEquipmentId[EQUIP_GLOVES] << endl;
-                    // cout << "접속한 캐릭터장비_망토 : " << loginCharacter -> nowEquipmentId[EQUIP_CLOAK] << endl;
-                    // cout << "접속한 캐릭터무기 : " << loginCharacter -> nowWeaponId << endl;
-                    // cout << "접속한 캐릭터체력 : " << loginCharacter -> hp << endl;
-                    // cout << "접속한 캐릭터스킬포인트 : " << loginCharacter -> sp << endl;
-                    // cout << "접속한 캐릭터row : " << loginCharacter.pos -> row << endl;
-                    // cout << "접속한 캐릭터col : " << loginCharacter.pos -> col << endl;
-                }else {
-
-                    cout << "캐릭터 선택 실패" << endl;
-                }
-            }else {
-                cout << "로그인 실패" << endl;
-            }
-        break;
-        case 2:
-            join();
-        break;
-        case 3:
-            cout << "게임을 종료합니다." << endl;
-            delete loginUser;
-            delete loginCharacter;
-            exit(0);
-        break;
-
-        sleep(1);
-    }
-}
-
-void join() {
+void UserClass::join() {
     Login joinInfo;
     Login tempUser;
     system("clear");
@@ -131,7 +54,7 @@ void join() {
 
 }
 
-bool loginAccount(Login * loginUser) {
+bool UserClass::login(Login * loginUser) {
     using namespace std;
     Login inputID;
     Login standID;
@@ -179,7 +102,7 @@ bool loginAccount(Login * loginUser) {
 
 }
 
-bool characterSelect(Login *loginUser, User *loginCharacter) {
+bool UserClass::characterSelect(Login *loginUser, User *loginCharacter) {
     char str[30] = "";
     int cnt = 0;
     char selectMenu = NULL;
@@ -254,7 +177,7 @@ bool characterSelect(Login *loginUser, User *loginCharacter) {
     return false;
 }
 
-void characterAccount(Login *loginUser)
+void UserClass::characterAccount(Login *loginUser)
 {
     using namespace std;
     User accountCharacter;
