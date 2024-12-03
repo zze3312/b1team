@@ -79,7 +79,10 @@ int main(){
             system("clear");
             cout << "전투테스트" << endl;
             MonsterClass msFunc;
-            msFunc.setMonsterToMap(map, "1");
+            Monster *testMon = new Monster();
+            loginCharacter -> hp = 100;
+            testMon -> id = 'L';
+            msFunc.meetMonster(testMon, loginCharacter);
     }
     sleep(1);
 }
