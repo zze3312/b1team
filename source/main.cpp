@@ -8,7 +8,10 @@ int main(){
     Login *loginUser = new Login(); //로그인 사용자 정보 담김
     User *loginCharacter = new User(); //접속한 캐릭터 정보 담김
     UserClass userFunc; //사용자 관련 기능 담김
+    MapClass mapFunc;
+    string mapNumber = "0";
     char selectMenu = NULL;
+    char map[ROW_SIZE][COL_SIZE] = {0};
 
     system("clear");
     cout << "메인화면" << endl;
@@ -69,9 +72,6 @@ int main(){
         case 4:
             system("clear");
             cout << "맵테스트" << endl;
-            MapClass mapFunc;
-            char map[ROW_SIZE][COL_SIZE] = {0};
-            string mapNumber = "0";
             mapFunc.mapInit(map, mapNumber);
             mapFunc.mapPrint(map);
         break;
@@ -79,7 +79,7 @@ int main(){
             system("clear");
             cout << "전투테스트" << endl;
             MonsterClass msFunc;
-
+            msFunc.setMonsterToMap(map, "1");
     }
     sleep(1);
 }

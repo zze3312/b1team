@@ -47,7 +47,7 @@ typedef struct{
 } User;
 
 typedef struct{
-    int id;
+    char id;
     string name;
     int hp;
     int exp;
