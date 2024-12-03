@@ -2,6 +2,7 @@
 #include "header/UserClass.h"
 
 int main(){
+    srand(time(NULL));
     Login *loginUser = new Login(); //로그인 사용자 정보 담김
     User *loginCharacter = new User(); //접속한 캐릭터 정보 담김
     UserClass userFunc; //사용자 관련 기능 담김
@@ -31,6 +32,7 @@ int main(){
                     cout << "접속한 캐릭터명 : " << loginCharacter -> nickname << endl;
                     // cout << "접속한 캐릭터레벨 : " << loginCharacter -> lvl << endl;
                     // cout << "접속한 캐릭터경험치 : " << loginCharacter -> exp << endl;
+                    // cout << "접속한 캐릭터레벨업 요구 경험치 : " << loginCharacter -> maxExp << endl;
                     // cout << "접속한 캐릭터장비_머리 : " << loginCharacter -> nowEquipmentId[EQUIP_MASK] << endl;
                     // cout << "접속한 캐릭터장비_갑바 : " << loginCharacter -> nowEquipmentId[EQUIP_ARMOR] << endl;
                     // cout << "접속한 캐릭터장비_신발 : " << loginCharacter -> nowEquipmentId[EQUIP_SHOES] << endl;

@@ -158,6 +158,7 @@ bool UserClass::characterSelect(Login *loginUser, User *loginCharacter) {
         fgets(bfr, sizeof(bfr), fp);
         loginCharacter -> lvl = atoi(strtok(bfr, ","));
         loginCharacter -> exp = atoi(strtok(NULL, ","));
+        loginCharacter -> maxExp = atoi(strtok(NULL, ","));
         loginCharacter -> nowEquipmentId[EQUIP_MASK] = atoi(strtok(NULL, ","));
         loginCharacter -> nowEquipmentId[EQUIP_ARMOR] = atoi(strtok(NULL, ","));
         loginCharacter -> nowEquipmentId[EQUIP_SHOES] = atoi(strtok(NULL, ","));

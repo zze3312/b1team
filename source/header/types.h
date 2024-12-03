@@ -9,6 +9,9 @@
 
 using namespace std;
 
+const int ROW_SIZE = 50;
+const int COL_SIZE = 51;
+
 const int EQUIP_MASK = 0; //머리
 const int EQUIP_ARMOR = 1; //갑바
 const int EQUIP_SHOES = 2; //신발
@@ -32,6 +35,7 @@ typedef struct{
     string nickname;
     int lvl;
     int exp;
+    int maxExp;
     int nowEquipmentId[5];
     int nowWeaponId;
     int jobId;

@@ -29,17 +29,17 @@ const string MAP_ICON[10] = {
     };
 // 도적 🕵️🥷 사망 🤸 
 
-void mapInit(char [50][51], string);
-void mapPrint(char [50][51]);
+void mapInit(char [ROW_SIZE][COL_SIZE], string);
+void mapPrint(char [ROW_SIZE][COL_SIZE]);
 
 int main(){
-    char map[50][51] = {0};
+    char map[ROW_SIZE][COL_SIZE] = {0};
     string mapNumber = "0";
     mapInit(map, mapNumber);
     mapPrint(map);
 }
 
-void mapInit(char map[50][51], string mapNum){
+void mapInit(char map[ROW_SIZE][COL_SIZE], string mapNum){
     char filePath[100] = "";
 
     strcat(filePath, ROOT_PATH.c_str());
@@ -53,9 +53,9 @@ void mapInit(char map[50][51], string mapNum){
     fclose(fp);
 }
 
-void mapPrint(char map[50][51]) {
-    for (int i = 0; i < 50; i++) {
-        for (int j = 0; j < 50; j++) {
+void mapPrint(char map[ROW_SIZE][COL_SIZE]) {
+    for (int i = 0; i < ROW_SIZE; i++) {
+        for (int j = 0; j < COL_SIZE - 1; j++) {
             switch (map[i][j] - '0') {
                 case MAP_ICON_NUM_0: // 0. 바닥
                     printf("%5s", MAP_ICON[MAP_ICON_NUM_0].c_str()); 
