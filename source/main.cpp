@@ -80,9 +80,11 @@ int main(){
             cout << "전투테스트" << endl;
             MonsterClass msFunc;
             Monster *testMon = new Monster();
-            loginCharacter -> hp = 100;
+            loginCharacter -> hp = 10000;
             testMon -> id = 'L';
             msFunc.meetMonster(testMon, loginCharacter);
+
+            //msFunc.setMonsterToMap(map, "5");
     }
     sleep(1);
 }

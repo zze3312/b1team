@@ -1,6 +1,8 @@
 #include "../header/MonsterClass.h"
 
 void MonsterClass::setMonsterToMap(char map[ROW_SIZE][COL_SIZE], const string &mapNum) {
+    //TODO : 맵 벽 추가 이후 해당부분 체크하는 프로세스 추가
+
     const int CREATE_MONSTERS = 20;
     Monster monsterList[CREATE_MONSTERS];
     for (int i = 0; i < CREATE_MONSTERS; i++) {
@@ -159,9 +161,10 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
     char selectMenu = NULL;
     setMonster(monster, loginCharacter);
 
-    while (monster -> hp > 0) {
+    while (monster -> hp > 0 && loginCharacter -> hp > 0) {
         cout << "몬스터 " << monster -> name << "을 만났습니다." << endl;
         cout << "몬스터의 현재 체력 : " << monster -> hp << endl;
+        cout << loginCharacter -> nickname << "의 현재 체력 : " << loginCharacter -> hp << endl;
         cout << "---------------------------------------" << endl;
         cout << "1. 공격" << endl;
         cout << "2. 아이템 사용" << endl;
@@ -172,7 +175,7 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
             case 1:
                 cout << "공격합니다" << endl;
                 // TODO : 데미지수정
-                monster -> hp -= 500;
+                monster -> hp -= 500000;
             break;
             case 2:
                 cout << "아이템을 사용합니다" << endl;
@@ -182,9 +185,45 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
             break;
             default:break;
         }
+        int attack = 0;
+        switch(monster -> id) {
+            case ORC_NUM:
+                attack = rand() % 5 + 10;
+            break;
+            case ZOMBIE_NUM:
+                attack = rand() % 13 + 17;
+            break;
+            case GHOUL_NUM:
+                attack = rand() % 25 + 20;
+            break;
+            case SKELETON_NUM:
+                attack = rand() % 27 + 28;
+            break;
+            case SPA_TOY_NUM:
+                attack = rand() % 43 + 32;
+            break;
+            case SOLDIER_NUM:
+                attack = rand() % 200 + 100;
+            break;
+            case BAPHOMET_NUM:
+                attack = rand() % 270 + 180;
+            break;
+            case LDNK_NUM:
+                attack = rand() % 250 + 300;
+            break;
+            case CSD_NUM:
+                attack = rand() % 800 + 500;
+            break;
+            default: break;
+        }
+        loginCharacter -> hp -= attack;
+    }
+    if (loginCharacter -> hp <= 0) {
+        cout << "몬스터 " << monster -> name << "에게 당했습니다!!" << endl;
+    }else {
+        cout << "몬스터 " << monster -> name << "을 해치웠습니다!!" << endl;
     }
 
-    cout << "몬스터 " << monster -> name << "을 해치웠습니다!!" << endl;
 
 }
 
