@@ -11,7 +11,7 @@ void onSet(EquipmentSet set)
 
     if (set.equipmentSet == 0)
     {
-        cout << "현재 세트효과 0, 효과없음" << endl;
+        cout << "현재 세트효과 없음" << endl;
     }
     else
     {
@@ -39,10 +39,10 @@ void onSet(EquipmentSet set)
     }
     cout << "세트효과 이름 : " << set.setEffectName << endl;
     cout << "세부능력 : " << set.setEffectEX << endl;
-    
+    // TODO : 스탯들 늘려주는거 setEffect.txt에 ,로 추가 
 }
 
-void checkSet()
+void checkSet(int userEquipment[5])
 {
     EquipmentSet set;
     char folderPath[100] = "";
@@ -54,11 +54,11 @@ void checkSet()
     char str[100] = "";
 
     int checkSet[5];
-    int tempItemID;
-    int tempItemEffect;
-    
 
-    int userEquipment[5] = {96,97,98,99,100}; // TODO : 임시, user.nowEquipmentId[5]로 가져올 예정
+    int tempItemID;
+    char * tempItemName;
+    char * tempItemTier;
+    int tempItemEffect;
 
     int i;
 
@@ -66,8 +66,8 @@ void checkSet()
     while(fgets(str, sizeof(str), fp))
     {
         tempItemID = atoi(strtok(str,","));
-        strtok(NULL, ",");
-        strtok(NULL, ",");
+        tempItemName = strtok(NULL, ",");
+        tempItemTier = strtok(NULL, ",");
         tempItemEffect = atoi(strtok(NULL, "\n"));
 
         for (i = 0; i < 5; i++)
@@ -81,34 +81,40 @@ void checkSet()
 
     if (checkSet[0] == checkSet[1] && checkSet[1] == checkSet[2] && checkSet[2] == checkSet[3] && checkSet[3] == checkSet[4])
     {
-        cout << "세트효과 발동!" << endl; // 세트효과 넣기
+        cout << "세트효과 발동!" << endl; // 출력문 없애기 1
         set.equipmentSet = checkSet[0];
         onSet(set);
     }
-    else
+    else // 출력확인용, 추후 삭제
     {
-        cout << "세트 아이템이 아닙니다.." << endl; // 없어도 됨
+        cout << "현재 세트효과 없음" << endl;
     }
     
     // 확인용
-    cout << "1번 아이템 : " << userEquipment[0] << endl;
-    cout << "2번 아이템 : " << userEquipment[1] << endl;
-    cout << "3번 아이템 : " << userEquipment[2] << endl;
-    cout << "4번 아이템 : " << userEquipment[3] << endl;
-    cout << "5번 아이템 : " << userEquipment[4] << endl;
-    cout << "1번 세트 : " << checkSet[0] << endl;
-    cout << "2번 세트 : " << checkSet[1] << endl;
-    cout << "3번 세트 : " << checkSet[2] << endl;
-    cout << "4번 세트 : " << checkSet[3] << endl;
-    cout << "5번 세트 : " << checkSet[4] << endl;
-
-
+    cout << "갑옷 시리얼넘버 : " << userEquipment[0] << endl;
+    cout << "신발 시리얼넘버 : " << userEquipment[1] << endl;
+    cout << "장갑 시리얼넘버 : " << userEquipment[2] << endl;
+    cout << "망토 시리얼넘버 : " << userEquipment[3] << endl;
+    cout << "마스크 시리얼넘버 : " << userEquipment[4] << endl;
+    cout << "갑옷 세트번호 : " << checkSet[0] << endl;
+    cout << "신발 세트번호 : " << checkSet[1] << endl;
+    cout << "장갑 세트번호 : " << checkSet[2] << endl;
+    cout << "망토 세트번호 : " << checkSet[3] << endl;
+    cout << "마스크 세트번호 : " << checkSet[4] << endl;
 }
+
+// TODO : void 현재 적용중인 세트효과 보기, 없다면 부족한 파츠 출력
 
 
 
 int main()
 {
-    checkSet();
+    User user;
+    user.nowEquipmentId[0] = 81; // 추후 삭제
+    user.nowEquipmentId[1] = 82;
+    user.nowEquipmentId[2] = 83;
+    user.nowEquipmentId[3] = 84;
+    user.nowEquipmentId[4] = 85;
+    checkSet(user.nowEquipmentId);
 }
 
