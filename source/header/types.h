@@ -81,4 +81,11 @@ typedef struct {
     string explanation;
 } ConsumptionItem;
 
-#endif // TYPES_H
+typedef struct {
+    int equipmentSet;
+    int addStat[5]; // 스탯 개수 임시 5개
+    string setEffectName;
+    string setEffectEX;
+} EquipmentSet;
+
+#endif // TYPES_H개
