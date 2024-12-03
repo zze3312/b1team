@@ -16,6 +16,11 @@ void MonsterClass::setMonsterToMap(char map[ROW_SIZE][COL_SIZE], const string &m
         int randomPosCol = rand() % 48 + 1;
         bool flag = false;
 
+        if (map[randomPosRow][randomPosCol] != '0') {
+            cout << "악 여긴벽!" << endl;
+            continue;
+        }
+
         for (int i = 0; i < idx; i++) {
             if (monsterList[i].pos.row == randomPosRow && monsterList[i].pos.col == randomPosCol) {
                 flag = true;

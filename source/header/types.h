@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <cstring>
 #include <unistd.h>
+#include <direct.h>
 
 using namespace std;
 
@@ -18,7 +19,8 @@ const int EQUIP_SHOES = 2; //신발
 const int EQUIP_GLOVES = 3; //장갑
 const int EQUIP_CLOAK = 4; //망토
 
-const string ROOT_PATH = "/home/lms/project/b1team/data/";
+//const string ROOT_PATH = "/home/lms/project/b1team/data/";
+const string ROOT_PATH = "C:/Users/jh/CLionProjects/b1team/data/";
 
 typedef struct{
     int row;

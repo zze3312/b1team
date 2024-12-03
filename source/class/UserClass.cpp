@@ -39,7 +39,8 @@ void UserClass::join() {
         strcpy(folderPath, ROOT_PATH.c_str());
         strcat(folderPath, "userData/");
         strcat(folderPath, joinInfo.id.c_str());
-        mkdir(folderPath, 0777);
+        //mkdir(folderPath, 0777);
+        mkdir(folderPath);
 
         strcat(folderPath, "/character.txt");
         fp = fopen(folderPath, "at");
@@ -203,7 +204,8 @@ void UserClass::characterAccount(Login *loginUser)
     strcat(folderPath, loginUser->id.c_str());
     strcat(folderPath, "/");
     strcat(folderPath, accountCharacter.nickname.c_str());
-    mkdir(folderPath, 0777);
+    //mkdir(folderPath, 0777);
+    mkdir(folderPath);
 
     char tempFolderPath[100] = "";
     strcat(folderPath, "/");

@@ -79,12 +79,13 @@ int main(){
             system("clear");
             cout << "전투테스트" << endl;
             MonsterClass msFunc;
-            Monster *testMon = new Monster();
-            loginCharacter -> hp = 10000;
-            testMon -> id = 'L';
-            msFunc.meetMonster(testMon, loginCharacter);
-
-            //msFunc.setMonsterToMap(map, "5");
+            //Monster *testMon = new Monster();
+            // loginCharacter -> hp = 10000;
+            // testMon -> id = 'L';
+            // msFunc.meetMonster(testMon, loginCharacter);
+            mapFunc.mapInit(map, "5");
+            msFunc.setMonsterToMap(map, "5");
+            mapFunc.mapPrint(map);
     }
     sleep(1);
 }
