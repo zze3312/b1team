@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <cstring>
 #include <unistd.h>
+#include <termios.h>
 //#include <direct.h>
 
 using namespace std;
@@ -24,6 +25,8 @@ const int EQUIP_CLOAK = 4; //망토
 
 const string ROOT_PATH = "/home/lms/project/b1team/data/";
 //const string ROOT_PATH = "C:/Users/jh/CLionProjects/b1team/data/";
+
+static termios orig_termios;
 
 typedef struct{
     int row;
@@ -50,7 +53,9 @@ typedef struct{
     int maxHp;
     int sp;
     char dieYn;
+    char beforeBlock;
     Position pos;
+    Position lastPos;
     Position savePos[7];
 } User;
 

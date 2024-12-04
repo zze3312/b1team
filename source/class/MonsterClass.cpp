@@ -12,12 +12,11 @@ void MonsterClass::setMonsterToMap(char map[ROW_SIZE][COL_SIZE], const string &m
 
     int idx = 0;
     while (1) {
-        int randomPosRow = rand() % 48 + 1;
-        int randomPosCol = rand() % 48 + 1;
+        int randomPosRow = rand() % (ROW_SIZE - 2) + 1;
+        int randomPosCol = rand() % (COL_SIZE - 2) + 1;
         bool flag = false;
 
         if (map[randomPosRow][randomPosCol] != '0') {
-            cout << "악 여긴벽!" << endl;
             continue;
         }
 
@@ -104,7 +103,7 @@ void MonsterClass::setMonsterToMap(char map[ROW_SIZE][COL_SIZE], const string &m
 
     for (int i = 0; i < CREATE_MONSTERS; i++) {
         map[monsterList[i].pos.row][monsterList[i].pos.col] = monsterList[i].id;
-        printf("%d. map[%d][%d] = %c\n",i ,monsterList[i].pos.row, monsterList[i].pos.col, monsterList[i].id);
+        //printf("%d. map[%d][%d] = %c\n",i ,monsterList[i].pos.row, monsterList[i].pos.col, monsterList[i].id);
     }
 }
 
@@ -164,9 +163,13 @@ void MonsterClass::setMonster(Monster *monster, User *loginCharacter) {
 
 void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
     char selectMenu = NULL;
+    int randomSoldier = rand() % 20;
+    char soldierYn = 'N';
     setMonster(monster, loginCharacter);
 
+
     while (monster -> hp > 0 && loginCharacter -> hp > 0) {
+        system("clear");
         cout << "몬스터 " << monster -> name << "을 만났습니다." << endl;
         cout << "몬스터의 현재 체력 : " << monster -> hp << endl;
         cout << loginCharacter -> nickname << "의 현재 체력 : " << loginCharacter -> hp << endl;
@@ -209,15 +212,19 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
             break;
             case SOLDIER_NUM:
                 attack = rand() % 200 + 100;
+                if (randomSoldier < 6) soldierYn = 'Y';
             break;
             case BAPHOMET_NUM:
                 attack = rand() % 270 + 180;
+                if (randomSoldier < 4) soldierYn = 'Y';
             break;
             case LDNK_NUM:
                 attack = rand() % 250 + 300;
+                if (randomSoldier < 2) soldierYn = 'Y';
             break;
             case CSD_NUM:
                 attack = rand() % 800 + 500;
+                if (randomSoldier < 1) soldierYn = 'Y';
             break;
             default: break;
         }
@@ -225,10 +232,52 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
     }
     if (loginCharacter -> hp <= 0) {
         cout << "몬스터 " << monster -> name << "에게 당했습니다!!" << endl;
+        if (loginCharacter -> hp < 0) {
+            loginCharacter -> hp = 0;
+            loginCharacter -> dieYn = 'Y';
+        }
+        //TODO : 보상부분 (약탈)
+
+        return;
     }else {
         cout << "몬스터 " << monster -> name << "을 해치웠습니다!!" << endl;
+        //TODO : 용사 등장 프로세스 추가
+        if (soldierYn == 'Y') {
+            Monster *newMonster = new Monster();
+            newMonster -> id = SOLDIER_NUM;
+            setMonster(newMonster, loginCharacter);
+            cout << "다른 용사가 당신이 몬스터를 무찌른 걸 보고 빼앗으러 왔습니다." << endl;
+            cout << "못된 용사 " << newMonster -> name << "을 무찌르고 보상을 차지하세요!" << endl;
+            cout << newMonster -> name << "의 현재 체력 : " << monster -> hp << endl;
+            cout << loginCharacter -> nickname << "의 현재 체력 : " << loginCharacter -> hp << endl;
+            cout << "---------------------------------------" << endl;
+            cout << "1. 공격" << endl;
+            cout << "2. 아이템 사용" << endl;
+            cout << "3. 도망" << endl;
+            cout << "---------------------------------------" << endl;
+            cin >> selectMenu;
+            while (newMonster -> hp > 0 && loginCharacter -> hp > 0) {
+                if (loginCharacter -> hp < 0) {
+                    loginCharacter -> hp = 0;
+                    loginCharacter -> dieYn = 'Y';
+                }
+                switch (selectMenu - '0') {
+                    case 1:
+                        cout << "공격합니다" << endl;
+                    // TODO : 데미지수정
+                    newMonster -> hp -= 500000;
+                    break;
+                    case 2:
+                        cout << "아이템을 사용합니다" << endl;
+                    break;
+                    case 3:
+                        cout << "도망갑니다" << endl;
+                    break;
+                    default:break;
+                }
+            }
+        }
+        //TODO : 보상부분 (획득)
     }
-
-
 }
 
