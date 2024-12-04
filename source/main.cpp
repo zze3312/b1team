@@ -16,6 +16,7 @@ int main(){
     char selectMenu = NULL;
 
     while(1){
+
         system("clear");
         cout << "메인화면" << endl;
         cout << "1. 로그인" << endl;
@@ -47,6 +48,7 @@ int main(){
                 exit(0);
             break;
         }
+        playFunc.echoOn();
         sleep(1);
     }
 }

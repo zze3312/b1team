@@ -25,7 +25,6 @@ void MapClass::setMap(char map[ROW_SIZE][COL_SIZE], string mapNum){
     fclose(fp);
 }
 
-
 void MapClass::printMap(char map[ROW_SIZE][COL_SIZE], User *loginCharacter) {
     int startCol = 0;
     int endCol = 0;
@@ -116,7 +115,12 @@ void MapClass::printMap(char map[ROW_SIZE][COL_SIZE], User *loginCharacter) {
                     printf("%5s", MAP_ICON[18].c_str());
                 break;
                 case USER_NUM:
-                    printf("%5s", MAP_ICON[19].c_str());
+                    if (loginCharacter -> dieYn == 'Y') {
+                        printf("%5s", MAP_ICON[20].c_str());
+                    }else {
+                        printf("%5s", MAP_ICON[19].c_str());
+                    }
+
                 break;
             }
         }

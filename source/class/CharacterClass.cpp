@@ -194,19 +194,6 @@ void CharacterClass::setCharacter(char map[ROW_SIZE][COL_SIZE], User *loginChara
     // TODO : 던전 출입구 마주할 시 좌표 이동해주는 프로세스 추가
 }
 
-void CharacterClass::die(User *loginCharacter) {
-    cout << "------------------------------------------------" << endl;
-    cout << " 죽었습니다." << endl;
-    cout << " 마을로 이동합니다." << endl;
-    cout << "------------------------------------------------" << endl;
-
-    loginCharacter -> pos.row = RESET_ROW;
-    loginCharacter -> pos.col = RESET_COL;
-    loginCharacter -> dieYn = 'Y';
-
-    sleep(3);
-}
-
 // TODO : 골드 추가 후 금액지불 프로세스 추가해야됨(파라메터도 수정해야됨)
 void CharacterClass::rebirth(User *loginCharacter, int *userGold) {
     int payGold = rand() % 500 + (loginCharacter -> lvl * 100); //레벨 비례 증가
@@ -321,11 +308,6 @@ void CharacterClass::getJobName(User *loginCharacter) {
     }
 }
 
-// 위 : 27 91 65
-// 아래 : 27 91 66
-// 우 : 27 91 67
-// 좌 : 27 91 68
-
 void CharacterClass::move(User *loginCharacter, char moveKey) {
     loginCharacter -> lastPos.row = loginCharacter -> pos.row;
     loginCharacter -> lastPos.col = loginCharacter -> pos.col;
@@ -341,4 +323,32 @@ void CharacterClass::move(User *loginCharacter, char moveKey) {
     }else {
         cout << "잘못된 입력입니다." << endl;
     }
+}
+
+void CharacterClass::gameSave(User *loginCharacter) {
+    string filePath = ROOT_PATH;
+    filePath += "userData/" + loginCharacter -> id + "/" + loginCharacter -> nickname + "/" + "characterInfo.txt";
+    FILE *fp = fopen(filePath.c_str(), "wt");
+
+    if (fp == NULL) {
+        cout << "잘못된 파일입니다." << endl;
+    }
+
+    fprintf(fp, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%c,%d,%d,%d,%d,%s\n"
+        , loginCharacter -> lvl
+        , loginCharacter -> exp
+        , loginCharacter -> nowEquipmentId[EQUIP_MASK]
+        , loginCharacter -> nowEquipmentId[EQUIP_ARMOR]
+        , loginCharacter -> nowEquipmentId[EQUIP_SHOES]
+        , loginCharacter -> nowEquipmentId[EQUIP_GLOVES]
+        , loginCharacter -> nowEquipmentId[EQUIP_CLOAK]
+        , loginCharacter -> nowWeaponId
+        , loginCharacter -> jobId
+        , loginCharacter -> dieYn
+        , loginCharacter -> hp
+        , loginCharacter -> sp
+        , loginCharacter -> pos.row
+        , loginCharacter -> pos.col
+        , loginCharacter -> pos.floor.c_str());
+    fclose(fp);
 }

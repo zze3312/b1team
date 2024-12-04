@@ -1,8 +1,6 @@
 #include "../header/MonsterClass.h"
 
 void MonsterClass::setMonsterToMap(char map[ROW_SIZE][COL_SIZE], const string &mapNum) {
-    //TODO : 맵 벽 추가 이후 해당부분 체크하는 프로세스 추가
-
     const int CREATE_MONSTERS = 20;
     Monster monsterList[CREATE_MONSTERS];
     for (int i = 0; i < CREATE_MONSTERS; i++) {
@@ -235,6 +233,13 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
         if (loginCharacter -> hp < 0) {
             loginCharacter -> hp = 0;
             loginCharacter -> dieYn = 'Y';
+            loginCharacter -> pos.row = RESET_ROW;
+            loginCharacter -> pos.col = RESET_COL;
+            loginCharacter -> lastPos.row = RESET_ROW;
+            loginCharacter -> lastPos.col = RESET_COL;
+            loginCharacter -> beforeBlock = '0';
+            loginCharacter -> pos.floor = '0';
+            loginCharacter -> dieYn = 'Y';
         }
         //TODO : 보상부분 (약탈)
 
@@ -259,6 +264,13 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
             while (newMonster -> hp > 0 && loginCharacter -> hp > 0) {
                 if (loginCharacter -> hp < 0) {
                     loginCharacter -> hp = 0;
+                    loginCharacter -> dieYn = 'Y';
+                    loginCharacter -> pos.row = RESET_ROW;
+                    loginCharacter -> pos.col = RESET_COL;
+                    loginCharacter -> lastPos.row = RESET_ROW;
+                    loginCharacter -> lastPos.col = RESET_COL;
+                    loginCharacter -> beforeBlock = '0';
+                    loginCharacter -> pos.floor = '0';
                     loginCharacter -> dieYn = 'Y';
                 }
                 switch (selectMenu - '0') {

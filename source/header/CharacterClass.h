@@ -15,6 +15,7 @@ class CharacterClass{
         void getWork(User *);
         void getJobName(User *);
         void move(User *, char);
+        void gameSave(User *);
 };
 
 

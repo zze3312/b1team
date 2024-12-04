@@ -25,7 +25,6 @@ const int EQUIP_CLOAK = 4; //망토
 
 const string ROOT_PATH = "/home/lms/project/b1team/data/";
 //const string ROOT_PATH = "C:/Users/jh/CLionProjects/b1team/data/";
-
 static termios orig_termios;
 
 typedef struct{
