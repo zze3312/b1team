@@ -13,6 +13,9 @@ using namespace std;
 const int ROW_SIZE = 50;
 const int COL_SIZE = 51;
 
+const int RESET_ROW = 18;
+const int RESET_COL = 25;
+
 const int EQUIP_MASK = 0; //머리
 const int EQUIP_ARMOR = 1; //갑바
 const int EQUIP_SHOES = 2; //신발
@@ -25,6 +28,7 @@ const string ROOT_PATH = "/home/lms/project/b1team/data/";
 typedef struct{
     int row;
     int col;
+    string floor;
 } Position;
 
 typedef struct{
@@ -43,7 +47,9 @@ typedef struct{
     int jobId;
     string jobName;
     int hp;
+    int maxHp;
     int sp;
+    char dieYn;
     Position pos;
     Position savePos[7];
 } User;
