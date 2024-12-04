@@ -222,13 +222,11 @@ void openInventory(Inventory * inv)
         if (choice == 1)
         {
             equipInventory(inv);
-            cout << "1번\n";
             continue;
         }
         else if (choice == 2)
         {
             consumableInventory(inv);
-            cout << "2번\n";
             continue;
         }
         else if (choice == 3)
