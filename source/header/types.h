@@ -27,18 +27,18 @@ const string ROOT_PATH = "/home/lms/project/b1team/data/";
 //const string ROOT_PATH = "C:/Users/jh/CLionProjects/b1team/data/";
 static termios orig_termios;
 
-typedef struct{
+struct Position{
     int row;
     int col;
     int floor;
-} Position;
+};
 
-typedef struct{
+struct Login{
     string id;
     string pwd;
-} Login;
+};
 
-typedef struct{
+struct User{
     string id;
     string nickname;
     int lvl;
@@ -53,51 +53,52 @@ typedef struct{
     int sp;
     char dieYn;
     char beforeBlock;
+    int minDamage;
     Position pos;
     Position lastPos;
     Position savePos[7];
-} User;
+};
 
-typedef struct{
+struct Monster{
     char id;
     string name;
     int hp;
     int exp;
     Position pos;
-} Monster;
+};
 
-typedef struct {
+struct Skill{
     int id;
     string name;
     double damage;
     int coolTime;
     int useSp;
-} Skill;
+};
 
-typedef struct {
+struct Job{
     int id;
     string name;
     Skill skillId[5];
-} Job;
+};
 
-typedef struct {
+struct EquipmentItem{
     int id;
     string name;
     int minLevel;
     int useJobId;
-} EquipmentItem;
+};
 
-typedef struct {
+struct ConsumptionItem{
     int id;
     string name;
     string explanation;
-} ConsumptionItem;
+};
 
-typedef struct {
+struct EquipmentSet{
     int equipmentSet;
     int addStat[5]; // 스탯 개수 임시 5개
     string setEffectName;
     string setEffectEX;
-} EquipmentSet;
+};
 
 #endif // TYPES_H개
