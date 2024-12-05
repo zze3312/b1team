@@ -6,6 +6,7 @@
 class NpcClass {
     public:
         void meetPriest(User *);
+        void meetFight(Monster *, User *, int *);
         void getJobName(User *);
     private:
         void rebirth(User *, int *);

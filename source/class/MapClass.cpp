@@ -292,6 +292,36 @@ void MapClass::mapEvent(User *loginCharacter) {
     else if (loginCharacter -> beforeBlock == MAP_ICON_NUM_8) {
         npcFunc.meetPriest(loginCharacter);
     }
+    //npc_결투장소환사를 만나면
+    else if (loginCharacter -> beforeBlock == MAP_ICON_NUM_5) {
+        int userGold = 10000;
+        Monster *mon = new Monster();
+        int randomMon = rand() % 7;
+        switch (randomMon) {
+            case 0:
+                mon -> id = ORC_NUM;
+            break;
+            case 1:
+                mon -> id = ZOMBIE_NUM;
+            break;
+            case 2:
+                mon -> id = GHOUL_NUM;
+            break;
+            case 3:
+                mon -> id = SKELETON_NUM;
+            break;
+            case 4:
+                mon -> id = SPA_TOY_NUM;
+            break;
+            case 5:
+                mon -> id = SOLDIER_NUM;
+            break;
+            case 6:
+                mon -> id = BAPHOMET_NUM;
+            break;
+        }
+        npcFunc.meetFight(mon, loginCharacter, &userGold);
+    }
 
     //죽었다면
     if (loginCharacter -> dieYn == 'Y') {

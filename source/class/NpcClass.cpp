@@ -1,4 +1,7 @@
 #include "../header/NpcClass.h"
+#include "../header/MonsterClass.h"
+
+MonsterClass msFunc;
 
 void NpcClass::meetPriest(User *loginCharacter) {
     //TODO : 성직자 왜움직임???? 성직자 왜 해치워짐????
@@ -218,4 +221,46 @@ void NpcClass::getJobName(User *loginCharacter) {
             loginCharacter -> jobName = "무직";
         break;
     }
+}
+
+void NpcClass::meetFight(Monster *mon, User *loginCharacter, int *gold) {
+    char selectMenu = NULL;
+    system("clear");
+    cout << "---------------------------------------" << endl;
+    usleep(500000);
+    cout << " 여기는 몬스터를 랜덤으로 소환하여 전투할 수 있는 결투장입니다." << endl;
+    usleep(500000);
+    cout << " 몬스터를 소환하는데 5000골드가 소모됩니다." << endl;
+    usleep(500000);
+    cout << " 어떤 몬스터가 소환될지 모릅니다." << endl;
+    usleep(500000);
+    cout << " 그래도 소환하시겠습니까?." << endl;
+    usleep(500000);
+    cout << "---------------------------------------" << endl;
+    usleep(500000);
+    cout << " 1. 소환" << endl;
+    usleep(500000);
+    cout << " 2. 취소" << endl;
+    usleep(500000);
+    cout << "---------------------------------------" << endl;
+    cin >> selectMenu;
+
+    if (towupper(selectMenu) == '1') {
+        if (*gold >= 5000) {
+            cout << " 몬스터를 소환합니다." << endl;
+            usleep(500000);
+            msFunc.meetMonster(mon, loginCharacter);
+        }else {
+            cout << " 골드가 부족합니다." << endl;
+            usleep(500000);
+            cout << " 골드가 부족하면 소환할 수 없습니다." << endl;
+            usleep(500000);
+            cout << " 사채업자에게 돈을 빌려오세요." << endl;
+            usleep(500000);
+        }
+    }else {
+        cout << " 안녕히가세요." << endl;
+        usleep(500000);
+    }
+
 }

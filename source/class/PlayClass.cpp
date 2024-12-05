@@ -29,6 +29,7 @@ void PlayClass::play(User *loginCharacter) {
         }else if (inputKey[0] == 47) {
             //TODO : / 이후 사용한 단축키 기능 실행
             cout << "동작할 작업" << endl;
+            cout << " i : 인벤토리" << endl;
             cout << " q : 종료" << endl;
             read(0, &inputKey, sizeof(inputKey));
             //cout << inputKey << endl;
