@@ -53,7 +53,7 @@ typedef struct {
 
 } Inventory;
 
-void updateInventory(Inventory * inv, User * user)
+void updateInventory(Inventory * inv, User * user) // 미완성
 {
     // 장비 불러오기
     string folderPath = ROOT_PATH + "userData/" + "doyeop" + "/" + "teamless" + "/equipInv.txt";
@@ -100,7 +100,7 @@ void updateInventory(Inventory * inv, User * user)
     fclose(fp3);
 }
 
-void dropItem(Inventory inv) // 얻은 아이템이 뭔지 확정하고, 인벤토리에 추가까지 해주는 함수
+void dropItem(Inventory inv) // 완성, 얻은 아이템이 뭔지 확정하고, 인벤토리에 추가까지 해주는 함수
 {
     srand((int)time(NULL));
 
@@ -155,7 +155,7 @@ void dropItem(Inventory inv) // 얻은 아이템이 뭔지 확정하고, 인벤�
 
 }
 
-void readInfoItemName(Inventory * inv)
+void readInfoItemName(Inventory * inv) // 완성
 {
     // 장비 정보 불러오기
     string folderPath = ROOT_PATH + "item/equipment.txt";
@@ -243,18 +243,18 @@ void readInfoItemName(Inventory * inv)
 
 }
 
-void tryEnhance(Inventory * inv, User * user, int tryConsumable)
+void tryEnhance(Inventory * inv, User * user, int tryConsumable) // 미완성
 {
     while (1)
     {
         cout << "               강화할 장비를 선택해주세요.\n";
         cout << "=======================================================\n";
-        cout << "1. " << user->nowWeaponId << endl;
-        cout << "2. " << user->nowEquipmentId[0] << endl;
-        cout << "3. " << user->nowEquipmentId[1] << endl;
-        cout << "4. " << user->nowEquipmentId[2] << endl;
-        cout << "5. " << user->nowEquipmentId[3] << endl;
-        cout << "6. " << user->nowEquipmentId[4] << endl;
+        cout << "1. " << user->nowEquipmentId[0] << endl;
+        cout << "2. " << user->nowEquipmentId[1] << endl;
+        cout << "3. " << user->nowEquipmentId[2] << endl;
+        cout << "4. " << user->nowEquipmentId[3] << endl;
+        cout << "5. " << user->nowEquipmentId[4] << endl;
+        cout << "6. " << user->nowWeaponId << endl;
         cout << "=======================================================\n";
 
         string choice;
@@ -274,13 +274,13 @@ void tryEnhance(Inventory * inv, User * user, int tryConsumable)
 
         if (prob == 0)
         {
-            if (choice == "1")
+            if (choice == "6")
             {
-                user->nowWeaponId; 
+                cout << "강화 성공!\n"; // TODO : 구현 예정
             }
-            else if (stoi(choice) > 1 && stoi(choice) < 7)
+            else if (stoi(choice) > 0 && stoi(choice) < 6)
             {
-                /* code */
+                cout << "강화 성공!\n"; // TODO : 구현 예정
             }
             else
             {
@@ -289,13 +289,26 @@ void tryEnhance(Inventory * inv, User * user, int tryConsumable)
         }
         else
         {
-            cout << "파괴!\n";
+            if (choice == "6")
+            {
+                cout << inv->equipmentList[user->nowWeaponId] << "가 파괴되었습니다...\n";
+                user->nowWeaponId = 0;
+            }
+            else if (stoi(choice) > 0 && stoi(choice) < 6)
+            {
+                cout << inv->equipmentList[user->nowEquipmentId[stoi(choice)-1]] << "가 파괴되었습니다...\n";
+                user->nowEquipmentId[stoi(choice)-1] = 0;
+            }
+            else
+            {
+                continue;
+            }
         }
         
     }
 }
 
-void wearEquip(Inventory * inv, User * user, int tryEquip)
+void wearEquip(Inventory * inv, User * user, int tryEquip) // 완성
 {
     inv->equipTypeList[tryEquip];
     
@@ -330,7 +343,7 @@ void wearEquip(Inventory * inv, User * user, int tryEquip)
     
 }
 
-void useConsumable(Inventory * inv, User * user, int tryConsumable)
+void useConsumable(Inventory * inv, User * user, int tryConsumable) // 미완성
 {
     switch (tryConsumable)
     {
@@ -375,20 +388,23 @@ void useConsumable(Inventory * inv, User * user, int tryConsumable)
     
 }
 
-void showNowEquip(Inventory * inv, User * user)
+void showNowEquip(Inventory * inv, User * user) // 완성
 {
     while (1)
     {
         cout << "========================================\n";
         cout << "  착용중인 장비       (q. 뒤로가기)\n";
         cout << "========================================\n";
-        cout << user->nowEquipmentId[0] << endl;
-        cout << user->nowEquipmentId[1] << endl;
-        cout << user->nowEquipmentId[2] << endl;
-        cout << user->nowEquipmentId[3] << endl;
-        cout << user->nowEquipmentId[4] << endl;
-        cout << user->nowWeaponId << endl;
+
         cout << "========================================\n";
+        cout << "1. 마스크:" << user->nowEquipmentId[0] << endl;
+        cout << "2. 갑옷:" << user->nowEquipmentId[1] << endl;
+        cout << "3. 신발:" << user->nowEquipmentId[2] << endl;
+        cout << "4. 장갑:" << user->nowEquipmentId[3] << endl;
+        cout << "5. 망토:" << user->nowEquipmentId[4] << endl;
+        cout << "6. 무기:" << user->nowWeaponId << endl;
+        cout << "========================================\n";
+        cout << "원하는 번호를 입력해서 착용해제\n";
 
         string choice;
         cin >> choice;
@@ -398,6 +414,20 @@ void showNowEquip(Inventory * inv, User * user)
         {
             break;
         }
+        else if (stoi(choice) > 0 && stoi(choice) < 6)
+        {
+            cout << "방어구 " << inv->equipNameList[user->nowEquipmentId[stoi(choice)-1]] << " 장착 해제\n";
+            inv->equipmentList[user->nowEquipmentId[stoi(choice)-1]]++;
+            user->nowEquipmentId[stoi(choice)-1] = 0;
+            continue;
+        }
+        else if (choice == "6")
+        {
+            cout << "무기 " << inv->equipNameList[user->nowWeaponId-1] << " 장착 해제\n";
+            inv->equipmentList[user->nowWeaponId-1]++;
+            user->nowWeaponId = 0;
+            continue;
+        }
         else
         {
             continue;
@@ -405,7 +435,7 @@ void showNowEquip(Inventory * inv, User * user)
     }
 }
 
-void equipInventory(Inventory * inv, User * user)
+void equipInventory(Inventory * inv, User * user) // 완성
 {
     int i;
     
@@ -494,7 +524,7 @@ void equipInventory(Inventory * inv, User * user)
     }
 }
 
-void consumableInventory(Inventory * inv, User * user)
+void consumableInventory(Inventory * inv, User * user) // 완성
 {
     int i;
 
@@ -575,7 +605,7 @@ void consumableInventory(Inventory * inv, User * user)
 
 }
 
-void openInventory(Inventory * inv, User * user)
+void openInventory(Inventory * inv, User * user) // 완성
 {
     string choice;
     
@@ -621,7 +651,7 @@ void openInventory(Inventory * inv, User * user)
 
 
 
-void onSet(EquipmentSet set)
+void onSet(EquipmentSet set) // 미완성, 세트효과쪽은 아직 더 다듬을 필요 o
 {
     char str[100] = "";
     int tempSetID;
@@ -663,7 +693,7 @@ void onSet(EquipmentSet set)
     // TODO : 스탯들 늘려주는거 setEffect.txt에 ,로 추가 
 }
 
-void checkSet(int userEquipment[5])
+void checkSet(int userEquipment[5]) // 완성?
 {
     EquipmentSet set;
     char folderPath[100] = "";
