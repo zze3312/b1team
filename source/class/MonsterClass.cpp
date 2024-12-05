@@ -175,7 +175,10 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
         return;
     }else if (monster -> hp <= 0){
         cout << monster -> name << "을 해치웠습니다!!" << endl;
-        loginCharacter -> beforeBlock = '0';
+        if (!(isdigit(loginCharacter -> beforeBlock))) {
+            loginCharacter -> beforeBlock = '0';
+        }
+
         //sleep(1);
         usleep(500000);
         loginCharacter -> exp += monster -> exp;
