@@ -7,17 +7,18 @@
 class MapClass {
     private:
         char (*map)[51] = new char[ROW_SIZE][COL_SIZE];
+        Position *downFloor = new Position;
         enum {
             MAP_ICON_NUM_0  = '0',
             MAP_ICON_NUM_1  = '1',
             MAP_ICON_NUM_2  = '2',
             MAP_ICON_NUM_3  = '3',
             MAP_ICON_NUM_4  = '4',
-            MAP_ICON_NUM_5  = '5',
-            MAP_ICON_NUM_6  = '6',
-            MAP_ICON_NUM_7  = '7',
-            MAP_ICON_NUM_8  = '8',
-            MAP_ICON_NUM_9  = '9',
+            MAP_ICON_NUM_5  = '5', //결투장
+            MAP_ICON_NUM_6  = '6', //던전입구
+            MAP_ICON_NUM_7  = '7', //잡화상인
+            MAP_ICON_NUM_8  = '8', //성직자
+            MAP_ICON_NUM_9  = '9', //대장장이
             ORC_NUM         = 'O',  //10
             ZOMBIE_NUM      = 'Z',  //11
             GHOUL_NUM       = 'G',  //12
@@ -63,6 +64,9 @@ class MapClass {
         void printMap(User *);
         void printStatus(User *);
         void charGoPortal(User *);
+        void mapEvent(User *);
+        void setDownFloor(Position);
+        void moveFloor(User *);
 };
 
 

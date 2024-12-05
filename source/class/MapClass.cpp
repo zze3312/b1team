@@ -1,9 +1,11 @@
 #include "../header/MapClass.h"
 #include "../header/MonsterClass.h"
 #include "../header/CharacterClass.h"
+#include "../header/NpcClass.h"
 
 MonsterClass monFunc;
 CharacterClass userFunc;
+NpcClass npcFunc;
 
 void MapClass::mapInit(User *loginCharacter) {
     setMap(loginCharacter -> pos.floor);
@@ -39,8 +41,12 @@ Position MapClass::setPortal() {
 }
 
 void MapClass::setCharacter(User *loginCharacter) {
+    if (loginCharacter -> jobName.empty()) {
+        npcFunc.getJobName(loginCharacter);
+    }
 
-    if (!(map[loginCharacter -> pos.row][loginCharacter -> pos.col] >= '1' && map[loginCharacter -> pos.row][loginCharacter -> pos.col] <= '9') || map[loginCharacter -> pos.row][loginCharacter -> pos.col] == '6') {
+    if (!(map[loginCharacter -> pos.row][loginCharacter -> pos.col] >= '1' && map[loginCharacter -> pos.row][loginCharacter -> pos.col] <= '4')
+        || map[loginCharacter -> pos.row][loginCharacter -> pos.col] == '6') {
         map[loginCharacter -> lastPos.row][loginCharacter -> lastPos.col] = loginCharacter -> beforeBlock;
         loginCharacter -> beforeBlock = map[loginCharacter -> pos.row][loginCharacter -> pos.col];
 
@@ -87,64 +93,49 @@ void MapClass::setMonster(User *loginCharacter) {
     }
 
     for (int i = 0; i < CREATE_MONSTERS; i++) {
-        int randomSoldier = rand() % 10;
-        int randomBaphomet = rand() % 10;
-        int randomLdnk = rand() % 10;
-        int randomCsd = rand() % 20;
-        int randomMonster = 0;
+        int randomMonster = rand() % 20;
         switch (loginCharacter->pos.floor) {
             case 1:
-                monsterList[i].id = ORC_NUM;
-                if (randomSoldier < 3) monsterList[i].id = SOLDIER_NUM;
+                if (randomMonster < 6) monsterList[i].id = SOLDIER_NUM;
+                else monsterList[i].id = ORC_NUM;
             break;
             case 2:
-                monsterList[i].id = ZOMBIE_NUM;
-                if (randomSoldier < 3) monsterList[i].id = SOLDIER_NUM;
+                if (randomMonster < 6) monsterList[i].id = SOLDIER_NUM;
+                else monsterList[i].id = ZOMBIE_NUM;
             break;
             case 3:
-                randomMonster = rand() % 2;
-
-                if (randomMonster == 0) monsterList[i].id = ZOMBIE_NUM;
+                if (randomMonster < 6) monsterList[i].id = SOLDIER_NUM;
+                else if (randomMonster < 14) monsterList[i].id = ZOMBIE_NUM;
                 else monsterList[i].id = GHOUL_NUM;
-
-                if (randomSoldier < 3) monsterList[i].id = SOLDIER_NUM;
             break;
             case 4:
-                randomMonster = rand() % 3;
-
-                if (randomMonster == 0) monsterList[i].id = ZOMBIE_NUM;
-                else if (randomMonster == 1) monsterList[i].id = GHOUL_NUM;
+                if (randomMonster < 6) monsterList[i].id = SOLDIER_NUM;
+                else if (randomMonster < 10)monsterList[i].id = ZOMBIE_NUM;
+                else if (randomMonster < 15) monsterList[i].id = GHOUL_NUM;
                 else monsterList[i].id = SKELETON_NUM;
-
-                if (randomSoldier < 3) monsterList[i].id = SOLDIER_NUM;
             break;
             case 5:
-                randomMonster = rand() % 3;
-
-                if (randomMonster == 0) monsterList[i].id = GHOUL_NUM;
-                else if (randomMonster == 1) monsterList[i].id = SKELETON_NUM;
+                if (randomMonster < 6) monsterList[i].id = SOLDIER_NUM;
+                else if (randomMonster < 10) monsterList[i].id = BAPHOMET_NUM;
+                else if (randomMonster < 14)monsterList[i].id = GHOUL_NUM;
+                else if (randomMonster < 17) monsterList[i].id = SKELETON_NUM;
                 else monsterList[i].id = SPA_TOY_NUM;
-
-                if (randomSoldier < 3) monsterList[i].id = SOLDIER_NUM;
-                if (randomBaphomet < 2) monsterList[i].id = BAPHOMET_NUM;
             break;
             case 6:
-                randomMonster = rand() % 3;
-
-                if (randomMonster == 0) monsterList[i].id = GHOUL_NUM;
-                else if (randomMonster == 1) monsterList[i].id = SKELETON_NUM;
+                if (randomMonster < 6) monsterList[i].id = SOLDIER_NUM;
+                else if (randomMonster < 10) monsterList[i].id = BAPHOMET_NUM;
+                else if (randomMonster < 12) monsterList[i].id = LDNK_NUM;
+                else if (randomMonster < 16)monsterList[i].id = GHOUL_NUM;
+                else if (randomMonster < 17) monsterList[i].id = SKELETON_NUM;
                 else monsterList[i].id = SPA_TOY_NUM;
-
-                if (randomSoldier < 3) monsterList[i].id = SOLDIER_NUM;
-                if (randomBaphomet < 2) monsterList[i].id = BAPHOMET_NUM;
-                if (randomLdnk < 1) monsterList[i].id = LDNK_NUM;
             break;
             case 7:
-                monsterList[i].id = SPA_TOY_NUM;
-
-                if (randomSoldier < 3) monsterList[i].id = SOLDIER_NUM;
-                if (randomBaphomet < 2) monsterList[i].id = BAPHOMET_NUM;
-                if (randomCsd < 1) monsterList[i].id = CSD_NUM;
+                if (randomMonster < 6) monsterList[i].id = SOLDIER_NUM;
+                else if (randomMonster < 10) monsterList[i].id = BAPHOMET_NUM;
+                else if (randomMonster < 11) monsterList[i].id = CSD_NUM;
+                else if (randomMonster < 14)monsterList[i].id = GHOUL_NUM;
+                else if (randomMonster < 17) monsterList[i].id = SKELETON_NUM;
+                else monsterList[i].id = SPA_TOY_NUM;
             break;
         }
     }
@@ -267,12 +258,91 @@ void MapClass::printStatus(User *loginCharacter) {
     cout << " 레벨     : " << loginCharacter -> lvl << endl;
     cout << " 경험치   : " << loginCharacter -> exp << " / " << loginCharacter -> maxExp << endl;
     cout << " 체력     : " << loginCharacter -> hp << " / " << loginCharacter -> maxHp <<endl;
+    cout << " 직업     : " << loginCharacter -> jobName << endl;
     cout << " 상태     : ";
     if (loginCharacter -> dieYn == 'N')
         cout << "정상" << endl;
     else
         cout << "죽음" << endl;
-    cout << " 현재 층   : " << loginCharacter -> pos.floor << "층" << endl;
+    cout << " 현재 층   : ";
+    if (loginCharacter -> pos.floor > 0) {
+        cout << loginCharacter -> pos.floor << "층" << endl;
+    }else {
+        cout << "마을" << endl;
+    }
+
+
     cout << " 현재 좌표   : [" << loginCharacter -> pos.row << ", " << loginCharacter -> pos.col << "]" << endl;
     cout << "------------------------------------------------" << endl;
+}
+
+void MapClass::mapEvent(User *loginCharacter) {
+    //포탈아이콘을 만나면
+    if (loginCharacter -> beforeBlock == MAP_ICON_NUM_6) {
+        moveFloor(loginCharacter);
+    }
+    //몬스터를 만나면
+    else if (!isdigit(loginCharacter -> beforeBlock)) {
+        Monster *mon = new Monster();
+        mon -> id = loginCharacter -> beforeBlock;
+        monFunc.meetMonster(mon, loginCharacter);
+        delete mon;
+    }
+    //npc_성직자를 만나면
+    else if (loginCharacter -> beforeBlock == MAP_ICON_NUM_8) {
+        npcFunc.meetPriest(loginCharacter);
+    }
+
+    //죽었다면
+    if (loginCharacter -> dieYn == 'Y') {
+        mapInit(loginCharacter);
+        setCharacter(loginCharacter);
+    }
+
+
+}
+
+void MapClass::moveFloor(User *loginCharacter) {
+    //올라가는지 내려가는지 체크
+    if ((loginCharacter -> pos.row == downFloor -> row && loginCharacter -> pos.col == downFloor -> col) && loginCharacter -> pos.floor != 0 ) {
+        loginCharacter -> pos.floor --;
+    }else {
+        loginCharacter -> pos.floor ++;
+    }
+
+    //던전 안
+    mapInit(loginCharacter);
+    if (loginCharacter -> pos.floor == 7) {
+        *downFloor = setPortal();
+
+        //해당층 입구포탈 위치로 간다
+        loginCharacter -> pos.row = downFloor -> row;
+        loginCharacter -> pos.col = downFloor -> col;
+        loginCharacter -> lastPos.row = downFloor -> row;
+        loginCharacter -> lastPos.col = downFloor -> col;
+    }else if (loginCharacter -> pos.floor != 0) {
+        //포탈의 위치 바꾸고
+        setPortal();
+        *downFloor = setPortal();
+
+        //해당층 입구포탈 위치로 간다
+        loginCharacter -> pos.row = downFloor -> row;
+        loginCharacter -> pos.col = downFloor -> col;
+        loginCharacter -> lastPos.row = downFloor -> row;
+        loginCharacter -> lastPos.col = downFloor -> col;
+
+    }else {
+        //던전 > 마을
+        *downFloor = {0,0};
+        //마을 던전 입구 좌표 : 49 26
+        loginCharacter -> pos.row = 49;
+        loginCharacter -> pos.col = 26;
+        loginCharacter -> lastPos.row = 49;
+        loginCharacter -> lastPos.col = 26;
+    }
+    setCharacter(loginCharacter);
+}
+
+void MapClass::setDownFloor(Position inputPos) {
+    *downFloor = inputPos;
 }

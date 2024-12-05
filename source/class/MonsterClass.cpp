@@ -57,37 +57,65 @@ void MonsterClass::getMonsterName(Monster *monster, User *loginCharacter) {
 
 void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
     char selectMenu = NULL;
+    int attack = 0;
     int randomSoldier = rand() % 20;
     char soldierYn = 'N';
     getMonsterName(monster, loginCharacter);
+    system("clear");
 
-
+    cout << monster -> name << "을(를) 만났습니다." << endl;
+    //sleep(1);
+    usleep(500000);
     while (monster -> hp > 0 && loginCharacter -> hp > 0) {
-        system("clear");
-        cout << "몬스터 " << monster -> name << "을 만났습니다." << endl;
-        cout << "몬스터의 현재 체력 : " << monster -> hp << endl;
-        cout << loginCharacter -> nickname << "의 현재 체력 : " << loginCharacter -> hp << endl;
         cout << "---------------------------------------" << endl;
+        //sleep(1);
+        usleep(500000);
+        cout << monster -> name <<"의 현재 체력 : " << monster -> hp << endl;
+        //sleep(1);
+        usleep(500000);
+        cout << loginCharacter -> nickname << "의 현재 체력 : " << loginCharacter -> hp << endl;
+        //sleep(1);
+        usleep(500000);
+        cout << "---------------------------------------" << endl;
+        //sleep(1);
+        usleep(500000);
         cout << "1. 공격" << endl;
+        //sleep(1);
+        usleep(500000);
         cout << "2. 아이템 사용" << endl;
+        //sleep(1);
+        usleep(500000);
         cout << "3. 도망" << endl;
+        //sleep(1);
+        usleep(500000);
         cout << "---------------------------------------" << endl;
         cin >> selectMenu;
-        switch (selectMenu - '0') {
-            case 1:
-                cout << "공격합니다" << endl;
-                // TODO : 데미지수정
-                monster -> hp -= 500000;
+        if (selectMenu - '0' == 1) {
+            cout << "공격합니다" << endl;
+            //sleep(1);
+            usleep(500000);
+            // TODO : 데미지 밸런스 패치 필요(우선 임시로 레벨별 최소값만 줌)
+            attack = rand() % (int)(30.0 * (loginCharacter->lvl / 10.0)) + loginCharacter -> minDamage;
+            cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
+            monster -> hp -= attack;
+            //sleep(1);
+            usleep(500000);
+        }else if (selectMenu - '0' == 2){
+            cout << "아이템을 사용합니다" << endl;
+            //sleep(1);
+            usleep(500000);
+        }else if (selectMenu - '0' == 3) {
+            cout << "도망갑니다" << endl;
+            //sleep(1);
+            usleep(500000);
             break;
-            case 2:
-                cout << "아이템을 사용합니다" << endl;
-            break;
-            case 3:
-                cout << "도망갑니다" << endl;
-            break;
-            default:break;
+        }else {
+            cout << "잘못된 선택입니다." << endl;
+            //sleep(1);
+            usleep(500000);
+            continue;
         }
-        int attack = 0;
+
         switch(monster -> id) {
             case ORC_NUM:
                 attack = rand() % 5 + 10;
@@ -122,10 +150,15 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
             break;
             default: break;
         }
+        cout << monster -> name << "의 공격! : " << attack << "만큼의 피해를 입었습니다." << endl;
         loginCharacter -> hp -= attack;
+        //sleep(1);
+        usleep(500000);
     }
     if (loginCharacter -> hp <= 0) {
-        cout << "몬스터 " << monster -> name << "에게 당했습니다!!" << endl;
+        cout << monster -> name << "에게 당했습니다!!" << endl;
+        //sleep(1);
+        usleep(500000);
         if (loginCharacter -> hp < 0) {
             loginCharacter -> hp = 0;
             loginCharacter -> dieYn = 'Y';
@@ -134,57 +167,105 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
             loginCharacter -> lastPos.row = RESET_ROW;
             loginCharacter -> lastPos.col = RESET_COL;
             loginCharacter -> beforeBlock = '0';
-            loginCharacter -> pos.floor = '0';
+            loginCharacter -> pos.floor = 0;
             loginCharacter -> dieYn = 'Y';
         }
         //TODO : 보상부분 (약탈)
 
         return;
-    }else {
-        cout << "몬스터 " << monster -> name << "을 해치웠습니다!!" << endl;
-        //TODO : 용사 등장 프로세스 추가
+    }else if (monster -> hp <= 0){
+        cout << monster -> name << "을 해치웠습니다!!" << endl;
+        loginCharacter -> beforeBlock = '0';
+        //sleep(1);
+        usleep(500000);
+        loginCharacter -> exp += monster -> exp;
+        cout << "경험치 " << monster -> exp << "를 얻었습니다." << endl;
+        //sleep(1);
+        usleep(500000);
+        cout << "---------------------------------------" << endl;
         if (soldierYn == 'Y') {
             Monster *newMonster = new Monster();
             newMonster -> id = SOLDIER_NUM;
             getMonsterName(newMonster, loginCharacter);
-            cout << "다른 용사가 당신이 몬스터를 무찌른 걸 보고 빼앗으러 왔습니다." << endl;
-            cout << "못된 용사 " << newMonster -> name << "을 무찌르고 보상을 차지하세요!" << endl;
-            cout << newMonster -> name << "의 현재 체력 : " << monster -> hp << endl;
-            cout << loginCharacter -> nickname << "의 현재 체력 : " << loginCharacter -> hp << endl;
-            cout << "---------------------------------------" << endl;
-            cout << "1. 공격" << endl;
-            cout << "2. 아이템 사용" << endl;
-            cout << "3. 도망" << endl;
-            cout << "---------------------------------------" << endl;
-            cin >> selectMenu;
+            cout << "다른 용사가 당신이 " << monster -> name << "을(를) 무찌른 걸 보고 빼앗으러 왔습니다." << endl;
+            //sleep(1);
+            usleep(500000);
+            cout << "못된 용사 " << newMonster -> name << "을(를) 무찌르고 보상을 차지하세요!" << endl;
+            //sleep(1);
+            usleep(500000);
+
             while (newMonster -> hp > 0 && loginCharacter -> hp > 0) {
-                if (loginCharacter -> hp < 0) {
-                    loginCharacter -> hp = 0;
-                    loginCharacter -> dieYn = 'Y';
-                    loginCharacter -> pos.row = RESET_ROW;
-                    loginCharacter -> pos.col = RESET_COL;
-                    loginCharacter -> lastPos.row = RESET_ROW;
-                    loginCharacter -> lastPos.col = RESET_COL;
-                    loginCharacter -> beforeBlock = '0';
-                    loginCharacter -> pos.floor = '0';
-                    loginCharacter -> dieYn = 'Y';
+                cout << "---------------------------------------" << endl;
+                //sleep(1);
+                usleep(500000);
+                cout << newMonster -> name <<"의 현재 체력 : " << newMonster -> hp << endl;
+                //sleep(1);
+                usleep(500000);
+                cout << loginCharacter -> nickname << "의 현재 체력 : " << loginCharacter -> hp << endl;
+                //sleep(1);
+                usleep(500000);
+                cout << "---------------------------------------" << endl;
+                //sleep(1);
+                usleep(500000);
+                cout << "1. 공격" << endl;
+                //sleep(1);
+                usleep(500000);
+                cout << "2. 아이템 사용" << endl;
+                //sleep(1);
+                usleep(500000);
+                cout << "3. 도망" << endl;
+                //sleep(1);
+                usleep(500000);
+                cout << "---------------------------------------" << endl;
+                cin >> selectMenu;
+                if (selectMenu - '0' == 1) {
+                    cout << "공격합니다" << endl;
+                    //sleep(1);
+                    usleep(500000);
+                    // TODO : 데미지 밸런스 패치 필요(우선 임시로 레벨별 최소값만 줌)
+                    attack = rand() % (int)(30.0 * (loginCharacter->lvl / 10.0)) + loginCharacter -> minDamage;
+                    cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
+                    newMonster -> hp -= attack;
+                    //sleep(1);
+                    usleep(500000);
+                }else if (selectMenu - '0' == 2){
+                    cout << "아이템을 사용합니다" << endl;
+                    //sleep(1);
+                    usleep(500000);
+                }else if (selectMenu - '0' == 3) {
+                    cout << "도망갑니다" << endl;
+                    //sleep(1);
+                    usleep(500000);
+                    break;
+                }else {
+                    cout << "잘못된 선택입니다." << endl;
+                    //sleep(1);
+                    usleep(500000);
+                    continue;
                 }
-                switch (selectMenu - '0') {
-                    case 1:
-                        cout << "공격합니다" << endl;
-                    // TODO : 데미지수정
-                    newMonster -> hp -= 500000;
-                    break;
-                    case 2:
-                        cout << "아이템을 사용합니다" << endl;
-                    break;
-                    case 3:
-                        cout << "도망갑니다" << endl;
-                    break;
-                    default:break;
-                }
+
+                cout << newMonster -> name << "의 공격! : " << attack << "만큼의 피해를 입었습니다." << endl;
+                loginCharacter -> hp -= attack;
+                usleep(500000);
             }
+
+
         }
+
+        if (loginCharacter -> hp < 0) {
+            loginCharacter -> hp = 0;
+            loginCharacter -> dieYn = 'Y';
+            loginCharacter -> pos.row = RESET_ROW;
+            loginCharacter -> pos.col = RESET_COL;
+            loginCharacter -> lastPos.row = RESET_ROW;
+            loginCharacter -> lastPos.col = RESET_COL;
+            loginCharacter -> beforeBlock = '0';
+            loginCharacter -> pos.floor = 0;
+            loginCharacter -> dieYn = 'Y';
+        }
+
+        //sleep(1);
+        usleep(500000);
         //TODO : 보상부분 (획득)
     }
 }

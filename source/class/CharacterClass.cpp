@@ -65,17 +65,14 @@ bool CharacterClass::characterSelect(Login *loginUser, User *loginCharacter) {
             loginCharacter -> pos.floor = atoi(strtok(NULL, "\n"));
             fclose(fp);
 
-
-            //직업명 불러오기
-            getJobName(loginCharacter);
-
             //레벨별 정보 불러오기
             filePath = ROOT_PATH + "levelInfo.txt";
             fp = fopen(filePath.c_str(), "rt");
             while (fgets(bfr, sizeof(bfr), fp)) {
                 if (loginCharacter -> lvl == atoi(strtok(bfr, ","))) {
                     loginCharacter -> maxExp = atoi(strtok(NULL, ","));
-                    loginCharacter -> maxHp = atoi(strtok(NULL, "\n"));
+                    loginCharacter -> maxHp = atoi(strtok(NULL, ","));
+                    loginCharacter -> minDamage = atoi(strtok(NULL, "\n"));
                     break;
                 }
             }
@@ -83,6 +80,7 @@ bool CharacterClass::characterSelect(Login *loginUser, User *loginCharacter) {
             loginCharacter -> beforeBlock = '0';
             loginCharacter -> lastPos.row = loginCharacter -> pos.row;
             loginCharacter -> lastPos.col = loginCharacter -> pos.col;
+            loginCharacter -> jobName = "";
             // cout << "접속한 캐릭터 : " << tempUser[ selectMenu - '0' - 1 ].nickname << endl;
             return true;
         }
@@ -113,8 +111,8 @@ void CharacterClass::characterAccount(Login *loginUser)
     //캐릭터정보 저장 파일
     fp = fopen(filePath.c_str(), "wt");
     // 캐릭터 생성 초기 값
-    // lvl, exp, 전체경험치, 장비1, 장비2, 장비3, 장비4, 장비5, 무기, 직업ID, hp, sp, 좌표row, 좌표col, 층
-    fprintf(fp, "1,0,0,0,0,0,0,0,0,N,100,100,18,25,0\n");
+    // lvl, exp, 장비1, 장비2, 장비3, 장비4, 장비5, 무기, 직업ID, 사망여부, hp, sp, 좌표row, 좌표col, 층
+    fprintf(fp, "1,0,10,6,7,8,9,1,0,N,100,100,18,25,0\n");
     fclose(fp);
 
     //캐릭터 인벤토리 정보 저장 파일
@@ -134,121 +132,8 @@ void CharacterClass::characterAccount(Login *loginUser)
     fclose(fp);
 
     cout << "캐릭터가 생성되었습니다!" << endl;
-    sleep(1);
-}
-
-// TODO : 골드 추가 후 금액지불 프로세스 추가해야됨(파라메터도 수정해야됨)
-void CharacterClass::rebirth(User *loginCharacter, int *userGold) {
-    int payGold = rand() % 500 + (loginCharacter -> lvl * 100); //레벨 비례 증가
-    char selectMenu = NULL;
-
-    cout << "------------------------------------------------" << endl;
-    cout << " 부활하시려면 골드가 필요합니다." << endl;
-    cout << " 부활 비용 : " << payGold << endl;
-    cout << "------------------------------------------------" << endl;
-    if (*userGold < payGold) {
-        cout << "부활금액이 부족합니다." << endl;
-        cout << "사채업자에게 돈을 빌려오세요" << endl;
-    }else {
-        cout << " 부활 하시겠습니까?";
-        cin >> selectMenu;
-        if (towupper(selectMenu) == 'Y') {
-            *userGold -= payGold;
-            loginCharacter -> hp = loginCharacter -> maxHp * 0.1;
-        }
-    }
-}
-// TODO : 골드 추가 후 금액지불 프로세스 추가해야됨(파라메터도 수정해야됨)
-void CharacterClass::levelUp(User *loginCharacter, int *userGold) {
-    int payGold = 0; //레벨 비례 증가
-    char selectMenu = NULL;
-
-    switch (loginCharacter -> lvl) {
-        case 1:
-            payGold = rand() % 50 + 100;// 100~150
-        break;
-        case 2:
-            payGold = rand() % 200 + 300;// 300~500
-        break;
-        case 3:
-            payGold = rand() % 500 + 500;// 500~1000
-        break;
-        case 4:
-            payGold = rand() % 1000 + 1000;// 1000~2000
-        break;
-        case 5:
-            payGold = rand() % 3000 + 2000;// 2000~5000
-        break;
-        case 6:
-            payGold = rand() % 5000 + 5000;// 5000~10000
-        break;
-        case 7:
-            payGold = rand() % 5000 + 5000;// 5000~10000
-        break;
-        case 8:
-            payGold = rand() % 5000 + 5000;// 5000~10000
-        break;
-        case 9:
-            payGold = rand() % 5000 + 5000;// 5000~10000
-        break;
-    }
-
-    cout << "------------------------------------------------" << endl;
-    cout << " 레벨업 하시려면 골드가 필요합니다." << endl;
-    cout << " 레벨업 비용 : " << payGold << endl;
-    cout << "------------------------------------------------" << endl;
-    if (*userGold < payGold) {
-        cout << "레벨업 금액이 부족합니다." << endl;
-        cout << "사채업자에게 돈을 빌려오세요" << endl;
-    }else {
-        cout << " 레벨업 하시겠습니까?";
-        cin >> selectMenu;
-        if (towupper(selectMenu) == 'Y') {
-            *userGold -= payGold;
-            loginCharacter -> lvl ++;
-        }
-    }
-}
-
-void CharacterClass::getWork(User *loginCharacter) {
-    char selectMenu = NULL;
-    cout << "------------------------------------------------" << endl;
-    cout << " 전직하실 직업을 선택해 주세요. " << endl;
-    cout << " 1. 검술사" << endl;
-    cout << " 2. 마법사" << endl;
-    cout << " 3. 궁술사" << endl;
-    cout << " 4. 창술사" << endl;
-    cout << " 5. 암살자" << endl;
-    cout << "------------------------------------------------" << endl;
-    cin >> selectMenu;
-
-    if (isdigit(selectMenu)) {
-        loginCharacter -> jobId = selectMenu;
-        getJobName(loginCharacter);
-    }
-}
-
-void CharacterClass::getJobName(User *loginCharacter) {
-    switch (loginCharacter -> jobId) {
-        case 1:
-            loginCharacter -> jobName = "검술사";
-        break;
-        case 2:
-            loginCharacter -> jobName = "마법사";
-        break;
-        case 3:
-            loginCharacter -> jobName = "궁술사";
-        break;
-        case 4:
-            loginCharacter -> jobName = "창술사";
-        break;
-        case 5:
-            loginCharacter -> jobName = "암살자";
-        break;
-        default:
-            loginCharacter -> jobName = "무직";
-        break;
-    }
+    //sleep(1);
+    usleep(500000);
 }
 
 void CharacterClass::move(User *loginCharacter, char moveKey) {

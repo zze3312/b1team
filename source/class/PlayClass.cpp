@@ -1,23 +1,19 @@
 #include "../header/PlayClass.h"
 #include "../header/MapClass.h"
-#include "../header/MonsterClass.h"
 #include "../header/CharacterClass.h"
 
 MapClass mapFunc;
-MonsterClass msFunc;
 CharacterClass charFunc; //캐릭터 관련 기능 담김
 
 void PlayClass::play(User *loginCharacter) {
     char inputKey[3];
-    Position upFloor = {0, 0};
-    Position downFloor = {0, 0};
     // 시작시 맵 셋팅
     mapFunc.mapInit(loginCharacter);
     // 맵 및 상태창
     system("clear");
     if (loginCharacter -> pos.floor > 0) {
-        upFloor = mapFunc.setPortal();
-        downFloor = mapFunc.setPortal();
+        mapFunc.setPortal();
+        mapFunc.setDownFloor(mapFunc.setPortal());
     }
     mapFunc.setCharacter(loginCharacter);
     mapFunc.printMap(loginCharacter);
@@ -25,6 +21,7 @@ void PlayClass::play(User *loginCharacter) {
 
     while (true) {
         echoOff();
+
         //TODO : 게임 플레이 전반적인 진행 프로세스 추가
         read(0, &inputKey, sizeof(inputKey));
         if (inputKey[0] == 27 && inputKey[1] == 91) {
@@ -40,49 +37,11 @@ void PlayClass::play(User *loginCharacter) {
                 break;
             }
 
-            if (inputKey[0] == 't') {
-                Monster *monster = new Monster();
-                monster -> id = 'L';
-                msFunc.meetMonster(monster, loginCharacter);
-            }
-
-            sleep(1);
+            ////sleep(1);
+            usleep(500000);
         }
         mapFunc.setCharacter(loginCharacter);
-        if (loginCharacter -> beforeBlock == '6') {
-            //올라가는지 내려가는지 체크
-            if ((loginCharacter -> pos.row == upFloor.row && loginCharacter -> pos.col == upFloor.col) || loginCharacter -> pos.floor == 0 ) {
-                loginCharacter -> pos.floor ++;
-            }else {
-                loginCharacter -> pos.floor --;
-            }
-
-            //던전 안
-            mapFunc.mapInit(loginCharacter);
-            if (loginCharacter -> pos.floor != 0) {
-                //포탈의 위치 바꾸고
-                upFloor = mapFunc.setPortal();
-                downFloor = mapFunc.setPortal();
-
-                //해당층 입구포탈 위치로 간다
-                loginCharacter -> pos.row = downFloor.row;
-                loginCharacter -> pos.col = downFloor.col;
-                loginCharacter -> lastPos.row = downFloor.row;
-                loginCharacter -> lastPos.col = downFloor.col;
-
-            }else {
-                //던전 > 마을
-                upFloor = {0,0};
-                downFloor = {0,0};
-                //마을 던전 입구 좌표 : 49 26
-                loginCharacter -> pos.row = 49;
-                loginCharacter -> pos.col = 26;
-                loginCharacter -> lastPos.row = 49;
-                loginCharacter -> lastPos.col = 26;
-            }
-            mapFunc.setCharacter(loginCharacter);
-        }
-
+        mapFunc.mapEvent(loginCharacter);
 
         // 맵 및 상태창
         system("clear");
