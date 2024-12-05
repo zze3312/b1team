@@ -75,6 +75,75 @@ void boredNPC()
     cout << "=================================================================\n";
 }
 
+void buyEquip()
+{
+    while (1)
+    {
+        grinNPC();
+        cout << "판도라: 초보자를 위한 장비들을 팔고 있어요!\n";
+        cout << "1. 기본검    2. 기본스태프  3. 기본활    4. 기본창    5. 기본단검\n";
+        cout << "6. 기본갑빠  7. 기본장화    8. 기본장갑  9. 기본망토  10. 기본마스크\n";
+        cout << "q. 뒤로가기\n";
+        cout << "=================================================================\n";
+
+        string choice;
+        cin >> choice;
+        system("clear");
+
+        if (choice == "q")
+        {
+            break;
+        }
+        else if (stoi(choice) < 6 && stoi(choice) > 0)
+        {
+            while (1)
+            {
+                grinNPC();
+                cout << "판도라: " << "inv->equipNameList[stoi(choice)-1]" << "을 구매하실 건가요?\n";
+                cout << "inv->equipNameList[stoi(choice)-1]" << ": ";
+                cout << "1. 구매하기  q. 뒤로가기\n";
+                cout << "=================================================================\n";
+
+                string choiceTwo;
+                cin >> choiceTwo;
+                system("clear");
+
+                if (choiceTwo == "q")
+                {
+                    break;
+                }
+                else if (choiceTwo == "1")
+                {
+                    grinNPC();
+                    cout << "구매해주셔서 감사합니다! 또 오세요!\n";
+                    cout << "50원 차감\n";
+                    // inv->gold -= 50;
+                    break;
+                }
+                else
+                {
+                    continue;
+                }       
+            }
+        }
+        else
+        {
+            continue;
+        }
+    }
+}
+
+void buyConsumable()
+{
+    while (1)
+    {
+        grinNPC();
+        cout << "판도라: 말섬 상점산 특제 상품이에요!\n";
+        cout << "1. 빨간물약  2. 마을이동주문서  q. 뒤로가기\n";
+        cout << "=================================================================\n";
+    }
+}
+
 void shopNPC()
 {
     srand((int)time(NULL));
@@ -177,50 +246,6 @@ void shopNPC()
         
         
 
-    }
-}
-
-void buyEquip()
-{
-    while (1)
-    {
-        grinNPC();
-        cout << "판도라: 초보자를 위한 장비들을 팔고 있어요!\n";
-        cout << "1. 기본검    2. 기본스태프  3. 기본활    4. 기본창    5. 기본단검\n"
-        cout << "6. 기본갑빠  7. 기본장화    8. 기본장갑  9. 기본망토  10. 기본마스크\n";
-        cout << "q. 뒤로가기\n";
-        cout << "=================================================================\n";
-
-        string choice;
-        cin >> choice;
-        system("clear");
-
-        if (choice = "q")
-        {
-            break;
-        }
-        else if (choice < 6 && choice > 0)
-        {
-            grinNPC();
-            cout << "판도라: " << inv->equipNameList[choice-1] << "을 구매하실 건가요?\n";
-            cout << inv->equipNameList[choice-1] << ": "
-            cout << "1. 빨간물약  2. 마을이동주문서  q. 뒤로가기\n";
-            cout << "=================================================================\n";
-        }
-        
-        
-
-    }
-}
-
-void buyConsumable()
-{
-    while (1)
-    {
-        grinNPC();
-        cout << "판도라: 말섬 상점산 특제 상품이에요!\n";
-        cout << "1. 빨간물약  2. 마을이동주문서  q. 뒤로가기\n";
-        cout << "=================================================================\n";
     }
 }
 

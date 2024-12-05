@@ -383,9 +383,6 @@ void useConsumable(Inventory * inv, User * user, int tryConsumable) // 미완성
     default:
         break;
     }
-    
-    
-    
 }
 
 void showNowEquip(Inventory * inv, User * user) // 완성
@@ -475,7 +472,7 @@ void equipInventory(Inventory * inv, User * user) // 완성
         {
             while (1)
             {
-                int tryEquip = inv->haveEquip[stoi(choice)-1]; // 현재 선택한 장비의 씨리얼 넘버 의미미
+                int tryEquip = inv->haveEquip[stoi(choice)-1]; // 현재 선택한 장비의 씨리얼 넘버 의미
                 cout << "========================================\n";
                 cout << inv->equipNameList[tryEquip] << endl;
                 cout << "========================================\n";
@@ -599,13 +596,9 @@ void consumableInventory(Inventory * inv, User * user) // 완성
             continue;
         }
     }
-    
-
-    
-
 }
 
-void openInventory(Inventory * inv, User * user) // 완성
+void openInventory(Inventory * inv, User * user) // 완성 i 눌러서 연결
 {
     string choice;
     
