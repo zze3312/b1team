@@ -5,8 +5,8 @@
 
 class PlayClass {
     public:
-        void play(char (*)[COL_SIZE] , User *);
-        void beforePlay (Login *, User *, char (*)[COL_SIZE]);
+        void play(User *);
+        void beforePlay (Login *, User *);
         void echoOff();
         void echoOn();
         void clearBuffer();

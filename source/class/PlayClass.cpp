@@ -7,23 +7,26 @@ MapClass mapFunc;
 MonsterClass msFunc;
 CharacterClass charFunc; //캐릭터 관련 기능 담김
 
-void PlayClass::play(char (*map)[COL_SIZE], User *loginCharacter) {
+void PlayClass::play(User *loginCharacter) {
     char inputKey[3];
+    Position upFloor = {0, 0};
+    Position downFloor = {0, 0};
     // 시작시 맵 셋팅
-    mapFunc.setMap(map, loginCharacter -> pos.floor);
-    charFunc.setCharacter(map, loginCharacter);
-    if (atoi(loginCharacter -> pos.floor.c_str()) > 0) {
-        // 마을이 아니면 몬스터 셋팅
-        msFunc.setMonsterToMap(map, loginCharacter -> pos.floor);
-    }
+    mapFunc.mapInit(loginCharacter);
+    // 맵 및 상태창
     system("clear");
-    mapFunc.printMap(map, loginCharacter);
-    charFunc.printStatus(loginCharacter);
+    if (loginCharacter -> pos.floor > 0) {
+        upFloor = mapFunc.setPortal();
+        downFloor = mapFunc.setPortal();
+    }
+    mapFunc.setCharacter(loginCharacter);
+    mapFunc.printMap(loginCharacter);
+    mapFunc.printStatus(loginCharacter);
 
     while (true) {
         echoOff();
-        read(0, &inputKey, sizeof(inputKey));
         //TODO : 게임 플레이 전반적인 진행 프로세스 추가
+        read(0, &inputKey, sizeof(inputKey));
         if (inputKey[0] == 27 && inputKey[1] == 91) {
             charFunc.move(loginCharacter, inputKey[2]);
         }else if (inputKey[0] == 47) {
@@ -42,20 +45,56 @@ void PlayClass::play(char (*map)[COL_SIZE], User *loginCharacter) {
                 monster -> id = 'L';
                 msFunc.meetMonster(monster, loginCharacter);
             }
+
             sleep(1);
         }
+        mapFunc.setCharacter(loginCharacter);
+        if (loginCharacter -> beforeBlock == '6') {
+            //올라가는지 내려가는지 체크
+            if ((loginCharacter -> pos.row == upFloor.row && loginCharacter -> pos.col == upFloor.col) || loginCharacter -> pos.floor == 0 ) {
+                loginCharacter -> pos.floor ++;
+            }else {
+                loginCharacter -> pos.floor --;
+            }
+
+            //던전 안
+            mapFunc.mapInit(loginCharacter);
+            if (loginCharacter -> pos.floor != 0) {
+                //포탈의 위치 바꾸고
+                upFloor = mapFunc.setPortal();
+                downFloor = mapFunc.setPortal();
+
+                //해당층 입구포탈 위치로 간다
+                loginCharacter -> pos.row = downFloor.row;
+                loginCharacter -> pos.col = downFloor.col;
+                loginCharacter -> lastPos.row = downFloor.row;
+                loginCharacter -> lastPos.col = downFloor.col;
+
+            }else {
+                //던전 > 마을
+                upFloor = {0,0};
+                downFloor = {0,0};
+                //마을 던전 입구 좌표 : 49 26
+                loginCharacter -> pos.row = 49;
+                loginCharacter -> pos.col = 26;
+                loginCharacter -> lastPos.row = 49;
+                loginCharacter -> lastPos.col = 26;
+            }
+            mapFunc.setCharacter(loginCharacter);
+        }
+
+
         // 맵 및 상태창
         system("clear");
-        charFunc.setCharacter(map, loginCharacter);
-        mapFunc.printMap(map, loginCharacter);
-        charFunc.printStatus(loginCharacter);
-        if (inputKey[0] == 'q') break;
+
+        mapFunc.printMap(loginCharacter);
+        mapFunc.printStatus(loginCharacter);
     }
 }
 
-void PlayClass::beforePlay (Login *loginUser, User *loginCharacter, char (*map)[COL_SIZE]) {
+void PlayClass::beforePlay (Login *loginUser, User *loginCharacter) {
     if (charFunc.characterSelect(loginUser, loginCharacter)) {
-        play(map, loginCharacter);
+        play(loginCharacter);
     }
 }
 

@@ -1,111 +1,7 @@
 #include "../header/MonsterClass.h"
 
-void MonsterClass::setMonsterToMap(char map[ROW_SIZE][COL_SIZE], const string &mapNum) {
-    const int CREATE_MONSTERS = 20;
-    Monster monsterList[CREATE_MONSTERS];
-    for (int i = 0; i < CREATE_MONSTERS; i++) {
-        Monster temp = {NULL, "", 0,0, 0, 0};
-        monsterList[i] = temp;
-    }
 
-    int idx = 0;
-    while (1) {
-        int randomPosRow = rand() % (ROW_SIZE - 2) + 1;
-        int randomPosCol = rand() % (COL_SIZE - 2) + 1;
-        bool flag = false;
-
-        if (map[randomPosRow][randomPosCol] != '0') {
-            continue;
-        }
-
-        for (int i = 0; i < idx; i++) {
-            if (monsterList[i].pos.row == randomPosRow && monsterList[i].pos.col == randomPosCol) {
-                flag = true;
-                break;
-            }
-        }
-
-        if (flag) {
-            continue;
-        }else {
-            monsterList[idx].pos.row = randomPosRow;
-            monsterList[idx].pos.col = randomPosCol;
-        }
-
-        idx++;
-        if (idx >= CREATE_MONSTERS) break;
-    }
-
-    for (int i = 0; i < CREATE_MONSTERS; i++) {
-        int randomSoldier = rand() % 10;
-        int randomBaphomet = rand() % 10;
-        int randomLdnk = rand() % 10;
-        int randomCsd = rand() % 20;
-        int randomMonster = 0;
-        switch (atoi(mapNum.c_str())) {
-            case 1:
-                monsterList[i].id = ORC_NUM;
-                if (randomSoldier < 3) monsterList[i].id = SOLDIER_NUM;
-            break;
-            case 2:
-                monsterList[i].id = ZOMBIE_NUM;
-                if (randomSoldier < 3) monsterList[i].id = SOLDIER_NUM;
-            break;
-            case 3:
-                randomMonster = rand() % 2;
-
-                if (randomMonster == 0) monsterList[i].id = ZOMBIE_NUM;
-                else monsterList[i].id = GHOUL_NUM;
-
-                if (randomSoldier < 3) monsterList[i].id = SOLDIER_NUM;
-            break;
-            case 4:
-                randomMonster = rand() % 3;
-
-                if (randomMonster == 0) monsterList[i].id = ZOMBIE_NUM;
-                else if (randomMonster == 1) monsterList[i].id = GHOUL_NUM;
-                else monsterList[i].id = SKELETON_NUM;
-
-                if (randomSoldier < 3) monsterList[i].id = SOLDIER_NUM;
-            break;
-            case 5:
-                randomMonster = rand() % 3;
-
-                if (randomMonster == 0) monsterList[i].id = GHOUL_NUM;
-                else if (randomMonster == 1) monsterList[i].id = SKELETON_NUM;
-                else monsterList[i].id = SPA_TOY_NUM;
-
-                if (randomSoldier < 3) monsterList[i].id = SOLDIER_NUM;
-                if (randomBaphomet < 2) monsterList[i].id = BAPHOMET_NUM;
-            break;
-            case 6:
-                randomMonster = rand() % 3;
-
-                if (randomMonster == 0) monsterList[i].id = GHOUL_NUM;
-                else if (randomMonster == 1) monsterList[i].id = SKELETON_NUM;
-                else monsterList[i].id = SPA_TOY_NUM;
-
-                if (randomSoldier < 3) monsterList[i].id = SOLDIER_NUM;
-                if (randomBaphomet < 2) monsterList[i].id = BAPHOMET_NUM;
-                if (randomLdnk < 1) monsterList[i].id = LDNK_NUM;
-            break;
-            case 7:
-                monsterList[i].id = SPA_TOY_NUM;
-
-                if (randomSoldier < 3) monsterList[i].id = SOLDIER_NUM;
-                if (randomBaphomet < 2) monsterList[i].id = BAPHOMET_NUM;
-                if (randomCsd < 1) monsterList[i].id = CSD_NUM;
-            break;
-        }
-    }
-
-    for (int i = 0; i < CREATE_MONSTERS; i++) {
-        map[monsterList[i].pos.row][monsterList[i].pos.col] = monsterList[i].id;
-        //printf("%d. map[%d][%d] = %c\n",i ,monsterList[i].pos.row, monsterList[i].pos.col, monsterList[i].id);
-    }
-}
-
-void MonsterClass::setMonster(Monster *monster, User *loginCharacter) {
+void MonsterClass::getMonsterName(Monster *monster, User *loginCharacter) {
     //Monster *monster = new Monster();
     const string SOLDIER_NAME[5] = {"김대현", "박민제", "김도엽", "김지현", "임정규"};
     int randomSoldierName = rand() % 5;
@@ -163,7 +59,7 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
     char selectMenu = NULL;
     int randomSoldier = rand() % 20;
     char soldierYn = 'N';
-    setMonster(monster, loginCharacter);
+    getMonsterName(monster, loginCharacter);
 
 
     while (monster -> hp > 0 && loginCharacter -> hp > 0) {
@@ -250,7 +146,7 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
         if (soldierYn == 'Y') {
             Monster *newMonster = new Monster();
             newMonster -> id = SOLDIER_NUM;
-            setMonster(newMonster, loginCharacter);
+            getMonsterName(newMonster, loginCharacter);
             cout << "다른 용사가 당신이 몬스터를 무찌른 걸 보고 빼앗으러 왔습니다." << endl;
             cout << "못된 용사 " << newMonster -> name << "을 무찌르고 보상을 차지하세요!" << endl;
             cout << newMonster -> name << "의 현재 체력 : " << monster -> hp << endl;

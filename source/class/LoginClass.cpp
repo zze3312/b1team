@@ -12,13 +12,11 @@ void LoginClass::join() {
     cout << "비밀번호 : ";
     cin >> joinInfo.pwd;
 
-    char folderPath[100] = "";
-    strcat(folderPath, ROOT_PATH.c_str());
-    strcat(folderPath, "userInfo.txt");
+    string filePath = ROOT_PATH + "userInfo.txt";
     char buffer[100] = "";
     char flag = 'Y';
 
-    FILE * fp = fopen(folderPath, "rt");
+    FILE * fp = fopen(filePath.c_str(), "rt");
     while (fgets(buffer, sizeof(buffer), fp))
     {
         tempUser.id = strtok(buffer, ",");
@@ -34,22 +32,19 @@ void LoginClass::join() {
     fclose(fp);
 
     if (flag == 'Y') {
-        fp = fopen(folderPath, "at");
+        fp = fopen(filePath.c_str(), "at");
         fprintf(fp, "%s,%s\n", joinInfo.id.c_str(), joinInfo.pwd.c_str());
         fclose(fp);
 
-        strcpy(folderPath, ROOT_PATH.c_str());
-        strcat(folderPath, "userData/");
-        strcat(folderPath, joinInfo.id.c_str());
-        mkdir(folderPath, 0777);
+        string folderPath = ROOT_PATH + "userData/" + joinInfo.id;
+        mkdir(folderPath.c_str(), 0777);
         //mkdir(folderPath);
 
-        strcat(folderPath, "/character.txt");
-        fp = fopen(folderPath, "at");
+        filePath = folderPath + "/character.txt";
+        fp = fopen(filePath.c_str(), "at");
         fprintf(fp, "");
 
-
-        cout << "회원가입이 되셨습니다";
+        cout << "회원가입이 되셨습니다" << endl;
 
     }else {
         cout << "이미 존재하는 아이디입니다." << endl;
@@ -75,12 +70,9 @@ bool LoginClass::login(Login * loginUser) {
 
     char str[100] = "";
     char flag = 'N';
-    char folderPath[100] = "";
+    string filePath = ROOT_PATH + "userInfo.txt";
 
-    strcat(folderPath, ROOT_PATH.c_str());
-    strcat(folderPath, "userInfo.txt");
-
-    FILE * fp = fopen(folderPath, "rt");
+    FILE * fp = fopen(filePath.c_str(), "rt");
 
     while (fgets(str, sizeof(str), fp)) {
         standID.id = strtok(str, ",");

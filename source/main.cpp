@@ -9,7 +9,6 @@ PlayClass playFunc;
 
 Login *loginUser = new Login(); //로그인 사용자 정보 담김
 User *loginCharacter = new User(); //접속한 캐릭터 정보 담김
-char (*map)[COL_SIZE] = new char[ROW_SIZE][COL_SIZE]; // 맵담김
 
 int main(){
     srand(time(NULL));
@@ -29,7 +28,7 @@ int main(){
             case 1:
                 // login 성공 시 true 반환됨
                 if (logFunc.login(loginUser)) {
-                    playFunc.beforePlay(loginUser, loginCharacter, map);
+                    playFunc.beforePlay(loginUser, loginCharacter);
                 }
             break;
             case 2:
@@ -42,13 +41,12 @@ int main(){
                 // 종료 시 동적할당 되어있던 정보들 제거
                 delete loginUser;
                 delete loginCharacter;
-                delete map;
 
                 // 프로그램 종료
                 exit(0);
             break;
         }
-        playFunc.echoOn();
+        //playFunc.echoOn();
         sleep(1);
     }
 }

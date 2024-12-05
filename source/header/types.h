@@ -30,7 +30,7 @@ static termios orig_termios;
 typedef struct{
     int row;
     int col;
-    string floor;
+    int floor;
 } Position;
 
 typedef struct{

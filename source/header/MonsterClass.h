@@ -21,8 +21,7 @@ class MonsterClass {
             CSD_NUM = 'C',
         };
     public:
-        void setMonster(Monster *, User *);
-        void setMonsterToMap(char [ROW_SIZE][COL_SIZE], const string &);
+        void getMonsterName(Monster *, User *);
         void meetMonster(Monster *, User *);
 };
 

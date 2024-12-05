@@ -6,6 +6,7 @@
 
 class MapClass {
     private:
+        char (*map)[51] = new char[ROW_SIZE][COL_SIZE];
         enum {
             MAP_ICON_NUM_0  = '0',
             MAP_ICON_NUM_1  = '1',
@@ -53,20 +54,15 @@ class MapClass {
             "👻"     //20
             };
         // 도적 🕵️🥷 사망 🤸
-//
-//     ORC_NUM = 'O',
-// ZOMBIE_NUM = 'Z',
-// GHOUL_NUM = 'G',
-// SKELETON_NUM = 'S',
-// SPA_TOY_NUM = 'T',
-// SOLDIER_NUM = 'L',
-// BAPHOMET_NUM = 'B',
-// LDNK_NUM = 'D',
-// CSD_NUM = 'C',
     public:
-        void mapInit(char [ROW_SIZE][COL_SIZE], string, User *);
-        void setMap(char [ROW_SIZE][COL_SIZE], string);
-        void printMap(char [ROW_SIZE][COL_SIZE], User *);
+        void mapInit(User *);
+        void setMap(int);
+        Position setPortal();
+        void setCharacter(User *);
+        void setMonster(User *);
+        void printMap(User *);
+        void printStatus(User *);
+        void charGoPortal(User *);
 };
 
 
