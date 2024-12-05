@@ -2,7 +2,10 @@
 #include "header/types.h"
 
 typedef struct {
-    int id;
+    int equipmentID; // 인벤토리에서 출력할 아이템 번호순 (즉 0개는 포함 x)
+    int haveEquip[100];
+    int consumableID;
+    int haveConsum[8];
     string name;
     
     int equipmentList[100]; // "rt"로 기존 파일에 있는 보유개수 불러옴
@@ -28,8 +31,22 @@ typedef struct {
     int potionB;
     int potionA;
 
+    // 정보 담기
+
+    // 장비
+    string equipNumList[100];
     string equipNameList[100];
+    string equipTierList[100];
+    int equipSetNumList[100];
+    // 소모품
+    string consumableNumList[8];
     string consumableNameList[8];
+    string consumableTierList[8];
+    string consumableEXList[8];
+    // 세트효과
+    string setEffectNumList[15];
+    string setEffectNameList[15];
+    string setEffectEXList[15];
 
 } Inventory;
 
@@ -137,26 +154,35 @@ void dropItem(Inventory inv) // 얻은 아이템이 뭔지 확정하고, 인벤�
 
 void readInfoItemName(Inventory * inv)
 {
+    // 장비 정보 불러오기
     string folderPath = ROOT_PATH + "item/equipment.txt";
 
     FILE * fp = fopen(folderPath.c_str(), "rt");
 
     char str[1000];
+    char * tempNum;
     char * tempName;
+    char * tempTier;
+    char * tempSetNum;
     int i = 0;
 
     while (fgets(str,sizeof(str),fp))
     {
-        strtok(str,",");
+        tempNum = strtok(str,",");
         tempName = strtok(NULL, ",");
-        strtok(NULL, ",");
-        strtok(NULL, "\n");
+        tempTier = strtok(NULL, ",");
+        tempSetNum = strtok(NULL, "\n");
 
+        inv->equipNumList[i] = tempNum;
         inv->equipNameList[i] = tempName;
+        inv->equipTierList[i] = tempTier;
+        inv->equipSetNumList[i] = atoi(tempSetNum);
+
         i++;
     }
     fclose(fp);
 
+    // 소모품 정보 불러오기
     string folderPath2 = ROOT_PATH + "item/consumable.txt";
 
     FILE * fp2 = fopen(folderPath2.c_str(), "rt");
@@ -166,70 +192,243 @@ void readInfoItemName(Inventory * inv)
 
     while (fgets(str2,sizeof(str2),fp2))
     {
-        strtok(str2,",");
+        tempNum = strtok(str2,",");
         tempName = strtok(NULL, ",");
-        strtok(NULL, ",");
-        strtok(NULL, "\n");
+        tempTier = strtok(NULL, ",");
+        tempSetNum = strtok(NULL, "\n");
 
+        inv->consumableNumList[i] = tempNum;
         inv->consumableNameList[i] = tempName;
+        inv->consumableTierList[i] = tempTier;
+        inv->consumableEXList[i] = tempSetNum;
+
         i++;
     }
     fclose(fp2);
+
+    // 세트효과 정보 불러오기
+    string folderPath3 = ROOT_PATH + "item/setEffect.txt";
+
+    FILE * fp3 = fopen(folderPath3.c_str(), "rt");
+
+    char str3[100];
+    i = 0;
+
+    while (fgets(str3,sizeof(str3),fp3))
+    {
+        tempNum = strtok(str3, ",");
+        tempName = strtok(NULL, ",");
+        tempTier = strtok(NULL, "\n");
+
+        inv->setEffectNumList[i] = tempNum;
+        inv->setEffectNameList[i] = tempName;
+        inv->setEffectEXList[i] = tempTier;
+
+        i++;
+    }
+    fclose(fp3);
+
 }
 
 void equipInventory(Inventory * inv)
 {
     int i;
     
-    for (i = 0; i < 100; i++)
-    {
-        if (inv->equipmentList[i] > 0)
+    while (1)
+    {   
+        cout << "========================================\n";
+        cout << "  보유한 장비 (상세 정보: 번호 입력)\n";
+        cout << "========================================\n";
+        cout << "  q. 뒤로가기\n";
+        cout << "========================================\n";
+
+        string choice;
+        inv->equipmentID = 0;
+
+        for (i = 0; i < 100; i++)
         {
-            cout << "현재 보유한 아이템 :\n";
-            cout << inv->equipNameList[i] << " " << inv->equipmentList[i] << "개" << endl;
+            if (inv->equipmentList[i] != 0)
+            {
+                inv->equipmentID++;
+                inv->haveEquip[inv->equipmentID - 1] = i;
+                cout << inv->equipmentID << ". " << inv->equipNameList[i] 
+                    << " " << inv->equipmentList[i] << "개" << endl;
+            }
         }
+
+        cout << "========================================\n";
+        cin >> choice;
+        system("clear");
+
+        string choiceTwo;
+
+        if (choice == "q")
+        {
+            break;
+        }
+        else if (stoi(choice) <= inv->equipmentID && stoi(choice) > 0)
+        {
+            while (1)
+            {
+                cout << "========================================\n";
+                cout << inv->equipNameList[inv->haveEquip[stoi(choice)-1]] << endl;
+                cout << "========================================\n";
+                cout << "장비 번호: " << inv->equipNumList[inv->haveEquip[stoi(choice)-1]] << endl;
+                cout << "장비 티어: " << inv->equipTierList[inv->haveEquip[stoi(choice)-1]] << endl;
+                cout << "========================================\n";
+                cout << "1. 착용하기  2. 세트효과 확인  q. 뒤로가기\n";
+                cout << "========================================\n";
+                
+                cin >> choiceTwo;
+                system("clear");
+
+                if (choiceTwo == "1")
+                {
+                    // 새 함수
+                    cout << "착용 완료!\n";
+                    continue;
+                }
+                else if (choiceTwo == "2")
+                {
+                    cout << "========================================\n";
+                    cout << "세트 이름: " << inv->setEffectNameList[inv->equipSetNumList[inv->haveEquip[stoi(choice)-1]]-1] << endl;
+                    cout << "세트효과: " << inv->setEffectEXList[inv->equipSetNumList[inv->haveEquip[stoi(choice)-1]]-1] << endl;
+                    cout << "========================================\n";
+                    
+                    continue;
+                }
+                else if (choiceTwo == "q")
+                {
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            continue;
+        }
+        else
+        {
+            continue;
+        }
+        
     }
-    
 }
 
 void consumableInventory(Inventory * inv)
 {
     int i;
 
-    for (i = 0; i < 8; i++)
+    while (1)
     {
-        if (inv->consumableList[i] != 0)
+        cout << "========================================\n";
+        cout << "  보유한 소모품 (상세 정보: 번호 입력)\n";
+        cout << "========================================\n";
+        cout << "  q. 뒤로가기\n";
+        cout << "========================================\n";
+
+        string choice;
+        inv->consumableID = 0;
+
+        for (i = 0; i < 8; i++)
         {
-            cout << "현재 보유한 아이템 :\n";
-            cout << inv->consumableNameList[i] << " " << inv->consumableList[i] << "개" << endl;
+            if (inv->consumableList[i] != 0)
+            {
+                inv->haveConsum[inv->consumableID] = i;
+                cout << inv->consumableID + 1 << ". " << inv->consumableNameList[i]
+                    << " " << inv->consumableList[i] << "개" << endl;
+                inv->consumableID++;
+            }
+        }
+
+        cout << "========================================\n";
+        cin >> choice;
+        system("clear");
+
+        string choiceTwo;
+        
+        if (choice == "q")
+        {
+            break;
+        }
+        else if (stoi(choice) <= inv->consumableID && stoi(choice) > 0)
+        {
+            while (1)
+            {
+                cout << "========================================\n";
+                cout << inv->consumableNameList[inv->haveConsum[stoi(choice)-1]] << endl;
+                cout << "========================================\n";
+                cout << "소모품 번호: " << inv->consumableNumList[inv->haveConsum[stoi(choice)-1]] << endl;
+                cout << "소모품 티어: " << inv->consumableTierList[inv->haveConsum[stoi(choice)-1]] << endl;
+                cout << "소모품 설명: " << inv->consumableEXList[inv->haveConsum[stoi(choice)-1]] << endl;
+                cout << "========================================\n";
+                cout << "1. 사용하기  q. 뒤로가기\n";
+                cout << "========================================\n";
+
+                cin >> choiceTwo;
+                system("clear");
+
+                if (choiceTwo == "1")
+                {
+                    // 새 함수
+                    cout << "사용 완료!\n";
+                    continue;
+                }
+                else if (choiceTwo == "q")
+                {
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            continue;
+        }
+        else
+        {
+            continue;
         }
     }
+    
+
+    
+
 }
 
 void openInventory(Inventory * inv)
 {
-    int choice;
+    string choice;
     
     while (1)
     {
         cout << "현재 보유한 골드 : " << inv->gold << endl;
-        cout << "==============================\n";
+        cout << "========================================\n";
         cout << "1. 장비\n";
         cout << "2. 소모품\n";
-        cout << "3. 돌아가기\n";
+        cout << "3. 착용중인 장비\n";
+        cout << "q. 뒤로가기\n";
+        cout << "========================================\n";
         cin >> choice;
+        system("clear");
 
-        if (choice == 1)
+        if (choice == "1")
         {
             equipInventory(inv);
             continue;
         }
-        else if (choice == 2)
+        else if (choice == "2")
         {
             consumableInventory(inv);
             continue;
         }
-        else if (choice == 3)
+        else if (choice == "3")
+        {
+            cout << "구현 예정\n";
+            continue;
+        }
+        else if (choice == "q")
         {
             break;
         }
@@ -289,7 +488,7 @@ void checkSet(int userEquipment[5])
     EquipmentSet set;
     char folderPath[100] = "";
     strcat(folderPath, ROOT_PATH.c_str());
-    strcat(folderPath,"item/clothes.txt");
+    strcat(folderPath,"item/equipment.txt");
 
     FILE * fp = fopen(folderPath, "rt");
 
