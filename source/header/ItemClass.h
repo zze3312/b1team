@@ -1,0 +1,76 @@
+#ifndef ITEMCLASS_H
+#define ITEMCLASS_H
+
+#include "types.h"
+
+typedef struct {
+    int equipmentID; // 인벤토리에서 출력할 아이템 번호순 (즉 0개는 포함 x)
+    int haveEquip[100];
+    int consumableID;
+    int haveConsum[8];
+    string name;
+
+    int equipmentList[100]; // "rt"로 기존 파일에 있는 보유개수 불러옴
+    int consumableList[8];
+    int gold;
+
+    int tierD;
+    int tierC;
+    int tierB;
+    int tierA;
+    int teleportHome;
+    int teleportAny;
+    int enhanceEquip;
+    int elixir;
+
+    int equipD;
+    int equipC;
+    int equipB;
+    int equipA;
+
+    int potionD;
+    int potionC;
+    int potionB;
+    int potionA;
+
+    // 정보 담기
+
+    // 장비
+    int equipNumList[100];
+    string equipNameList[100];
+    string equipTierList[100];
+    int equipSetNumList[100];
+    string equipSpecList[100];
+    int equipTypeList[100]; // 뒤에서 2번째
+    int equipJobList[100]; // 맨 뒤뒤
+    // 소모품
+    string consumableNumList[8];
+    string consumableNameList[8];
+    string consumableTierList[8];
+    string consumableEXList[8];
+    // 세트효과
+    string setEffectNumList[15];
+    string setEffectNameList[15];
+    string setEffectEXList[15];
+
+} Inventory;
+
+class ItemClass {
+    public:
+        void updateInventory(Inventory * inv, User * user);
+        void dropItem(Inventory inv);
+        void readInfoItemName(Inventory * inv);
+        void tryEnhance(Inventory * inv, User * user, int tryConsumable);
+        void wearEquip(Inventory * inv, User * user, int tryEquip);
+        void useConsumable(Inventory * inv, User * user, int tryConsumable);
+        void showNowEquip(Inventory * inv, User * user);
+        void equipInventory(Inventory * inv, User * user);
+        void consumableInventory(Inventory * inv, User * user);
+        void openInventory(Inventory * inv, User * user);
+        void onSet(EquipmentSet set);
+        void checkSet(int userEquipment[5]);
+};
+
+
+
+#endif //ITEMCLASS_H

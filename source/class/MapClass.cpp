@@ -2,6 +2,7 @@
 #include "../header/MonsterClass.h"
 #include "../header/CharacterClass.h"
 #include "../header/NpcClass.h"
+#include "../header/ItemClass.h"
 
 MonsterClass monFunc;
 CharacterClass userFunc;
@@ -321,6 +322,7 @@ void MapClass::mapEvent(User *loginCharacter) {
             break;
         }
         npcFunc.meetFight(mon, loginCharacter, &userGold);
+        delete mon;
     }
 
     //죽었다면
