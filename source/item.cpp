@@ -40,7 +40,7 @@ typedef struct {
     int equipSetNumList[100];
     string equipSpecList[100];
     int equipTypeList[100]; // 뒤에서 2번째
-    int equipJobList[100]; // 맨 뒤뒤
+    int equipJobList[100]; // 맨 뒤
     // 소모품
     string consumableNumList[8];
     string consumableNameList[8];
@@ -61,7 +61,7 @@ void updateInventory(Inventory * inv, Character * user) // 미완성
 
     FILE * fp = fopen(folderPath.c_str(), "rt");
 
-    char str[100];
+    char str[10];
     int i = 0;
 
     while (fgets(str,sizeof(str),fp))
@@ -77,7 +77,7 @@ void updateInventory(Inventory * inv, Character * user) // 미완성
 
     FILE * fp2 = fopen(folderPath2.c_str(), "rt");
 
-    char str2[100];
+    char str2[10];
     i = 0;
 
     while (fgets(str2,sizeof(str2),fp2))
@@ -93,7 +93,7 @@ void updateInventory(Inventory * inv, Character * user) // 미완성
 
     FILE * fp3 = fopen(folderPath3.c_str(), "rt");
 
-    char str3[10000];
+    char str3[10];
     fgets(str3,sizeof(str3),fp3);
     inv->gold = atoi(str3);
     
@@ -310,9 +310,7 @@ void tryEnhance(Inventory * inv, Character * user, int tryConsumable) // 미완�
 
 void wearEquip(Inventory * inv, Character * user, int tryEquip) // 완성
 {
-    inv->equipTypeList[tryEquip];
-    
-    if (user->jobId == inv->equipJobList[tryEquip])
+    if (user->jobId == inv->equipJobList[tryEquip] || inv->equipJobList[tryEquip] == 0)
     {
         for (int i = 0; i < 6; i++)
         {
@@ -322,6 +320,8 @@ void wearEquip(Inventory * inv, Character * user, int tryEquip) // 완성
                 {
                     user->nowEquipmentId[i] = inv->equipNumList[tryEquip];
                     cout << inv->equipNameList[tryEquip] << " 착용 완료! \n";
+                    sleep(2);
+                    system("clear");
                     inv->equipmentList[tryEquip]--;
                     return;
                 }
@@ -329,16 +329,29 @@ void wearEquip(Inventory * inv, Character * user, int tryEquip) // 완성
                 {
                     user->nowWeaponId - inv->equipNumList[tryEquip];
                     cout << inv->equipNameList[tryEquip] << " 착용 완료! \n";
+                    sleep(2);
+                    system("clear");
                     inv->equipmentList[tryEquip]--;
                 }
                 else
                 {
                     cout << "=======================================================\n";
                     cout << "착용중인 장비가 있습니다!! 먼저 장비를 해제하고 와주세요\n";
+                    sleep(2);
+                    system("clear");
                     return;
                 }
             }
         }
+    }
+    else
+    {
+        cout << "=======================================================\n";
+        cout << "직업에 맞는 장비를 착용해주세요!!\n";
+        cout << "현재 직업: " << user->jobId << endl;
+        cout << "선택한 아이템의 착용 조건 : " << inv->equipJobList[tryEquip] << endl;
+        sleep(2);
+        system("clear");
     }
     
 }
@@ -392,8 +405,6 @@ void showNowEquip(Inventory * inv, Character * user) // 완성
         cout << "========================================\n";
         cout << "  착용중인 장비       (q. 뒤로가기)\n";
         cout << "========================================\n";
-
-        cout << "========================================\n";
         cout << "1. 마스크:" << user->nowEquipmentId[0] << endl;
         cout << "2. 갑옷:" << user->nowEquipmentId[1] << endl;
         cout << "3. 신발:" << user->nowEquipmentId[2] << endl;
@@ -403,6 +414,7 @@ void showNowEquip(Inventory * inv, Character * user) // 완성
         cout << "========================================\n";
         cout << "원하는 번호를 입력해서 착용해제\n";
 
+
         string choice;
         cin >> choice;
         system("clear");
@@ -411,19 +423,45 @@ void showNowEquip(Inventory * inv, Character * user) // 완성
         {
             break;
         }
-        else if (stoi(choice) > 0 && stoi(choice) < 6)
+        else if (choice == "1" || choice == "2" || choice == "3" || choice == "4" || choice == "5")
         {
-            cout << "방어구 " << inv->equipNameList[user->nowEquipmentId[stoi(choice)-1]] << " 장착 해제\n";
-            inv->equipmentList[user->nowEquipmentId[stoi(choice)-1]]++;
-            user->nowEquipmentId[stoi(choice)-1] = 0;
-            continue;
+            int num = stoi(choice)-1;
+            
+            if (user->nowEquipmentId[num] != 0)
+            {
+                cout << "방어구 " << inv->equipNameList[user->nowEquipmentId[num]-1] << " 장착 해제\n";
+                sleep(2);
+                system("clear");
+                inv->equipmentList[user->nowEquipmentId[num]-1]++;
+                user->nowEquipmentId[num] = 0;
+                continue;
+            }
+            else
+            {
+                cout << "해제할 장비가 없습니다!\n";
+                sleep(2);
+                system("clear");                
+                continue;
+            }
         }
         else if (choice == "6")
         {
-            cout << "무기 " << inv->equipNameList[user->nowWeaponId-1] << " 장착 해제\n";
-            inv->equipmentList[user->nowWeaponId-1]++;
-            user->nowWeaponId = 0;
-            continue;
+            if (user->nowWeaponId != 0)
+            {
+                cout << "무기 " << inv->equipNameList[user->nowWeaponId-1] << " 장착 해제\n";
+                sleep(2);
+                system("clear");
+                inv->equipmentList[user->nowWeaponId-1]++;
+                user->nowWeaponId = 0;
+                continue;
+            }
+            else
+            {
+                cout << "해제할 장비가 없습니다!\n";
+                sleep(2);
+                system("clear");                
+                continue;
+            }
         }
         else
         {
@@ -444,7 +482,7 @@ void equipInventory(Inventory * inv, Character * user) // 완성
         cout << "  q. 뒤로가기\n";
         cout << "========================================\n";
 
-        string choice;
+        char choice[4];
         inv->equipmentID = 0;
 
         for (i = 0; i < 100; i++)
@@ -464,9 +502,13 @@ void equipInventory(Inventory * inv, Character * user) // 완성
 
         string choiceTwo;
 
-        if (choice == "q")
+        if (choice[0] == 'q')
         {
             break;
+        }
+        else if (!isdigit(choice[0]) || (!isdigit(choice[1]) && choice[1] == ' ') || (!isdigit(choice[2]) && choice[2] == ' '))
+        {
+            continue;
         }
         else if (stoi(choice) <= inv->equipmentID && stoi(choice) > 0)
         {
@@ -533,7 +575,7 @@ void consumableInventory(Inventory * inv, Character * user) // 완성
         cout << "  q. 뒤로가기\n";
         cout << "========================================\n";
 
-        string choice;
+        char choice[3];
         inv->consumableID = 0;
 
         for (i = 0; i < 8; i++)
@@ -556,6 +598,10 @@ void consumableInventory(Inventory * inv, Character * user) // 완성
         if (choice == "q")
         {
             break;
+        }
+        else if (!isdigit(choice[0]) && !isdigit(choice[1]) && !isdigit(choice[2]))
+        {
+            continue;
         }
         else if (stoi(choice) <= inv->consumableID && stoi(choice) > 0)
         {

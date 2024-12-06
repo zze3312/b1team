@@ -4,7 +4,6 @@ void ItemClass::updateInventory() // 미완성
 {
     // 장비 불러오기
     string folderPath = ROOT_PATH + "userData/" + user->id + "/" + user->nickname + "/equipInv.txt";
-    // TODO : "doyeop", "teamless" 임시로 집어넣음, 사용자와 닉네임 값 집어넣어야함
 
     FILE * fp = fopen(folderPath.c_str(), "rt");
 
@@ -260,9 +259,7 @@ void ItemClass::tryEnhance(int tryConsumable) // 미완성
 
 void ItemClass::wearEquip(int tryEquip) // 완성
 {
-    inv->equipTypeList[tryEquip];
-
-    if (user->jobId == inv->equipJobList[tryEquip])
+    if (user->jobId == inv->equipJobList[tryEquip] || inv->equipJobList[tryEquip] == 0)
     {
         for (int i = 0; i < 6; i++)
         {
@@ -272,6 +269,8 @@ void ItemClass::wearEquip(int tryEquip) // 완성
                 {
                     user->nowEquipmentId[i] = inv->equipNumList[tryEquip];
                     cout << inv->equipNameList[tryEquip] << " 착용 완료! \n";
+                    sleep(2);
+                    system("clear");
                     inv->equipmentList[tryEquip]--;
                     return;
                 }
@@ -279,16 +278,29 @@ void ItemClass::wearEquip(int tryEquip) // 완성
                 {
                     user->nowWeaponId - inv->equipNumList[tryEquip];
                     cout << inv->equipNameList[tryEquip] << " 착용 완료! \n";
+                    sleep(2);
+                    system("clear");
                     inv->equipmentList[tryEquip]--;
                 }
                 else
                 {
                     cout << "=======================================================\n";
                     cout << "착용중인 장비가 있습니다!! 먼저 장비를 해제하고 와주세요\n";
+                    sleep(2);
+                    system("clear");
                     return;
                 }
             }
         }
+    }
+    else
+    {
+        cout << "=======================================================\n";
+        cout << "직업에 맞는 장비를 착용해주세요!!\n";
+        cout << "현재 직업: " << user->jobId << endl;
+        cout << "선택한 아이템의 착용 조건 : " << inv->equipJobList[tryEquip] << endl;
+        sleep(2);
+        system("clear");
     }
 
 }
@@ -342,10 +354,35 @@ void ItemClass::showNowEquip() // 완성
 {
     while (1)
     {
+        string set[2];
+        int current[5]; // 이름이 너무 길어서 여기에 담음
+        int current2[5];
+
+        for (int i = 0; i < 5; i++)
+        {
+            current[i] = user->nowEquipmentId[i];
+        }
+        for (int i = 0; i < 5; i++)
+        {
+            current2[i] = inv->equipSetNumList[user->nowEquipmentId[i]-1];
+        }
+        
+        
+        if (current[0] == 0 || current[1] == 0 || current[2] == 0 || current[3] == 0 || current[4] == 0 || user->nowWeaponId == 0)
+        {
+            set[0] = "없음";
+            set[1] = "없음";
+        }
+        else if (current2[0] == current2[1] && current2[1] == current2[2] && current2[2] == current2[3] && current2[3] == current2[4] && current2[4] == inv->equipSetNumList[user->nowWeaponId-1])
+        {
+            set[0] = inv->setEffectNameList[current2[0]];
+            set[1] = inv->setEffectEXList[current2[0]];
+        }
+        
+
+
         cout << "========================================\n";
         cout << "  착용중인 장비       (q. 뒤로가기)\n";
-        cout << "========================================\n";
-
         cout << "========================================\n";
         cout << "1. 마스크:" << user->nowEquipmentId[0] << endl;
         cout << "2. 갑옷:" << user->nowEquipmentId[1] << endl;
@@ -354,11 +391,14 @@ void ItemClass::showNowEquip() // 완성
         cout << "5. 망토:" << user->nowEquipmentId[4] << endl;
         cout << "6. 무기:" << user->nowWeaponId << endl;
         cout << "========================================\n";
+        cout << "적용중인 세트: " << set[0] << endl;
+        cout << "효과: " << set[1] << endl;
+        cout << "========================================\n";
         cout << "원하는 번호를 입력해서 착용해제\n";
 
         // string choice;
         // cin >> choice;
-
+        
         char choice[3];
         read(0, &choice, sizeof(choice));
         system("clear");
@@ -369,17 +409,42 @@ void ItemClass::showNowEquip() // 완성
         }
         else if (choice[0] > '0' && choice[0] < '6')
         {
-            cout << "방어구 " << inv->equipNameList[user->nowEquipmentId[stoi(choice)-1]] << " 장착 해제\n";
-            inv->equipmentList[user->nowEquipmentId[stoi(choice)-1]]++;
-            user->nowEquipmentId[stoi(choice)-1] = 0;
-            continue;
+            int num = atoi(choice)-1;
+
+            if (user->nowEquipmentId[num] != 0)
+            {
+                cout << "방어구 " << inv->equipNameList[user->nowEquipmentId[num]-1] << " 장착 해제\n";
+                inv->equipmentList[user->nowEquipmentId[num]-1]++;
+                user->nowEquipmentId[num] = 0;
+                continue;
+            }
+            else
+            {
+                cout << "해제할 장비가 없습니다!\n";
+                sleep(2);
+                system("clear");                
+                continue;
+            }
+            
         }
         else if (choice[0] == '6')
         {
-            cout << "무기 " << inv->equipNameList[user->nowWeaponId-1] << " 장착 해제\n";
-            inv->equipmentList[user->nowWeaponId-1]++;
-            user->nowWeaponId = 0;
-            continue;
+            if (user->nowWeaponId != 0)
+            {
+                cout << "무기 " << inv->equipNameList[user->nowWeaponId-1] << " 장착 해제\n";
+                sleep(2);
+                system("clear");
+                inv->equipmentList[user->nowWeaponId-1]++;
+                user->nowWeaponId = 0;
+                continue;
+            }
+            else
+            {
+                cout << "해제할 장비가 없습니다!\n";
+                sleep(2);
+                system("clear");                
+                continue;
+            }
         }
         else
         {
@@ -400,7 +465,7 @@ void ItemClass::equipInventory() // 완성
         cout << "  q. 뒤로가기\n";
         cout << "========================================\n";
 
-        string choice;
+        char choice[4];
         inv->equipmentID = 0;
 
         for (i = 0; i < 100; i++)
@@ -420,15 +485,19 @@ void ItemClass::equipInventory() // 완성
 
         string choiceTwo;
 
-        if (choice == "q")
+        if (choice[0] == 'q')
         {
             break;
+        }
+        else if (!isdigit(choice[0]) || (!isdigit(choice[1]) && choice[1] == ' ') || (!isdigit(choice[2]) && choice[2] == ' '))
+        {
+            continue;
         }
         else if (stoi(choice) <= inv->equipmentID && stoi(choice) > 0)
         {
             while (1)
             {
-                int tryEquip = inv->haveEquip[stoi(choice)-1]; // 현재 선택한 장비의 씨리얼 넘버 의미미
+                int tryEquip = inv->haveEquip[stoi(choice)-1]; // 현재 선택한 장비의 씨리얼 넘버 의미
                 cout << "========================================\n";
                 cout << inv->equipNameList[tryEquip] << endl;
                 cout << "========================================\n";
@@ -713,4 +782,9 @@ void ItemClass::checkSet(int userEquipment[5]) // 완성?
     cout << "장갑 세트번호 : " << checkSet[2] << endl;
     cout << "망토 세트번호 : " << checkSet[3] << endl;
     cout << "마스크 세트번호 : " << checkSet[4] << endl;
+}
+
+void ItemClass::closeInven()
+{
+
 }

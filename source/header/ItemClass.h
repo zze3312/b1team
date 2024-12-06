@@ -5,35 +5,35 @@
 
 typedef struct {
     int equipmentID; // 인벤토리에서 출력할 아이템 번호순 (즉 0개는 포함 x)
-    int haveEquip[100];
-    int consumableID;
-    int haveConsum[8];
-    string name;
+    int haveEquip[100]; // 가지고 있는 장비
+    int consumableID; // 소모품 번호순
+    int haveConsum[8]; // 가지고 있는 소모품
+    string name; 
 
     int equipmentList[100]; // "rt"로 기존 파일에 있는 보유개수 불러옴
-    int consumableList[8];
+    int consumableList[8]; // 똑같이 기존 파일에 있는 거 담아옴
     int gold;
 
-    int tierD;
-    int tierC;
-    int tierB;
-    int tierA;
-    int teleportHome;
+    int tierD; // 1티어
+    int tierC; // 2티어
+    int tierB; // 3티어
+    int tierA; // 4티어 얻었을 때 드랍 유무 담아주는 변수
+    int teleportHome; 
     int teleportAny;
     int enhanceEquip;
     int elixir;
 
-    int equipD;
-    int equipC;
+    int equipD; 
+    int equipC; // 도감 번호중에 랜덤으로 드랍
     int equipB;
     int equipA;
 
-    int potionD;
+    int potionD; // 포션 드랍 유무 결정
     int potionC;
     int potionB;
     int potionA;
 
-    // 정보 담기
+    // 정보 담기 (txt에서 읽어오고 여기에 담음)
 
     // 장비
     int equipNumList[100];
@@ -79,6 +79,7 @@ class ItemClass {
         void openInventory();
         void onSet(EquipmentSet set);
         void checkSet(int userEquipment[5]);
+        void closeInven();
 };
 
 
