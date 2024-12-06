@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <cstring>
 #include <unistd.h>
+#include <ctype.h>
 #include <termios.h>
 //#include <direct.h>
 
@@ -38,6 +39,14 @@ struct Login{
     string pwd;
 };
 
+struct Skill{
+    int id;
+    string name;
+    double damage;
+    int coolTime;
+    int useSp;
+};
+
 struct Character{
     string id;
     string nickname;
@@ -57,6 +66,7 @@ struct Character{
     Position pos;
     Position lastPos;
     Position savePos[7];
+    Skill userSkill[2];
 };
 
 struct Monster{
@@ -65,14 +75,6 @@ struct Monster{
     int hp;
     int exp;
     Position pos;
-};
-
-struct Skill{
-    int id;
-    string name;
-    double damage;
-    int coolTime;
-    int useSp;
 };
 
 struct Job{
