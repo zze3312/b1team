@@ -1,6 +1,7 @@
 #include "../header/PlayClass.h"
 #include "../header/MapClass.h"
 #include "../header/CharacterClass.h"
+#include "../header/ItemClass.h"
 
 MapClass mapFunc;
 CharacterClass charFunc; //캐릭터 관련 기능 담김
@@ -36,6 +37,9 @@ void PlayClass::play(User *loginCharacter) {
             if (inputKey[0] == 'q') {
                 charFunc.gameSave(loginCharacter);
                 break;
+            }else if (inputKey[0] == 'i') {
+                ItemClass *itemFunc = new ItemClass(loginCharacter);
+                itemFunc -> openInventory();
             }
 
             ////sleep(1);

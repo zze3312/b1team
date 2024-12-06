@@ -55,18 +55,25 @@ typedef struct {
 
 } Inventory;
 
+
+
+
 class ItemClass {
+    Inventory *inv = new Inventory();
+    User *user = new User();
+
     public:
-        void updateInventory(Inventory * inv, User * user);
+        ItemClass(User *newUser) : user(newUser) {updateInventory();}
+        void updateInventory();
         void dropItem(Inventory inv);
-        void readInfoItemName(Inventory * inv);
-        void tryEnhance(Inventory * inv, User * user, int tryConsumable);
-        void wearEquip(Inventory * inv, User * user, int tryEquip);
-        void useConsumable(Inventory * inv, User * user, int tryConsumable);
-        void showNowEquip(Inventory * inv, User * user);
-        void equipInventory(Inventory * inv, User * user);
-        void consumableInventory(Inventory * inv, User * user);
-        void openInventory(Inventory * inv, User * user);
+        void readInfoItemName();
+        void tryEnhance(int tryConsumable);
+        void wearEquip(int tryEquip);
+        void useConsumable(int tryConsumable);
+        void showNowEquip();
+        void equipInventory();
+        void consumableInventory();
+        void openInventory();
         void onSet(EquipmentSet set);
         void checkSet(int userEquipment[5]);
 };

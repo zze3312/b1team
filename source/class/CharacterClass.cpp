@@ -121,7 +121,7 @@ void CharacterClass::characterAccount(Login *loginUser)
     fprintf(fp, "");
     fclose(fp);
 
-    filePath = folderPath + "/comsumableInv.txt";
+    filePath = folderPath + "/consumableInv.txt";
     fp = fopen(filePath.c_str(), "wt");
     fprintf(fp, "");
     fclose(fp);

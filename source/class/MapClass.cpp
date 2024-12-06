@@ -2,7 +2,6 @@
 #include "../header/MonsterClass.h"
 #include "../header/CharacterClass.h"
 #include "../header/NpcClass.h"
-#include "../header/ItemClass.h"
 
 MonsterClass monFunc;
 CharacterClass userFunc;

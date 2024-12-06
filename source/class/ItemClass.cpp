@@ -1,9 +1,9 @@
 #include "../header/ItemClass.h"
 
-void ItemClass::updateInventory(Inventory * inv, User * user) // 미완성
+void ItemClass::updateInventory() // 미완성
 {
     // 장비 불러오기
-    string folderPath = ROOT_PATH + "userData/" + "doyeop" + "/" + "teamless" + "/equipInv.txt";
+    string folderPath = ROOT_PATH + "userData/" + user->id + "/" + user->nickname + "/equipInv.txt";
     // TODO : "doyeop", "teamless" 임시로 집어넣음, 사용자와 닉네임 값 집어넣어야함
 
     FILE * fp = fopen(folderPath.c_str(), "rt");
@@ -20,7 +20,8 @@ void ItemClass::updateInventory(Inventory * inv, User * user) // 미완성
     fclose(fp);
 
     // 소모품 불러오기
-    string folderPath2 = ROOT_PATH + "userData/" + "doyeop" + "/" + "teamless" + "/consumableInv.txt";
+    string folderPath2 = ROOT_PATH + "userData/" + user->id + "/" + user->nickname + "/consumableInv.txt";
+    cout << folderPath2 << endl;
 
     FILE * fp2 = fopen(folderPath2.c_str(), "rt");
 
@@ -36,7 +37,7 @@ void ItemClass::updateInventory(Inventory * inv, User * user) // 미완성
     fclose(fp2);
 
     // 골드 불러오기
-    string folderPath3 = ROOT_PATH + "userData/" + "doyeop" + "/" + "teamless" + "/goldInv.txt";
+    string folderPath3 = ROOT_PATH + "userData/" + user->id + "/" + user->nickname + "/goldInv.txt";
 
     FILE * fp3 = fopen(folderPath3.c_str(), "rt");
 
@@ -102,7 +103,7 @@ void ItemClass::dropItem(Inventory inv) // 완성, 얻은 아이템이 뭔지 �
 
 }
 
-void ItemClass::readInfoItemName(Inventory * inv) // 완성
+void ItemClass::readInfoItemName() // 완성
 {
     // 장비 정보 불러오기
     string folderPath = ROOT_PATH + "item/equipment.txt";
@@ -190,7 +191,7 @@ void ItemClass::readInfoItemName(Inventory * inv) // 완성
 
 }
 
-void ItemClass::tryEnhance(Inventory * inv, User * user, int tryConsumable) // 미완성
+void ItemClass::tryEnhance(int tryConsumable) // 미완성
 {
     while (1)
     {
@@ -204,8 +205,10 @@ void ItemClass::tryEnhance(Inventory * inv, User * user, int tryConsumable) // �
         cout << "6. " << user->nowWeaponId << endl;
         cout << "=======================================================\n";
 
-        string choice;
-        cin >> choice;
+        //string choice;
+        //cin >> choice;
+        char choice[3];
+        read(0, &choice, sizeof(choice));
         system("clear");
 
         int prob; // 확률
@@ -221,11 +224,11 @@ void ItemClass::tryEnhance(Inventory * inv, User * user, int tryConsumable) // �
 
         if (prob == 0)
         {
-            if (choice == "6")
+            if (choice[0] == '6')
             {
                 cout << "강화 성공!\n"; // TODO : 구현 예정
             }
-            else if (stoi(choice) > 0 && stoi(choice) < 6)
+            else if (choice[0] > '0' && choice[0] < '6')
             {
                 cout << "강화 성공!\n"; // TODO : 구현 예정
             }
@@ -236,12 +239,12 @@ void ItemClass::tryEnhance(Inventory * inv, User * user, int tryConsumable) // �
         }
         else
         {
-            if (choice == "6")
+            if (choice[0] == '6')
             {
                 cout << inv->equipmentList[user->nowWeaponId] << "가 파괴되었습니다...\n";
                 user->nowWeaponId = 0;
             }
-            else if (stoi(choice) > 0 && stoi(choice) < 6)
+            else if (choice[0] > '0' && choice[0] < '6')
             {
                 cout << inv->equipmentList[user->nowEquipmentId[stoi(choice)-1]] << "가 파괴되었습니다...\n";
                 user->nowEquipmentId[stoi(choice)-1] = 0;
@@ -255,7 +258,7 @@ void ItemClass::tryEnhance(Inventory * inv, User * user, int tryConsumable) // �
     }
 }
 
-void ItemClass::wearEquip(Inventory * inv, User * user, int tryEquip) // 완성
+void ItemClass::wearEquip(int tryEquip) // 완성
 {
     inv->equipTypeList[tryEquip];
 
@@ -290,7 +293,7 @@ void ItemClass::wearEquip(Inventory * inv, User * user, int tryEquip) // 완성
 
 }
 
-void ItemClass::useConsumable(Inventory * inv, User * user, int tryConsumable) // 미완성
+void ItemClass::useConsumable(int tryConsumable) // 미완성
 {
     switch (tryConsumable)
     {
@@ -322,10 +325,10 @@ void ItemClass::useConsumable(Inventory * inv, User * user, int tryConsumable) /
         // 새 좌표 생성 / 좌표 이동 / 뒤로가기 함수 필요
         break;
     case 7: // 엘릭서
-        tryEnhance(inv, user, tryConsumable);
+        tryEnhance(tryConsumable);
         break;
     case 8: // 장비강화주문서
-        tryEnhance(inv, user, tryConsumable);
+        tryEnhance(tryConsumable);
         break;
     default:
         break;
@@ -335,7 +338,7 @@ void ItemClass::useConsumable(Inventory * inv, User * user, int tryConsumable) /
 
 }
 
-void ItemClass::showNowEquip(Inventory * inv, User * user) // 완성
+void ItemClass::showNowEquip() // 완성
 {
     while (1)
     {
@@ -353,22 +356,25 @@ void ItemClass::showNowEquip(Inventory * inv, User * user) // 완성
         cout << "========================================\n";
         cout << "원하는 번호를 입력해서 착용해제\n";
 
-        string choice;
-        cin >> choice;
+        // string choice;
+        // cin >> choice;
+
+        char choice[3];
+        read(0, &choice, sizeof(choice));
         system("clear");
 
-        if (choice == "q")
+        if (choice[0] == 'q')
         {
             break;
         }
-        else if (stoi(choice) > 0 && stoi(choice) < 6)
+        else if (choice[0] > '0' && choice[0] < '6')
         {
             cout << "방어구 " << inv->equipNameList[user->nowEquipmentId[stoi(choice)-1]] << " 장착 해제\n";
             inv->equipmentList[user->nowEquipmentId[stoi(choice)-1]]++;
             user->nowEquipmentId[stoi(choice)-1] = 0;
             continue;
         }
-        else if (choice == "6")
+        else if (choice[0] == '6')
         {
             cout << "무기 " << inv->equipNameList[user->nowWeaponId-1] << " 장착 해제\n";
             inv->equipmentList[user->nowWeaponId-1]++;
@@ -382,7 +388,7 @@ void ItemClass::showNowEquip(Inventory * inv, User * user) // 완성
     }
 }
 
-void ItemClass::equipInventory(Inventory * inv, User * user) // 완성
+void ItemClass::equipInventory() // 완성
 {
     int i;
 
@@ -394,7 +400,7 @@ void ItemClass::equipInventory(Inventory * inv, User * user) // 완성
         cout << "  q. 뒤로가기\n";
         cout << "========================================\n";
 
-        string choice;
+        // string choice;
         inv->equipmentID = 0;
 
         for (i = 0; i < 100; i++)
@@ -409,16 +415,19 @@ void ItemClass::equipInventory(Inventory * inv, User * user) // 완성
         }
 
         cout << "========================================\n";
-        cin >> choice;
+        // cin >> choice;
+
+        char choice[3];
+        read(0, &choice, sizeof(choice));
         system("clear");
 
-        string choiceTwo;
+        // string choiceTwo;
 
-        if (choice == "q")
+        if (choice[0] == 'q')
         {
             break;
         }
-        else if (stoi(choice) <= inv->equipmentID && stoi(choice) > 0)
+        else if (choice[0] <= inv->equipmentID + '0' && choice[0] > '0')
         {
             while (1)
             {
@@ -435,15 +444,16 @@ void ItemClass::equipInventory(Inventory * inv, User * user) // 완성
                 cout << "1. 착용하기  2. 세트효과 확인  q. 뒤로가기\n";
                 cout << "========================================\n";
 
-                cin >> choiceTwo;
+                // cin >> choiceTwo;
+                read(0, &choice, sizeof(choice));
                 system("clear");
 
-                if (choiceTwo == "1")
+                if (choice[0] == '1')
                 {
-                    wearEquip(inv, user, tryEquip);
+                    wearEquip(tryEquip);
                     break;
                 }
-                else if (choiceTwo == "2")
+                else if (choice[0] == '2')
                 {
                     cout << "========================================\n";
                     cout << "세트 이름: " << inv->setEffectNameList[inv->equipSetNumList[tryEquip]-1] << endl;
@@ -452,7 +462,7 @@ void ItemClass::equipInventory(Inventory * inv, User * user) // 완성
 
                     continue;
                 }
-                else if (choiceTwo == "q")
+                else if (choice[0] == 'q')
                 {
                     break;
                 }
@@ -471,7 +481,7 @@ void ItemClass::equipInventory(Inventory * inv, User * user) // 완성
     }
 }
 
-void ItemClass::consumableInventory(Inventory * inv, User * user) // 완성
+void ItemClass::consumableInventory() // 완성
 {
     int i;
 
@@ -483,7 +493,7 @@ void ItemClass::consumableInventory(Inventory * inv, User * user) // 완성
         cout << "  q. 뒤로가기\n";
         cout << "========================================\n";
 
-        string choice;
+        // string choice;
         inv->consumableID = 0;
 
         for (i = 0; i < 8; i++)
@@ -498,16 +508,18 @@ void ItemClass::consumableInventory(Inventory * inv, User * user) // 완성
         }
 
         cout << "========================================\n";
-        cin >> choice;
+        // cin >> choice;
+        char choice[3];
+        read(0, &choice, sizeof(choice));
         system("clear");
 
-        string choiceTwo;
+        //string choiceTwo;
 
-        if (choice == "q")
+        if (choice[0] == 'q')
         {
             break;
         }
-        else if (stoi(choice) <= inv->consumableID && stoi(choice) > 0)
+        else if (choice[0] <= inv->consumableID + '0' && choice[0] > '0')
         {
             while (1)
             {
@@ -522,15 +534,16 @@ void ItemClass::consumableInventory(Inventory * inv, User * user) // 완성
                 cout << "1. 사용하기  q. 뒤로가기\n";
                 cout << "========================================\n";
 
-                cin >> choiceTwo;
+                //cin >> choiceTwo;
+                read(0, &choice, sizeof(choice));
                 system("clear");
 
-                if (choiceTwo == "1")
+                if (choice[0] == '1')
                 {
-                    useConsumable(inv, user, tryConsumable);
+                    useConsumable(tryConsumable);
                     continue;
                 }
-                else if (choiceTwo == "q")
+                else if (choice[0] == 'q')
                 {
                     break;
                 }
@@ -552,12 +565,14 @@ void ItemClass::consumableInventory(Inventory * inv, User * user) // 완성
 
 }
 
-void ItemClass::openInventory(Inventory * inv, User * user) // 완성
+void ItemClass::openInventory() // 완성
 {
-    string choice;
+    char choice[3];
+    //string choice;
 
     while (1)
     {
+        system("clear");
         cout << "현재 보유한 골드 : " << inv->gold << endl;
         cout << "========================================\n";
         cout << "1. 장비\n";
@@ -565,26 +580,28 @@ void ItemClass::openInventory(Inventory * inv, User * user) // 완성
         cout << "3. 착용중인 장비\n";
         cout << "q. 뒤로가기\n";
         cout << "========================================\n";
-        cin >> choice;
+        //cin >> choice;
+        read(0, &choice, sizeof(choice));
         system("clear");
 
-        if (choice == "1")
+        if (choice[0] == '1')
         {
-            equipInventory(inv, user);
+            equipInventory();
             continue;
         }
-        else if (choice == "2")
+        else if (choice[0] == '2')
         {
-            consumableInventory(inv, user);
+            consumableInventory();
             continue;
         }
-        else if (choice == "3")
+        else if (choice[0] == '3')
         {
-            showNowEquip(inv, user);
+            showNowEquip();
             continue;
         }
-        else if (choice == "q")
+        else if (choice[0] == 'q')
         {
+            //closeInven();
             break;
         }
         else
