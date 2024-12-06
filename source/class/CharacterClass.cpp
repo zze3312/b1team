@@ -128,7 +128,7 @@ void CharacterClass::characterAccount(Login *loginUser)
 
     filePath = folderPath + "/goldInv.txt";
     fp = fopen(filePath.c_str(), "wt");
-    fprintf(fp, "");
+    fprintf(fp, "300");
     fclose(fp);
 
     cout << "캐릭터가 생성되었습니다!" << endl;

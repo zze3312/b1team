@@ -39,7 +39,8 @@ Position MapClass::setPortal() {
 
 void MapClass::setCharacter(Character *loginCharacter) {
     if (loginCharacter -> jobName.empty()) {
-        npcFunc.getJobName(loginCharacter);
+        NpcClass *npc = new NpcClass(loginCharacter);
+        npc -> getJobName();
     }
 
     if (!(map[loginCharacter -> pos.row][loginCharacter -> pos.col] >= '1' && map[loginCharacter -> pos.row][loginCharacter -> pos.col] <= '4')

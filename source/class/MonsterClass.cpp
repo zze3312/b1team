@@ -1,5 +1,7 @@
 #include "../header/MonsterClass.h"
 
+#include "../header/ItemClass.h"
+
 
 void MonsterClass::getMonsterName() {
     //Monster *monster = new Monster();
@@ -102,7 +104,8 @@ void MonsterClass::meetMonster() {
             usleep(500000);
         }else if (selectMenu - '0' == 2){
             cout << "아이템을 사용합니다" << endl;
-            //sleep(1);
+            ItemClass *inventory = new ItemClass(user);
+            inventory -> openInventory();
             usleep(500000);
         }else if (selectMenu - '0' == 3) {
             cout << "도망갑니다" << endl;
