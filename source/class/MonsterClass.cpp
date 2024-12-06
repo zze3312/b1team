@@ -94,11 +94,11 @@ void MonsterClass::meetMonster() {
             cout << "---------------------------------------" << endl;
             usleep(500000);
             cout << "0. 기본공격" << endl;
-            if (user -> sp >= user -> userSkill[0].useSp){
+            if (user -> sp >= user -> userSkill[0].useSp && user -> lvl >= 3 && user -> jobId != 0){
             usleep(500000);
             cout << user -> userSkill[0].id << ". " << user -> userSkill[0].name << "(sp소모 : " << user -> userSkill[0].useSp << ")" << endl;
             }
-            if (user -> sp >= user -> userSkill[1].useSp) {
+            if (user -> sp >= user -> userSkill[1].useSp && user -> lvl >= 7 && user -> jobId != 0) {
                 usleep(500000);
                 cout << user -> userSkill[1].id << ". " << user -> userSkill[1].name << "(sp소모 : " << user -> userSkill[1].useSp << ")" << endl;
             }
@@ -114,7 +114,7 @@ void MonsterClass::meetMonster() {
                 cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
                 monster -> hp -= attack;
                 usleep(500000);
-            } else if (selectMenu - '0' == 1) {
+            } else if (selectMenu - '0' == 1 && user -> lvl >= 3 && user -> jobId != 0) {
                 cout << "스킬 " << user -> userSkill[0].useSp << "을 사용합니다." << endl;
                 usleep(500000);
                 user -> sp -= user -> userSkill[0].useSp;
@@ -131,7 +131,7 @@ void MonsterClass::meetMonster() {
                 cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
                 monster -> hp -= attack;
                 usleep(500000);
-            } else if (selectMenu - '0' == 2) {
+            } else if (selectMenu - '0' == 2 && user -> lvl >= 7 && user -> jobId != 0) {
                 cout << "스킬 " << user -> userSkill[1].name << "을 사용합니다." << endl;
                 usleep(500000);
                 user -> sp -= user -> userSkill[0].useSp;
@@ -148,6 +148,8 @@ void MonsterClass::meetMonster() {
                 cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
                 monster -> hp -= attack;
                 usleep(500000);
+            }else {
+                cout << "플레이어의 공격! : 공격에 실패하였습니다." << endl;
             }
         }else if (selectMenu - '0' == 2){
             cout << "아이템을 사용합니다" << endl;
@@ -322,6 +324,8 @@ void MonsterClass::meetMonster() {
                         cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
                         newMonster -> hp -= attack;
                         usleep(500000);
+                    }else {
+                        cout << "플레이어의 공격! : 공격에 실패하였습니다." << endl;
                     }
                     cout << newMonster -> name << "의 공격! : " << attack << "만큼의 피해를 입었습니다." << endl;
                     user -> hp -= attack;
