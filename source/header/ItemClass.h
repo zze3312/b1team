@@ -5,13 +5,13 @@
 
 typedef struct {
     int equipmentID; // 인벤토리에서 출력할 아이템 번호순 (즉 0개는 포함 x)
-    int haveEquip[100]; // 가지고 있는 장비
+    int haveEquip[100]; // 1개 이상인 장비 출력용
     int consumableID; // 소모품 번호순
-    int haveConsum[8]; // 가지고 있는 소모품
+    int haveConsum[8]; // 1개 이상인 장비 출력용
     string name; 
 
-    int equipmentList[100]; // "rt"로 기존 파일에 있는 보유개수 불러옴
-    int consumableList[8]; // 똑같이 기존 파일에 있는 거 담아옴
+    int equipmentList[100]; // "rt"로 기존 파일에 있는 보유개수 불러옴, 현재 유저 인벤
+    int consumableList[8]; // 똑같이 기존 파일에 있는 거 담아옴, 현재 유저 인벤벤
     int gold;
 
     int tierD; // 1티어
@@ -77,8 +77,6 @@ class ItemClass {
         void equipInventory();
         void consumableInventory();
         void openInventory();
-        void onSet(EquipmentSet set);
-        void checkSet(int userEquipment[5]);
         void closeInven();
 };
 

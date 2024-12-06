@@ -356,15 +356,10 @@ void ItemClass::showNowEquip() // 완성
     {
         string set[2];
         int current[5]; // 이름이 너무 길어서 여기에 담음
-        int current2[5];
 
         for (int i = 0; i < 5; i++)
         {
-            current[i] = user->nowEquipmentId[i];
-        }
-        for (int i = 0; i < 5; i++)
-        {
-            current2[i] = inv->equipSetNumList[user->nowEquipmentId[i]-1];
+            current[i] = inv->equipSetNumList[user->nowEquipmentId[i]-1];
         }
         
         
@@ -373,10 +368,10 @@ void ItemClass::showNowEquip() // 완성
             set[0] = "없음";
             set[1] = "없음";
         }
-        else if (current2[0] == current2[1] && current2[1] == current2[2] && current2[2] == current2[3] && current2[3] == current2[4] && current2[4] == inv->equipSetNumList[user->nowWeaponId-1])
+        else if (current[0] == current[1] && current[1] == current[2] && current[2] == current[3] && current[3] == current[4] && current[4] == inv->equipSetNumList[user->nowWeaponId-1])
         {
-            set[0] = inv->setEffectNameList[current2[0]];
-            set[1] = inv->setEffectEXList[current2[0]];
+            set[0] = inv->setEffectNameList[current[0]];
+            set[1] = inv->setEffectEXList[current[0]];
         }
         
 
@@ -432,8 +427,6 @@ void ItemClass::showNowEquip() // 완성
             if (user->nowWeaponId != 0)
             {
                 cout << "무기 " << inv->equipNameList[user->nowWeaponId-1] << " 장착 해제\n";
-                sleep(2);
-                system("clear");
                 inv->equipmentList[user->nowWeaponId-1]++;
                 user->nowWeaponId = 0;
                 continue;
@@ -460,7 +453,7 @@ void ItemClass::equipInventory() // 완성
     while (1)
     {
         cout << "========================================\n";
-        cout << "  보유한 장비 (상세 정보: 번호 입력)\n";
+        cout << "  보유한 장비 (입력 후 엔터)\n";
         cout << "========================================\n";
         cout << "  q. 뒤로가기\n";
         cout << "========================================\n";
@@ -522,12 +515,22 @@ void ItemClass::equipInventory() // 완성
                 }
                 else if (choice2 == '2')
                 {
-                    cout << "========================================\n";
-                    cout << "세트 이름: " << inv->setEffectNameList[inv->equipSetNumList[tryEquip]-1] << endl;
-                    cout << "세트효과: " << inv->setEffectEXList[inv->equipSetNumList[tryEquip]-1] << endl;
-                    cout << "========================================\n";
-
-                    continue;
+                    if (inv->equipSetNumList[tryEquip] == 0)
+                    {
+                        cout << "========================================\n";
+                        cout << "세트 이름: " << "없음" << endl;
+                        cout << "세트효과: " << "없음" << endl;
+                        cout << "========================================\n";
+                        continue;
+                    }
+                    else
+                    {
+                        cout << "========================================\n";
+                        cout << "세트 이름: " << inv->setEffectNameList[inv->equipSetNumList[tryEquip]-1] << endl;
+                        cout << "세트효과: " << inv->setEffectEXList[inv->equipSetNumList[tryEquip]-1] << endl;
+                        cout << "========================================\n";
+                        continue;
+                    }
                 }
                 else if (choice2 == 'q')
                 {
@@ -669,7 +672,7 @@ void ItemClass::openInventory() // 완성
         }
         else if (choice[0] == 'q')
         {
-            //closeInven();
+            closeInven();
             break;
         }
         else
@@ -683,5 +686,37 @@ void ItemClass::openInventory() // 완성
 
 void ItemClass::closeInven()
 {
+    // 장비 저장
+    string folderPath = ROOT_PATH + "userData/" + user->id + "/" + user->nickname + "/equipInv.txt";
+
+    FILE * fp = fopen(folderPath.c_str(), "wt");
+
+    for (int i = 0; i < 100; i++)
+    {
+        fprintf(fp, "%d\n", inv->equipmentList[i]);
+    }
+
+    fclose(fp);
+
+    // 소모품 저장
+    string folderPath2 = ROOT_PATH + "userData/" + user->id + "/" + user->nickname + "/consumableInv.txt";
+
+    FILE * fp2 = fopen(folderPath2.c_str(), "wt");
+
+    for (int i = 0; i < 8; i++)
+    {
+        fprintf(fp2, "%d\n", inv->consumableList[i]);
+    }
+
+    fclose(fp2);
+
+    // 골드 저장
+    string folderPath3 = ROOT_PATH + "userData/" + user->id + "/" + user->nickname + "/goldInv.txt";
+
+    FILE * fp3 = fopen(folderPath3.c_str(), "wt");
+
+    fprintf(fp3, "%d\n", inv->gold);
+
+    fclose(fp3);
 
 }
