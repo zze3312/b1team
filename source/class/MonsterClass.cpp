@@ -158,7 +158,7 @@ void MonsterClass::meetMonster() {
             cout << "도망갑니다" << endl;
             //sleep(1);
             usleep(500000);
-            break;
+            return;
         }else {
             cout << "잘못된 선택입니다." << endl;
             //sleep(1);
@@ -268,11 +268,11 @@ void MonsterClass::meetMonster() {
                     cout << "---------------------------------------" << endl;
                     usleep(500000);
                     cout << "0. 기본공격" << endl;
-                    if (user -> sp >= user -> userSkill[0].useSp){
+                    if (user -> sp >= user -> userSkill[0].useSp && user -> lvl >= 3 && user -> jobId != 0){
                     usleep(500000);
                     cout << user -> userSkill[0].id << ". " << user -> userSkill[0].name << "(sp소모 : " << user -> userSkill[0].useSp << ")" << endl;
                     }
-                    if (user -> sp >= user -> userSkill[1].useSp) {
+                    if (user -> sp >= user -> userSkill[1].useSp && user -> lvl >= 7 && user -> jobId != 0) {
                         usleep(500000);
                         cout << user -> userSkill[1].id << ". " << user -> userSkill[1].name << "(sp소모 : " << user -> userSkill[1].useSp << ")" << endl;
                     }
@@ -297,9 +297,9 @@ void MonsterClass::meetMonster() {
                         if (user -> jobId == 1 || user -> jobId == 3) {
                             attack = (rand() % ((user -> userStat.str) * 10 * (user -> lvl)) + user -> minDamage) * user -> userSkill[0].damage;
                         }else if (user -> jobId == 2) {
-                            attack = (rand() % ((user -> userStat.str) * 12 * (user -> lvl)) + user -> minDamage) * user -> userSkill[0].damage;
+                            attack = (rand() % ((user -> userStat.intl) * 12 * (user -> lvl)) + user -> minDamage) * user -> userSkill[0].damage;
                         }else {
-                            attack = (rand() % ((user -> userStat.str) * 10 * (user -> lvl)) + user -> minDamage) * user -> userSkill[0].damage;
+                            attack = (rand() % ((user -> userStat.dex) * 10 * (user -> lvl)) + user -> minDamage) * user -> userSkill[0].damage;
                         }
 
                         cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
@@ -314,9 +314,9 @@ void MonsterClass::meetMonster() {
                         if (user -> jobId == 1 || user -> jobId == 3) {
                             attack = (rand() % ((user -> userStat.str) * 15 * (user -> lvl)) + user -> minDamage) * user -> userSkill[1].damage;
                         }else if (user -> jobId == 2) {
-                            attack = (rand() % ((user -> userStat.str) * 17 * (user -> lvl)) + user -> minDamage) * user -> userSkill[1].damage;
+                            attack = (rand() % ((user -> userStat.intl) * 17 * (user -> lvl)) + user -> minDamage) * user -> userSkill[1].damage;
                         }else {
-                            attack = (rand() % ((user -> userStat.str) * 15 * (user -> lvl)) + user -> minDamage) * user -> userSkill[1].damage;
+                            attack = (rand() % ((user -> userStat.dex) * 15 * (user -> lvl)) + user -> minDamage) * user -> userSkill[1].damage;
                         }
 
                         cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
@@ -337,18 +337,14 @@ void MonsterClass::meetMonster() {
                     cout << "도망갑니다" << endl;
                     //sleep(1);
                     usleep(500000);
-                    break;
+                    return;
                 }else {
                     cout << "잘못된 선택입니다." << endl;
                     //sleep(1);
                     usleep(500000);
                     continue;
                 }
-
-
             }
-
-
         }
 
         if (user -> hp < 0) {
