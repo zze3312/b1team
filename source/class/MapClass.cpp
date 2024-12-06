@@ -1,13 +1,11 @@
 #include "../header/MapClass.h"
-#include "../header/MonsterClass.h"
 #include "../header/CharacterClass.h"
+#include "../header/MonsterClass.h"
 #include "../header/NpcClass.h"
 
-MonsterClass monFunc;
 CharacterClass userFunc;
-NpcClass npcFunc;
 
-void MapClass::mapInit(User *loginCharacter) {
+void MapClass::mapInit(Character *loginCharacter) {
     setMap(loginCharacter -> pos.floor);
     if (loginCharacter -> pos.floor > 0) {
         setMonster(loginCharacter);
@@ -24,7 +22,6 @@ void MapClass::setMap(int mapNum){
 
 Position MapClass::setPortal() {
     Position pos;
-    int cnt = 0;
 
     while (1) {
         int randomRow = rand() % ROW_SIZE;
@@ -40,7 +37,7 @@ Position MapClass::setPortal() {
 
 }
 
-void MapClass::setCharacter(User *loginCharacter) {
+void MapClass::setCharacter(Character *loginCharacter) {
     if (loginCharacter -> jobName.empty()) {
         npcFunc.getJobName(loginCharacter);
     }
@@ -56,7 +53,7 @@ void MapClass::setCharacter(User *loginCharacter) {
         loginCharacter -> pos.col = loginCharacter -> lastPos.col;
     }
 }
-void MapClass::setMonster(User *loginCharacter) {
+void MapClass::setMonster(Character *loginCharacter) {
     const int CREATE_MONSTERS = 20;
     Monster monsterList[CREATE_MONSTERS];
     for (int i = 0; i < CREATE_MONSTERS; i++) {
@@ -146,7 +143,7 @@ void MapClass::setMonster(User *loginCharacter) {
     }
 }
 
-void MapClass::printMap(User *loginCharacter) {
+void MapClass::printMap(Character *loginCharacter) {
     int startCol = 0;
     int endCol = 0;
     int startRow = 0;
@@ -252,7 +249,7 @@ void MapClass::printMap(User *loginCharacter) {
     }
 }
 
-void MapClass::printStatus(User *loginCharacter) {
+void MapClass::printStatus(Character *loginCharacter) {
     cout << "------------------------------------------------" << endl;
     cout << " 캐릭터명 : " << loginCharacter -> nickname << endl;
     cout << " 레벨     : " << loginCharacter -> lvl << endl;
@@ -276,52 +273,57 @@ void MapClass::printStatus(User *loginCharacter) {
     cout << "------------------------------------------------" << endl;
 }
 
-void MapClass::mapEvent(User *loginCharacter) {
+void MapClass::mapEvent(Character *loginCharacter) {
     //포탈아이콘을 만나면
     if (loginCharacter -> beforeBlock == MAP_ICON_NUM_6) {
         moveFloor(loginCharacter);
     }
     //몬스터를 만나면
     else if (!isdigit(loginCharacter -> beforeBlock)) {
-        Monster *mon = new Monster();
-        mon -> id = loginCharacter -> beforeBlock;
-        monFunc.meetMonster(mon, loginCharacter);
-        delete mon;
+        MonsterClass *monFunc = new MonsterClass(loginCharacter, loginCharacter -> beforeBlock);
+        monFunc->meetMonster();
+        delete monFunc;
     }
     //npc_성직자를 만나면
     else if (loginCharacter -> beforeBlock == MAP_ICON_NUM_8) {
-        npcFunc.meetPriest(loginCharacter);
+        NpcClass * npcFunc = new NpcClass(loginCharacter);
+        npcFunc->meetPriest();
+        delete npcFunc;
     }
     //npc_결투장소환사를 만나면
     else if (loginCharacter -> beforeBlock == MAP_ICON_NUM_5) {
         int userGold = 10000;
-        Monster *mon = new Monster();
+        char mon = NULL;
+
         int randomMon = rand() % 7;
         switch (randomMon) {
             case 0:
-                mon -> id = ORC_NUM;
+                mon = ORC_NUM;
             break;
             case 1:
-                mon -> id = ZOMBIE_NUM;
+                mon = ZOMBIE_NUM;
             break;
             case 2:
-                mon -> id = GHOUL_NUM;
+                mon = GHOUL_NUM;
             break;
             case 3:
-                mon -> id = SKELETON_NUM;
+                mon = SKELETON_NUM;
             break;
             case 4:
-                mon -> id = SPA_TOY_NUM;
+                mon = SPA_TOY_NUM;
             break;
             case 5:
-                mon -> id = SOLDIER_NUM;
+                mon = SOLDIER_NUM;
             break;
             case 6:
-                mon -> id = BAPHOMET_NUM;
+                mon = BAPHOMET_NUM;
             break;
         }
-        npcFunc.meetFight(mon, loginCharacter, &userGold);
-        delete mon;
+        NpcClass * npcFunc = new NpcClass(loginCharacter);
+        MonsterClass *monster = new MonsterClass(loginCharacter, mon);
+        npcFunc->meetFight(monster, &userGold);
+        delete npcFunc;
+        delete monster;
     }
 
     //죽었다면
@@ -333,7 +335,7 @@ void MapClass::mapEvent(User *loginCharacter) {
 
 }
 
-void MapClass::moveFloor(User *loginCharacter) {
+void MapClass::moveFloor(Character *loginCharacter) {
     //올라가는지 내려가는지 체크
     if ((loginCharacter -> pos.row == downFloor -> row && loginCharacter -> pos.col == downFloor -> col) && loginCharacter -> pos.floor != 0 ) {
         loginCharacter -> pos.floor --;

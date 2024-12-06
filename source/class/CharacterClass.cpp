@@ -2,12 +2,12 @@
 
 
 
-bool CharacterClass::characterSelect(Login *loginUser, User *loginCharacter) {
+bool CharacterClass::characterSelect(Login *loginUser, Character *loginCharacter) {
     char str[30] = "";
 
     char selectMenu = NULL;
     string filePath = ROOT_PATH + "userData/" + loginUser->id + "/character.txt";
-    User tempUser[3];
+    Character tempUser[3];
 
     while (true) {
         int cnt = 0;
@@ -90,7 +90,7 @@ bool CharacterClass::characterSelect(Login *loginUser, User *loginCharacter) {
 void CharacterClass::characterAccount(Login *loginUser)
 {
     using namespace std;
-    User accountCharacter;
+    Character accountCharacter;
     string filePath = ROOT_PATH + "userData/" + loginUser->id + "/character.txt";
 
     system("clear");
@@ -136,7 +136,7 @@ void CharacterClass::characterAccount(Login *loginUser)
     usleep(500000);
 }
 
-void CharacterClass::move(User *loginCharacter, char moveKey) {
+void CharacterClass::move(Character *loginCharacter, char moveKey) {
     loginCharacter -> lastPos.row = loginCharacter -> pos.row;
     loginCharacter -> lastPos.col = loginCharacter -> pos.col;
 
@@ -153,7 +153,7 @@ void CharacterClass::move(User *loginCharacter, char moveKey) {
     }
 }
 
-void CharacterClass::gameSave(User *loginCharacter) {
+void CharacterClass::gameSave(Character *loginCharacter) {
     string filePath = ROOT_PATH;
     filePath += "userData/" + loginCharacter -> id + "/" + loginCharacter -> nickname + "/" + "characterInfo.txt";
     FILE *fp = fopen(filePath.c_str(), "wt");

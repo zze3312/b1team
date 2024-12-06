@@ -8,7 +8,7 @@ PlayClass playFunc;
 
 
 Login *loginUser = new Login(); //로그인 사용자 정보 담김
-User *loginCharacter = new User(); //접속한 캐릭터 정보 담김
+Character *loginCharacter = new Character(); //접속한 캐릭터 정보 담김
 
 int main(){
     srand(time(NULL));

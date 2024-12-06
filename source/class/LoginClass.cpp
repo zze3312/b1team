@@ -8,7 +8,8 @@ void LoginClass::join() {
     cout << "회원가입" << endl;
     cout << "아이디 : ";
     cin >> joinInfo.id;
-    if (joinInfo.id == "q") return;
+    if (joinInfo.id == "q")
+        return;
     cout << "비밀번호 : ";
     cin >> joinInfo.pwd;
 

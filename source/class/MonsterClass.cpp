@@ -1,7 +1,7 @@
 #include "../header/MonsterClass.h"
 
 
-void MonsterClass::getMonsterName(Monster *monster, User *loginCharacter) {
+void MonsterClass::getMonsterName() {
     //Monster *monster = new Monster();
     const string SOLDIER_NAME[5] = {"김대현", "박민제", "김도엽", "김지현", "임정규"};
     int randomSoldierName = rand() % 5;
@@ -33,47 +33,47 @@ void MonsterClass::getMonsterName(Monster *monster, User *loginCharacter) {
         break;
         case SOLDIER_NUM:
             monster -> name = SOLDIER_NAME[randomSoldierName];
-            monster -> hp   = loginCharacter -> hp * 200;
-            monster -> exp  = loginCharacter -> maxExp * 0.1;
+            monster -> hp   = user -> hp * 200;
+            monster -> exp  = user -> maxExp * 0.1;
         break;
         case BAPHOMET_NUM:
             monster -> name = "바포메트";
-            monster -> hp   = loginCharacter -> hp * 500;
-            monster -> exp  = loginCharacter -> maxExp * 0.15;
+            monster -> hp   = user -> hp * 500;
+            monster -> exp  = user -> maxExp * 0.15;
         break;
         case LDNK_NUM:
             monster -> name = "이동녀크";
-            monster -> hp   = loginCharacter -> hp * 700;
-            monster -> exp  = loginCharacter -> maxExp * 0.2;
+            monster -> hp   = user -> hp * 700;
+            monster -> exp  = user -> maxExp * 0.2;
         break;
         case CSD_NUM:
             monster -> name = "최상달";
-            monster -> hp   = loginCharacter -> hp * 1000;
-            monster -> exp  = loginCharacter -> maxExp * 0.3;
+            monster -> hp   = user -> hp * 1000;
+            monster -> exp  = user -> maxExp * 0.3;
         break;
         default: break;
     }
 }
 
-void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
+void MonsterClass::meetMonster() {
     char selectMenu = NULL;
     int attack = 0;
     int randomSoldier = rand() % 20;
     char soldierYn = 'N';
-    getMonsterName(monster, loginCharacter);
+    getMonsterName();
     system("clear");
 
     cout << monster -> name << "을(를) 만났습니다." << endl;
     //sleep(1);
     usleep(500000);
-    while (monster -> hp > 0 && loginCharacter -> hp > 0) {
+    while (monster -> hp > 0 && user -> hp > 0) {
         cout << "---------------------------------------" << endl;
         //sleep(1);
         usleep(500000);
         cout << monster -> name <<"의 현재 체력 : " << monster -> hp << endl;
         //sleep(1);
         usleep(500000);
-        cout << loginCharacter -> nickname << "의 현재 체력 : " << loginCharacter -> hp << endl;
+        cout << user -> nickname << "의 현재 체력 : " << user -> hp << endl;
         //sleep(1);
         usleep(500000);
         cout << "---------------------------------------" << endl;
@@ -95,7 +95,7 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
             //sleep(1);
             usleep(500000);
             // TODO : 데미지 밸런스 패치 필요(우선 임시로 레벨별 최소값만 줌)
-            attack = rand() % (int)(30.0 * (loginCharacter->lvl / 10.0)) + loginCharacter -> minDamage;
+            attack = rand() % (int)(30.0 * (user->lvl / 10.0)) + user -> minDamage;
             cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
             monster -> hp -= attack;
             //sleep(1);
@@ -151,37 +151,37 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
             default: break;
         }
         cout << monster -> name << "의 공격! : " << attack << "만큼의 피해를 입었습니다." << endl;
-        loginCharacter -> hp -= attack;
+        user -> hp -= attack;
         //sleep(1);
         usleep(500000);
     }
-    if (loginCharacter -> hp <= 0) {
+    if (user -> hp <= 0) {
         cout << monster -> name << "에게 당했습니다!!" << endl;
         //sleep(1);
         usleep(500000);
-        if (loginCharacter -> hp < 0) {
-            loginCharacter -> hp = 0;
-            loginCharacter -> dieYn = 'Y';
-            loginCharacter -> pos.row = RESET_ROW;
-            loginCharacter -> pos.col = RESET_COL;
-            loginCharacter -> lastPos.row = RESET_ROW;
-            loginCharacter -> lastPos.col = RESET_COL;
-            loginCharacter -> beforeBlock = '0';
-            loginCharacter -> pos.floor = 0;
-            loginCharacter -> dieYn = 'Y';
+        if (user -> hp < 0) {
+            user -> hp = 0;
+            user -> dieYn = 'Y';
+            user -> pos.row = RESET_ROW;
+            user -> pos.col = RESET_COL;
+            user -> lastPos.row = RESET_ROW;
+            user -> lastPos.col = RESET_COL;
+            user -> beforeBlock = '0';
+            user -> pos.floor = 0;
+            user -> dieYn = 'Y';
         }
         //TODO : 보상부분 (약탈)
 
         return;
     }else if (monster -> hp <= 0){
         cout << monster -> name << "을 해치웠습니다!!" << endl;
-        if (!(isdigit(loginCharacter -> beforeBlock))) {
-            loginCharacter -> beforeBlock = '0';
+        if (!(isdigit(user -> beforeBlock))) {
+            user -> beforeBlock = '0';
         }
 
         //sleep(1);
         usleep(500000);
-        loginCharacter -> exp += monster -> exp;
+        user -> exp += monster -> exp;
         cout << "경험치 " << monster -> exp << "를 얻었습니다." << endl;
         //sleep(1);
         usleep(500000);
@@ -189,7 +189,7 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
         if (soldierYn == 'Y') {
             Monster *newMonster = new Monster();
             newMonster -> id = SOLDIER_NUM;
-            getMonsterName(newMonster, loginCharacter);
+            getMonsterName();
             cout << "다른 용사가 당신이 " << monster -> name << "을(를) 무찌른 걸 보고 빼앗으러 왔습니다." << endl;
             //sleep(1);
             usleep(500000);
@@ -197,14 +197,14 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
             //sleep(1);
             usleep(500000);
 
-            while (newMonster -> hp > 0 && loginCharacter -> hp > 0) {
+            while (newMonster -> hp > 0 && user -> hp > 0) {
                 cout << "---------------------------------------" << endl;
                 //sleep(1);
                 usleep(500000);
                 cout << newMonster -> name <<"의 현재 체력 : " << newMonster -> hp << endl;
                 //sleep(1);
                 usleep(500000);
-                cout << loginCharacter -> nickname << "의 현재 체력 : " << loginCharacter -> hp << endl;
+                cout << user -> nickname << "의 현재 체력 : " << user -> hp << endl;
                 //sleep(1);
                 usleep(500000);
                 cout << "---------------------------------------" << endl;
@@ -226,7 +226,7 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
                     //sleep(1);
                     usleep(500000);
                     // TODO : 데미지 밸런스 패치 필요(우선 임시로 레벨별 최소값만 줌)
-                    attack = rand() % (int)(30.0 * (loginCharacter->lvl / 10.0)) + loginCharacter -> minDamage;
+                    attack = rand() % (int)(30.0 * (user->lvl / 10.0)) + user -> minDamage;
                     cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
                     newMonster -> hp -= attack;
                     //sleep(1);
@@ -248,23 +248,23 @@ void MonsterClass::meetMonster(Monster *monster, User *loginCharacter) {
                 }
 
                 cout << newMonster -> name << "의 공격! : " << attack << "만큼의 피해를 입었습니다." << endl;
-                loginCharacter -> hp -= attack;
+                user -> hp -= attack;
                 usleep(500000);
             }
 
 
         }
 
-        if (loginCharacter -> hp < 0) {
-            loginCharacter -> hp = 0;
-            loginCharacter -> dieYn = 'Y';
-            loginCharacter -> pos.row = RESET_ROW;
-            loginCharacter -> pos.col = RESET_COL;
-            loginCharacter -> lastPos.row = RESET_ROW;
-            loginCharacter -> lastPos.col = RESET_COL;
-            loginCharacter -> beforeBlock = '0';
-            loginCharacter -> pos.floor = 0;
-            loginCharacter -> dieYn = 'Y';
+        if (user -> hp < 0) {
+            user -> hp = 0;
+            user -> dieYn = 'Y';
+            user -> pos.row = RESET_ROW;
+            user -> pos.col = RESET_COL;
+            user -> lastPos.row = RESET_ROW;
+            user -> lastPos.col = RESET_COL;
+            user -> beforeBlock = '0';
+            user -> pos.floor = 0;
+            user -> dieYn = 'Y';
         }
 
         //sleep(1);

@@ -1,9 +1,6 @@
 #include "../header/NpcClass.h"
-#include "../header/MonsterClass.h"
 
-MonsterClass msFunc;
-
-void NpcClass::meetPriest(User *loginCharacter) {
+void NpcClass::meetPriest() {
     //TODO : 성직자 왜움직임???? 성직자 왜 해치워짐????
     char selectMenu = NULL;
     int gold = 500;
@@ -24,27 +21,27 @@ void NpcClass::meetPriest(User *loginCharacter) {
     cout << "------------------------------------------------" << endl;
     cin >> selectMenu;
     if (selectMenu == '1') {
-        heal(loginCharacter);
+        heal();
     }else if (selectMenu == '2') {
-        rebirth(loginCharacter, &gold);
+        rebirth(&gold);
     }else if (selectMenu == '3') {
-        levelUp(loginCharacter, &gold);
+        levelUp(&gold);
     }else if (selectMenu == '4') {
-        getWork(loginCharacter);
+        getWork();
     }else {
         cout << " 잘못된 선택입니다." << endl;
     }
 }
 
-void NpcClass::heal(User *loginCharacter){
-    if (loginCharacter -> dieYn == 'N') {
+void NpcClass::heal(){
+    if (user -> dieYn == 'N') {
         //sleep(1);
         usleep(500000);
         cout << " 체력을 모두 회복합니다." << endl;
         //sleep(1);
         usleep(500000);
         cout << "------------------------------------------------" << endl;
-        loginCharacter -> hp = loginCharacter -> maxHp;
+        user -> hp = user -> maxHp;
     }else {
         //sleep(1);
         usleep(500000);
@@ -64,8 +61,8 @@ void NpcClass::heal(User *loginCharacter){
 }
 
 // TODO : 골드 추가 후 금액지불 프로세스 추가해야됨(파라메터도 수정해야됨)
-void NpcClass::rebirth(User *loginCharacter, int *userGold) {
-    int payGold = rand() % 500 + (loginCharacter -> lvl * 100); //레벨 비례 증가
+void NpcClass::rebirth(int *userGold) {
+    int payGold = rand() % 500 + (user -> lvl * 100); //레벨 비례 증가
     char selectMenu = NULL;
     cout << " 부활하시려면 골드가 필요합니다." << endl;
     //sleep(1);
@@ -91,8 +88,8 @@ void NpcClass::rebirth(User *loginCharacter, int *userGold) {
         cin >> selectMenu;
         if (towupper(selectMenu) == 'Y') {
             *userGold -= payGold;
-            loginCharacter -> hp = loginCharacter -> maxHp * 0.1;
-            loginCharacter -> dieYn = 'N';
+            user -> hp = user -> maxHp * 0.1;
+            user -> dieYn = 'N';
             cout << "\n 부활하셨습니다." << endl;
             //sleep(1);
             usleep(500000);
@@ -112,8 +109,8 @@ void NpcClass::rebirth(User *loginCharacter, int *userGold) {
 }
 
 // TODO : 골드 추가 후 금액지불 프로세스 추가해야됨(파라메터도 수정해야됨)
-void NpcClass::levelUp(User *loginCharacter, int *userGold) {
-    if (loginCharacter -> lvl == 10) {
+void NpcClass::levelUp(int *userGold) {
+    if (user -> lvl == 10) {
         cout << "이미 최대 레벨에 도달하셨습니다." << endl;
         //sleep(1);
         usleep(500000);
@@ -123,11 +120,11 @@ void NpcClass::levelUp(User *loginCharacter, int *userGold) {
         return;
     }
 
-    if (loginCharacter -> exp >= loginCharacter -> maxExp && loginCharacter -> exp != 0) {
+    if (user -> exp >= user -> maxExp && user -> exp != 0) {
         int payGold = 0; //레벨 비례 증가
         char selectMenu = NULL;
 
-        switch (loginCharacter -> lvl) {
+        switch (user -> lvl) {
             case 1:
                 payGold = rand() % 50 + 100;// 100~150
             break;
@@ -169,7 +166,7 @@ void NpcClass::levelUp(User *loginCharacter, int *userGold) {
             cin >> selectMenu;
             if (towupper(selectMenu) == 'Y') {
                 *userGold -= payGold;
-                loginCharacter -> lvl ++;
+                user -> lvl ++;
             }
         }
     }else {
@@ -183,7 +180,7 @@ void NpcClass::levelUp(User *loginCharacter, int *userGold) {
 
 }
 
-void NpcClass::getWork(User *loginCharacter) {
+void NpcClass::getWork() {
     char selectMenu = NULL;
     cout << " 전직하실 직업을 선택해 주세요. " << endl;
     cout << " 1. 검술사" << endl;
@@ -195,35 +192,35 @@ void NpcClass::getWork(User *loginCharacter) {
     cin >> selectMenu;
 
     if (isdigit(selectMenu)) {
-        loginCharacter -> jobId = selectMenu - '0';
-        getJobName(loginCharacter);
+        user -> jobId = selectMenu - '0';
+        getJobName();
     }
 }
 
-void NpcClass::getJobName(User *loginCharacter) {
-    switch (loginCharacter -> jobId) {
+void NpcClass::getJobName() {
+    switch (user -> jobId) {
         case 1:
-            loginCharacter -> jobName = "검술사";
+            user -> jobName = "검술사";
         break;
         case 2:
-            loginCharacter -> jobName = "마법사";
+            user -> jobName = "마법사";
         break;
         case 3:
-            loginCharacter -> jobName = "궁술사";
+            user -> jobName = "궁술사";
         break;
         case 4:
-            loginCharacter -> jobName = "창술사";
+            user -> jobName = "창술사";
         break;
         case 5:
-            loginCharacter -> jobName = "암살자";
+            user -> jobName = "암살자";
         break;
         default:
-            loginCharacter -> jobName = "무직";
+            user -> jobName = "무직";
         break;
     }
 }
 
-void NpcClass::meetFight(Monster *mon, User *loginCharacter, int *gold) {
+void NpcClass::meetFight(MonsterClass *mon, int *gold) {
     char selectMenu = NULL;
     system("clear");
     cout << "---------------------------------------" << endl;
@@ -249,7 +246,7 @@ void NpcClass::meetFight(Monster *mon, User *loginCharacter, int *gold) {
         if (*gold >= 5000) {
             cout << " 몬스터를 소환합니다." << endl;
             usleep(500000);
-            msFunc.meetMonster(mon, loginCharacter);
+            mon -> meetMonster();
         }else {
             cout << " 골드가 부족합니다." << endl;
             usleep(500000);

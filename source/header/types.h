@@ -38,7 +38,7 @@ struct Login{
     string pwd;
 };
 
-struct User{
+struct Character{
     string id;
     string nickname;
     int lvl;

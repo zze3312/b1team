@@ -60,10 +60,10 @@ typedef struct {
 
 class ItemClass {
     Inventory *inv = new Inventory();
-    User *user = new User();
+    Character *user = new Character();
 
     public:
-        ItemClass(User *newUser) : user(newUser) {updateInventory();}
+        ItemClass(Character *newUser) : user(newUser) {updateInventory();}
         void updateInventory();
         void dropItem(Inventory inv);
         void readInfoItemName();

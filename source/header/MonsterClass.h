@@ -1,10 +1,7 @@
-//
-// Created by lms on 24. 12. 3.
-//
-
 #ifndef MONSTERCLASS_H
 #define MONSTERCLASS_H
 #include "types.h"
+
 
 
 class MonsterClass {
@@ -20,9 +17,15 @@ class MonsterClass {
             LDNK_NUM = 'D',
             CSD_NUM = 'C',
         };
+
+        Monster *monster = new Monster();
+        Character *user = new Character();
     public:
-        void getMonsterName(Monster *, User *);
-        void meetMonster(Monster *, User *);
+        MonsterClass(Character *loginCharacter, char monNum) : user(loginCharacter) {
+            monster -> id = monNum;
+        }
+        void getMonsterName();
+        void meetMonster();
 };
 
 

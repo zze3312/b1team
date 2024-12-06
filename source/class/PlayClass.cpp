@@ -6,7 +6,7 @@
 MapClass mapFunc;
 CharacterClass charFunc; //캐릭터 관련 기능 담김
 
-void PlayClass::play(User *loginCharacter) {
+void PlayClass::play(Character *loginCharacter) {
     char inputKey[3];
     // 시작시 맵 셋팅
     mapFunc.mapInit(loginCharacter);
@@ -56,7 +56,7 @@ void PlayClass::play(User *loginCharacter) {
     }
 }
 
-void PlayClass::beforePlay (Login *loginUser, User *loginCharacter) {
+void PlayClass::beforePlay (Login *loginUser, Character *loginCharacter) {
     if (charFunc.characterSelect(loginUser, loginCharacter)) {
         play(loginCharacter);
     }

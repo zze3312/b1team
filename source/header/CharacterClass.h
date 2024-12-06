@@ -5,10 +5,10 @@
 
 class CharacterClass{
     public:
-        bool characterSelect(Login *, User *);
+        bool characterSelect(Login *, Character *);
         void characterAccount(Login *);
-        void move(User *, char);
-        void gameSave(User *);
+        void move(Character *, char);
+        void gameSave(Character *);
 };
 
 

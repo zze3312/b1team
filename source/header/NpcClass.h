@@ -1,21 +1,21 @@
 #ifndef NPCCLASS_H
 #define NPCCLASS_H
 
+#include "MonsterClass.h"
 #include "types.h"
 
 class NpcClass {
-    public:
-        void meetPriest(User *);
-        void meetFight(Monster *, User *, int *);
-        void getJobName(User *);
-    private:
-        void rebirth(User *, int *);
-        void heal(User *);
-        void levelUp(User *, int *);
-        void getWork(User *);
+    Character *user = new Character();
 
+    void rebirth(int *);
+    void heal();
+    void levelUp(int *);
+    void getWork();
+public:
+    NpcClass(Character *loginCharacter) : user(loginCharacter) {}
+    void meetPriest();
+    void meetFight(MonsterClass *, int *);
+    void getJobName();
 };
-
-
 
 #endif //NPCCLASS_H
