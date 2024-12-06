@@ -47,6 +47,12 @@ struct Skill{
     int useSp;
 };
 
+struct Stat {
+    int str; //힘
+    int dex; //민첩
+    int intl; //지능
+};
+
 struct Character{
     string id;
     string nickname;
@@ -60,9 +66,12 @@ struct Character{
     int hp;
     int maxHp;
     int sp;
+    int maxSp;
     char dieYn;
     char beforeBlock;
     int minDamage;
+    int statPoint;
+    Stat userStat;
     Position pos;
     Position lastPos;
     Position savePos[7];

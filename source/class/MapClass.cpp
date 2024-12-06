@@ -40,7 +40,7 @@ Position MapClass::setPortal() {
 void MapClass::setCharacter(Character *loginCharacter) {
     if (loginCharacter -> jobName.empty()) {
         NpcClass *npc = new NpcClass(loginCharacter);
-        npc -> getJobName();
+        npc -> getInfo();
     }
 
     if (!(map[loginCharacter -> pos.row][loginCharacter -> pos.col] >= '1' && map[loginCharacter -> pos.row][loginCharacter -> pos.col] <= '4')
@@ -172,11 +172,11 @@ void MapClass::printMap(Character *loginCharacter) {
         endRow = loginCharacter -> pos.row + 8;
     }
 
-    // for (int i = startRow; i < endRow; i++) {
-    //     for (int j = startCol; j < endCol; j++) {
+    for (int i = startRow; i < endRow; i++) {
+        for (int j = startCol; j < endCol; j++) {
 
-    for (int i = 0; i < 50; i++) {
-        for (int j = 0; j < 50; j++) {
+    // for (int i = 0; i < 50; i++) {
+    //     for (int j = 0; j < 50; j++) {
             //printf("%c", map[i][j]);
             switch (map[i][j]) {
                 case MAP_ICON_NUM_0: // 0. 바닥
@@ -256,6 +256,7 @@ void MapClass::printStatus(Character *loginCharacter) {
     cout << " 레벨     : " << loginCharacter -> lvl << endl;
     cout << " 경험치   : " << loginCharacter -> exp << " / " << loginCharacter -> maxExp << endl;
     cout << " 체력     : " << loginCharacter -> hp << " / " << loginCharacter -> maxHp <<endl;
+    cout << " 마나     : " << loginCharacter -> sp << " / " << loginCharacter -> maxSp <<endl;
     cout << " 직업     : " << loginCharacter -> jobName << endl;
     cout << " 상태     : ";
     if (loginCharacter -> dieYn == 'N')

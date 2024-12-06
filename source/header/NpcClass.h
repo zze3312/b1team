@@ -15,7 +15,7 @@ public:
     NpcClass(Character *loginCharacter) : user(loginCharacter) {}
     void meetPriest();
     void meetFight(MonsterClass *, int *);
-    void getJobName();
+    void getInfo();
 };
 
 #endif //NPCCLASS_H

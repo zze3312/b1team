@@ -36,12 +36,16 @@ void NpcClass::meetPriest() {
 void NpcClass::heal(){
     if (user -> dieYn == 'N') {
         //sleep(1);
+        user -> hp = user -> maxHp;
         usleep(500000);
         cout << " 체력을 모두 회복합니다." << endl;
         //sleep(1);
+        user -> hp = user -> maxSp;
+        usleep(500000);
+        cout << " 마나를 모두 회복합니다." << endl;
+        //sleep(1);
         usleep(500000);
         cout << "------------------------------------------------" << endl;
-        user -> hp = user -> maxHp;
     }else {
         //sleep(1);
         usleep(500000);
@@ -167,6 +171,7 @@ void NpcClass::levelUp(int *userGold) {
             if (towupper(selectMenu) == 'Y') {
                 *userGold -= payGold;
                 user -> lvl ++;
+                user -> statPoint += 10;
             }
         }
     }else {
@@ -181,23 +186,32 @@ void NpcClass::levelUp(int *userGold) {
 }
 
 void NpcClass::getWork() {
-    char selectMenu = NULL;
-    cout << " 전직하실 직업을 선택해 주세요. " << endl;
-    cout << " 1. 검술사" << endl;
-    cout << " 2. 마법사" << endl;
-    cout << " 3. 궁술사" << endl;
-    cout << " 4. 창술사" << endl;
-    cout << " 5. 암살자" << endl;
-    cout << "------------------------------------------------" << endl;
-    cin >> selectMenu;
+    if (user -> lvl > 3) {
+        char selectMenu = NULL;
+        cout << " 전직하실 직업을 선택해 주세요. " << endl;
+        cout << " 1. 검술사" << endl;
+        cout << " 2. 마법사" << endl;
+        cout << " 3. 궁술사" << endl;
+        cout << " 4. 창술사" << endl;
+        cout << " 5. 암살자" << endl;
+        cout << "------------------------------------------------" << endl;
+        cin >> selectMenu;
 
-    if (isdigit(selectMenu)) {
-        user -> jobId = selectMenu - '0';
-        getJobName();
+        if (isdigit(selectMenu)) {
+            user -> jobId = selectMenu - '0';
+            getInfo();
+        }
+    }else {
+        cout << "더 강해져서 돌아오세요" << endl;
+        //sleep(1);
+        usleep(500000);
+        cout << "------------------------------------------------" << endl;
+        //sleep(1);
+        usleep(500000);
     }
 }
 
-void NpcClass::getJobName() {
+void NpcClass::getInfo() {
     switch (user -> jobId) {
         case 1:
             user -> jobName = "검술사";
@@ -217,6 +231,24 @@ void NpcClass::getJobName() {
         default:
             user -> jobName = "무직";
         break;
+    }
+
+    string filePath = ROOT_PATH + "skillInfo.txt";
+    FILE *fp = fopen(filePath.c_str(), "rt");
+    char bfr[100] = "";
+    int i = 0;
+    while (fgets(bfr, sizeof(bfr), fp)) {
+        int jobId = atoi(strtok(bfr, ","));
+        if ( jobId == user -> jobId ) {
+            Skill temp;
+            temp.id = atoi(strtok(NULL, ","));
+            temp.name = strtok(NULL, ",");
+            temp.coolTime = atoi(strtok(NULL, ","));
+            temp.useSp = atoi(strtok(NULL, ","));
+            temp.damage = atoi(strtok(NULL, ","));
+            user -> userSkill[i] = temp;
+            i++;
+        }
     }
 }
 

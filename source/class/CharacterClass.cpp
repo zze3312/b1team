@@ -1,7 +1,5 @@
 #include "../header/CharacterClass.h"
 
-
-
 bool CharacterClass::characterSelect(Login *loginUser, Character *loginCharacter) {
     char str[30] = "";
 
@@ -62,7 +60,12 @@ bool CharacterClass::characterSelect(Login *loginUser, Character *loginCharacter
             loginCharacter -> sp = atoi(strtok(NULL, ","));
             loginCharacter -> pos.row = atoi(strtok(NULL, ","));
             loginCharacter -> pos.col = atoi(strtok(NULL, ","));
-            loginCharacter -> pos.floor = atoi(strtok(NULL, "\n"));
+            loginCharacter -> pos.floor = atoi(strtok(NULL, ","));
+            loginCharacter -> userStat.str = atoi(strtok(NULL, ","));
+            loginCharacter -> userStat.dex = atoi(strtok(NULL, ","));
+            loginCharacter -> userStat.intl = atoi(strtok(NULL, ","));
+            loginCharacter -> statPoint = atoi(strtok(NULL, "\n"));
+
             fclose(fp);
 
             //레벨별 정보 불러오기
@@ -72,11 +75,18 @@ bool CharacterClass::characterSelect(Login *loginUser, Character *loginCharacter
                 if (loginCharacter -> lvl == atoi(strtok(bfr, ","))) {
                     loginCharacter -> maxExp = atoi(strtok(NULL, ","));
                     loginCharacter -> maxHp = atoi(strtok(NULL, ","));
-                    loginCharacter -> minDamage = atoi(strtok(NULL, "\n"));
+                    loginCharacter -> minDamage = atoi(strtok(NULL, ","));
+                    if (loginCharacter -> jobId != 2){
+                        loginCharacter -> maxSp = atoi(strtok(NULL, "\n"));
+                    }else {
+                        loginCharacter -> maxSp = atoi(strtok(NULL, "\n")) * 1.5;
+                    }
                     break;
                 }
             }
+            fclose(fp);
 
+            //나머지 값 세팅
             loginCharacter -> beforeBlock = '0';
             loginCharacter -> lastPos.row = loginCharacter -> pos.row;
             loginCharacter -> lastPos.col = loginCharacter -> pos.col;
@@ -111,8 +121,8 @@ void CharacterClass::characterAccount(Login *loginUser)
     //캐릭터정보 저장 파일
     fp = fopen(filePath.c_str(), "wt");
     // 캐릭터 생성 초기 값
-    // lvl, exp, 장비1, 장비2, 장비3, 장비4, 장비5, 무기, 직업ID, 사망여부, hp, sp, 좌표row, 좌표col, 층
-    fprintf(fp, "1,0,10,6,7,8,9,1,0,N,100,100,18,25,0\n");
+    // lvl, exp, 장비1, 장비2, 장비3, 장비4, 장비5, 무기, 직업ID, 사망여부, hp, sp, 좌표row, 좌표col, 층, 힘, 민첩, 지능, 보유스탯포인트
+    fprintf(fp, "1,0,10,6,7,8,9,1,0,N,100,100,18,25,0,0,0,0,0\n");
     fclose(fp);
 
     //캐릭터 인벤토리 정보 저장 파일
@@ -166,7 +176,7 @@ void CharacterClass::gameSave(Character *loginCharacter) {
         cout << "잘못된 파일입니다." << endl;
     }
 
-    fprintf(fp, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%c,%d,%d,%d,%d,%d\n"
+    fprintf(fp, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d\n"
         , loginCharacter -> lvl
         , loginCharacter -> exp
         , loginCharacter -> nowEquipmentId[EQUIP_MASK]
@@ -181,6 +191,81 @@ void CharacterClass::gameSave(Character *loginCharacter) {
         , loginCharacter -> sp
         , loginCharacter -> pos.row
         , loginCharacter -> pos.col
-        , loginCharacter -> pos.floor);
+        , loginCharacter -> pos.floor
+        , loginCharacter -> userStat.str
+        , loginCharacter -> userStat.dex
+        , loginCharacter -> userStat.intl
+        , loginCharacter -> statPoint);
     fclose(fp);
+}
+
+void CharacterClass::statWindow(Character *loginCharacter) {
+    char inputKey = NULL;
+    system("clear");
+    cout << "============================================" << endl;
+    cout << "              현재 캐릭터 능력치" << endl;
+    cout << "=============================================" << endl;
+    cout << "  1. 근력 : " << loginCharacter -> userStat.str << endl;
+    cout << "  2. 민첩 : " << loginCharacter -> userStat.dex << endl;
+    cout << "  3. 지능 : " << loginCharacter -> userStat.intl << endl;
+    cout << "=============================================" << endl;
+    cout << " 보유 능력치 포인트 : " << loginCharacter -> statPoint << endl;
+    cout << "=============================================" << endl;
+    if (loginCharacter -> statPoint > 0) {
+        cout << " 1. 능력치 분배" << endl;
+    }
+    cout << " q. 돌아가기" << endl;
+    read(0, &inputKey, sizeof(inputKey));
+    if (inputKey == '1') {
+        while (loginCharacter -> statPoint > 0) {
+            system("clear");
+            cout << "============================================" << endl;
+            cout << "              현재 캐릭터 능력치" << endl;
+            cout << "=============================================" << endl;
+            cout << "  1. 근력 : " << loginCharacter -> userStat.str << endl;
+            cout << "  2. 민첩 : " << loginCharacter -> userStat.dex << endl;
+            cout << "  3. 지능 : " << loginCharacter -> userStat.intl << endl;
+            cout << "=============================================" << endl;
+            cout << " 보유 능력치 포인트 : " << loginCharacter -> statPoint << endl;
+            cout << "=============================================" << endl;
+            cout << " 분배하실 능력치를 선택해주세요.(q : 돌아가기)" << endl;
+            read(0, &inputKey, sizeof(inputKey));
+            if (inputKey == '1') {
+                cout << " 능력치 포인트를 \' 근력 \'에 투자하시겠습니까?" << endl;
+                cout << "   1. 예" << endl;
+                cout << "   2. 아니오" << endl;
+                read(0, &inputKey, sizeof(inputKey));
+                if (inputKey == '1') {
+                    loginCharacter -> userStat.str ++;
+                    loginCharacter -> statPoint --;
+                    cout << " \' 근력 \'이 상승하셨습니다." << endl;
+                }
+            }else if (inputKey == '2') {
+                cout << " 능력치 포인트를 \' 민첩 \'에 투자하시겠습니까?" << endl;
+                cout << "   1. 예" << endl;
+                cout << "   2. 아니오" << endl;
+                read(0, &inputKey, sizeof(inputKey));
+                if (inputKey == '1') {
+                    loginCharacter -> userStat.dex ++;
+                    loginCharacter -> statPoint --;
+                    cout << " \' 민첩 \'이 상승하셨습니다." << endl;
+                }
+            }else if (inputKey == '3') {
+                cout << " 능력치 포인트를 \' 지능 \'에 투자하시겠습니까?" << endl;
+                cout << "   1. 예" << endl;
+                cout << "   2. 아니오" << endl;
+                read(0, &inputKey, sizeof(inputKey));
+                if (inputKey == '1') {
+                    loginCharacter -> userStat.intl ++;
+                    loginCharacter -> statPoint --;
+                    cout << " \' 지능 \'이 상승하셨습니다." << endl;
+                }
+            }else if (inputKey == 'q') {
+                break;
+            }else {
+                cout << " 잘못된 입력입니다." << endl;
+            }
+        }
+    }
+
 }

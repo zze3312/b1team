@@ -89,19 +89,66 @@ void MonsterClass::meetMonster() {
         usleep(500000);
         cout << "3. 도망" << endl;
         //sleep(1);
-        usleep(500000);
-        cout << "---------------------------------------" << endl;
         cin >> selectMenu;
         if (selectMenu - '0' == 1) {
-            cout << "공격합니다" << endl;
-            //sleep(1);
+            cout << "---------------------------------------" << endl;
             usleep(500000);
-            // TODO : 데미지 밸런스 패치 필요(우선 임시로 레벨별 최소값만 줌)
-            attack = rand() % (int)(30.0 * (user->lvl / 10.0)) + user -> minDamage;
-            cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
-            monster -> hp -= attack;
-            //sleep(1);
+            cout << "0. 기본공격" << endl;
+            if (user -> sp >= user -> userSkill[0].useSp){
             usleep(500000);
+            cout << user -> userSkill[0].id << ". " << user -> userSkill[0].name << "(sp소모 : " << user -> userSkill[0].useSp << ")" << endl;
+            }
+            if (user -> sp >= user -> userSkill[1].useSp) {
+                usleep(500000);
+                cout << user -> userSkill[1].id << ". " << user -> userSkill[1].name << "(sp소모 : " << user -> userSkill[1].useSp << ")" << endl;
+            }
+            usleep(500000);
+            cin >> selectMenu;
+            cout << "---------------------------------------" << endl;
+            usleep(500000);
+            if (selectMenu - '0' == 0) {
+                cout << "기본공격을 합니다." << endl;
+                usleep(500000);
+
+                attack = rand() % ((user -> userStat.str) * (user -> lvl)) + user -> minDamage;
+                cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
+                monster -> hp -= attack;
+                usleep(500000);
+            } else if (selectMenu - '0' == 1) {
+                cout << "스킬 " << user -> userSkill[0].useSp << "을 사용합니다." << endl;
+                usleep(500000);
+                user -> sp -= user -> userSkill[0].useSp;
+                cout << "마나 " << user -> userSkill[0].useSp << "을 소모합니다." << endl;
+                usleep(500000);
+                if (user -> jobId == 1 || user -> jobId == 3) {
+                    attack = (rand() % ((user -> userStat.str) * 10 * (user -> lvl)) + user -> minDamage) * user -> userSkill[0].damage;
+                }else if (user -> jobId == 2) {
+                    attack = (rand() % ((user -> userStat.str) * 12 * (user -> lvl)) + user -> minDamage) * user -> userSkill[0].damage;
+                }else {
+                    attack = (rand() % ((user -> userStat.str) * 10 * (user -> lvl)) + user -> minDamage) * user -> userSkill[0].damage;
+                }
+
+                cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
+                monster -> hp -= attack;
+                usleep(500000);
+            } else if (selectMenu - '0' == 2) {
+                cout << "스킬 " << user -> userSkill[1].name << "을 사용합니다." << endl;
+                usleep(500000);
+                user -> sp -= user -> userSkill[0].useSp;
+                cout << "마나 " << user -> userSkill[1].useSp << "을 소모합니다." << endl;
+                usleep(500000);
+                if (user -> jobId == 1 || user -> jobId == 3) {
+                    attack = (rand() % ((user -> userStat.str) * 15 * (user -> lvl)) + user -> minDamage) * user -> userSkill[1].damage;
+                }else if (user -> jobId == 2) {
+                    attack = (rand() % ((user -> userStat.str) * 17 * (user -> lvl)) + user -> minDamage) * user -> userSkill[1].damage;
+                }else {
+                    attack = (rand() % ((user -> userStat.str) * 15 * (user -> lvl)) + user -> minDamage) * user -> userSkill[1].damage;
+                }
+
+                cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
+                monster -> hp -= attack;
+                usleep(500000);
+            }
         }else if (selectMenu - '0' == 2){
             cout << "아이템을 사용합니다" << endl;
             ItemClass *inventory = new ItemClass(user);
@@ -202,41 +249,89 @@ void MonsterClass::meetMonster() {
 
             while (newMonster -> hp > 0 && user -> hp > 0) {
                 cout << "---------------------------------------" << endl;
-                //sleep(1);
                 usleep(500000);
                 cout << newMonster -> name <<"의 현재 체력 : " << newMonster -> hp << endl;
-                //sleep(1);
                 usleep(500000);
                 cout << user -> nickname << "의 현재 체력 : " << user -> hp << endl;
-                //sleep(1);
                 usleep(500000);
                 cout << "---------------------------------------" << endl;
-                //sleep(1);
                 usleep(500000);
                 cout << "1. 공격" << endl;
-                //sleep(1);
                 usleep(500000);
                 cout << "2. 아이템 사용" << endl;
-                //sleep(1);
                 usleep(500000);
                 cout << "3. 도망" << endl;
-                //sleep(1);
                 usleep(500000);
                 cout << "---------------------------------------" << endl;
                 cin >> selectMenu;
                 if (selectMenu - '0' == 1) {
-                    cout << "공격합니다" << endl;
-                    //sleep(1);
+                    cout << "---------------------------------------" << endl;
                     usleep(500000);
-                    // TODO : 데미지 밸런스 패치 필요(우선 임시로 레벨별 최소값만 줌)
-                    attack = rand() % (int)(30.0 * (user->lvl / 10.0)) + user -> minDamage;
-                    cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
-                    newMonster -> hp -= attack;
-                    //sleep(1);
+                    cout << "0. 기본공격" << endl;
+                    if (user -> sp >= user -> userSkill[0].useSp){
+                    usleep(500000);
+                    cout << user -> userSkill[0].id << ". " << user -> userSkill[0].name << "(sp소모 : " << user -> userSkill[0].useSp << ")" << endl;
+                    }
+                    if (user -> sp >= user -> userSkill[1].useSp) {
+                        usleep(500000);
+                        cout << user -> userSkill[1].id << ". " << user -> userSkill[1].name << "(sp소모 : " << user -> userSkill[1].useSp << ")" << endl;
+                    }
+                    usleep(500000);
+                    cin >> selectMenu;
+                    cout << "---------------------------------------" << endl;
+                    usleep(500000);
+                    if (selectMenu - '0' == 0) {
+                        cout << "기본공격을 합니다." << endl;
+                        usleep(500000);
+
+                        attack = rand() % ((user -> userStat.str) * (user -> lvl)) + user -> minDamage;
+                        cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
+                        newMonster -> hp -= attack;
+                        usleep(500000);
+                    } else if (selectMenu - '0' == 1) {
+                        cout << "스킬 " << user -> userSkill[0].useSp << "을 사용합니다." << endl;
+                        usleep(500000);
+                        user -> sp -= user -> userSkill[0].useSp;
+                        cout << "마나 " << user -> userSkill[0].useSp << "을 소모합니다." << endl;
+                        usleep(500000);
+                        if (user -> jobId == 1 || user -> jobId == 3) {
+                            attack = (rand() % ((user -> userStat.str) * 10 * (user -> lvl)) + user -> minDamage) * user -> userSkill[0].damage;
+                        }else if (user -> jobId == 2) {
+                            attack = (rand() % ((user -> userStat.str) * 12 * (user -> lvl)) + user -> minDamage) * user -> userSkill[0].damage;
+                        }else {
+                            attack = (rand() % ((user -> userStat.str) * 10 * (user -> lvl)) + user -> minDamage) * user -> userSkill[0].damage;
+                        }
+
+                        cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
+                        newMonster -> hp -= attack;
+                        usleep(500000);
+                    } else if (selectMenu - '0' == 2) {
+                        cout << "스킬 " << user -> userSkill[1].name << "을 사용합니다." << endl;
+                        usleep(500000);
+                        user -> sp -= user -> userSkill[0].useSp;
+                        cout << "마나 " << user -> userSkill[1].useSp << "을 소모합니다." << endl;
+                        usleep(500000);
+                        if (user -> jobId == 1 || user -> jobId == 3) {
+                            attack = (rand() % ((user -> userStat.str) * 15 * (user -> lvl)) + user -> minDamage) * user -> userSkill[1].damage;
+                        }else if (user -> jobId == 2) {
+                            attack = (rand() % ((user -> userStat.str) * 17 * (user -> lvl)) + user -> minDamage) * user -> userSkill[1].damage;
+                        }else {
+                            attack = (rand() % ((user -> userStat.str) * 15 * (user -> lvl)) + user -> minDamage) * user -> userSkill[1].damage;
+                        }
+
+                        cout << "플레이어의 공격! : " << attack << "만큼의 피해를 주었습니다." << endl;
+                        newMonster -> hp -= attack;
+                        usleep(500000);
+                    }
+                    cout << newMonster -> name << "의 공격! : " << attack << "만큼의 피해를 입었습니다." << endl;
+                    user -> hp -= attack;
                     usleep(500000);
                 }else if (selectMenu - '0' == 2){
                     cout << "아이템을 사용합니다" << endl;
                     //sleep(1);
+                    usleep(500000);
+                    cout << newMonster -> name << "의 공격! : " << attack << "만큼의 피해를 입었습니다." << endl;
+                    user -> hp -= attack;
                     usleep(500000);
                 }else if (selectMenu - '0' == 3) {
                     cout << "도망갑니다" << endl;
@@ -250,9 +345,7 @@ void MonsterClass::meetMonster() {
                     continue;
                 }
 
-                cout << newMonster -> name << "의 공격! : " << attack << "만큼의 피해를 입었습니다." << endl;
-                user -> hp -= attack;
-                usleep(500000);
+
             }
 
 

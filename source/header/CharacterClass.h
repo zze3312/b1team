@@ -9,6 +9,7 @@ class CharacterClass{
         void characterAccount(Login *);
         void move(Character *, char);
         void gameSave(Character *);
+        void statWindow(Character *);
 };
 
 

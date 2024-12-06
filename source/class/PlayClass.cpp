@@ -31,16 +31,19 @@ void PlayClass::play(Character *loginCharacter) {
             //TODO : / 이후 사용한 단축키 기능 실행
             cout << "동작할 작업" << endl;
             cout << " i : 인벤토리" << endl;
+            cout << " s : 능력치" << endl;
             cout << " q : 종료" << endl;
             read(0, &inputKey, sizeof(inputKey));
             //cout << inputKey << endl;
-            if (inputKey[0] == 'q') {
-                charFunc.gameSave(loginCharacter);
-                break;
-            }else if (inputKey[0] == 'i') {
+            if (inputKey[0] == 'i') {
                 ItemClass *itemFunc = new ItemClass(loginCharacter);
                 itemFunc -> openInventory();
                 delete itemFunc;
+            }else if (inputKey[0] == 's') {
+                charFunc.statWindow(loginCharacter);
+            }if (inputKey[0] == 'q') {
+                charFunc.gameSave(loginCharacter);
+                return;
             }
 
             ////sleep(1);
