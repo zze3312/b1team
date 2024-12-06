@@ -40,6 +40,7 @@ void PlayClass::play(Character *loginCharacter) {
             }else if (inputKey[0] == 'i') {
                 ItemClass *itemFunc = new ItemClass(loginCharacter);
                 itemFunc -> openInventory();
+                delete itemFunc;
             }
 
             ////sleep(1);

@@ -53,7 +53,7 @@ typedef struct {
 
 } Inventory;
 
-void updateInventory(Inventory * inv, User * user) // 미완성
+void updateInventory(Inventory * inv, Character * user) // 미완성
 {
     // 장비 불러오기
     string folderPath = ROOT_PATH + "userData/" + "doyeop" + "/" + "teamless" + "/equipInv.txt";
@@ -243,7 +243,7 @@ void readInfoItemName(Inventory * inv) // 완성
 
 }
 
-void tryEnhance(Inventory * inv, User * user, int tryConsumable) // 미완성
+void tryEnhance(Inventory * inv, Character * user, int tryConsumable) // 미완성
 {
     while (1)
     {
@@ -308,7 +308,7 @@ void tryEnhance(Inventory * inv, User * user, int tryConsumable) // 미완성
     }
 }
 
-void wearEquip(Inventory * inv, User * user, int tryEquip) // 완성
+void wearEquip(Inventory * inv, Character * user, int tryEquip) // 완성
 {
     inv->equipTypeList[tryEquip];
     
@@ -343,7 +343,7 @@ void wearEquip(Inventory * inv, User * user, int tryEquip) // 완성
     
 }
 
-void useConsumable(Inventory * inv, User * user, int tryConsumable) // 미완성
+void useConsumable(Inventory * inv, Character * user, int tryConsumable) // 미완성
 {
     switch (tryConsumable)
     {
@@ -385,7 +385,7 @@ void useConsumable(Inventory * inv, User * user, int tryConsumable) // 미완성
     }
 }
 
-void showNowEquip(Inventory * inv, User * user) // 완성
+void showNowEquip(Inventory * inv, Character * user) // 완성
 {
     while (1)
     {
@@ -432,7 +432,7 @@ void showNowEquip(Inventory * inv, User * user) // 완성
     }
 }
 
-void equipInventory(Inventory * inv, User * user) // 완성
+void equipInventory(Inventory * inv, Character * user) // 완성
 {
     int i;
     
@@ -521,7 +521,7 @@ void equipInventory(Inventory * inv, User * user) // 완성
     }
 }
 
-void consumableInventory(Inventory * inv, User * user) // 완성
+void consumableInventory(Inventory * inv, Character * user) // 완성
 {
     int i;
 
@@ -598,7 +598,7 @@ void consumableInventory(Inventory * inv, User * user) // 완성
     }
 }
 
-void openInventory(Inventory * inv, User * user) // 완성 i 눌러서 연결
+void openInventory(Inventory * inv, Character * user) // 완성 i 눌러서 연결
 {
     string choice;
     
@@ -747,25 +747,25 @@ void checkSet(int userEquipment[5]) // 완성?
     cout << "마스크 세트번호 : " << checkSet[4] << endl;
 }
 
-int main()
-{
-    User user;
-    Inventory inv;
+// int main()
+// {
+//     Character user;
+//     Inventory inv;
 
-    user.jobId = 1;
+//     user.jobId = 1;
     
-    user.nowEquipmentId[0] = 0; // 추후 삭제
-    user.nowEquipmentId[1] = 0;
-    user.nowEquipmentId[2] = 0;
-    user.nowEquipmentId[3] = 0;
-    user.nowEquipmentId[4] = 0;
-    user.nowWeaponId = 0;
+//     user.nowEquipmentId[0] = 0; // 추후 삭제
+//     user.nowEquipmentId[1] = 0;
+//     user.nowEquipmentId[2] = 0;
+//     user.nowEquipmentId[3] = 0;
+//     user.nowEquipmentId[4] = 0;
+//     user.nowWeaponId = 0;
     
 
-    updateInventory(&inv, &user);
-    readInfoItemName(&inv);
-    openInventory(&inv, &user);
+//     updateInventory(&inv, &user);
+//     readInfoItemName(&inv);
+//     openInventory(&inv, &user);
 
-    checkSet(user.nowEquipmentId);
-}
+//     checkSet(user.nowEquipmentId);
+// }
 

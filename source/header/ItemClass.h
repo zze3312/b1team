@@ -63,7 +63,10 @@ class ItemClass {
     Character *user = new Character();
 
     public:
-        ItemClass(Character *loginCharacter) : user(loginCharacter) {updateInventory();}
+        ItemClass(Character *loginCharacter) : user(loginCharacter) {
+            updateInventory();
+            readInfoItemName();
+        }
         void updateInventory();
         void dropItem(Inventory inv);
         void readInfoItemName();

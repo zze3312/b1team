@@ -118,12 +118,16 @@ void CharacterClass::characterAccount(Login *loginUser)
     //캐릭터 인벤토리 정보 저장 파일
     filePath = folderPath + "/equipInv.txt";
     fp = fopen(filePath.c_str(), "wt");
-    fprintf(fp, "");
+    string fileText = "";
+    for (int i = 0; i < 100; i++) {
+        fileText += "0\n";
+    }
+    fprintf(fp, fileText.c_str());
     fclose(fp);
 
     filePath = folderPath + "/consumableInv.txt";
     fp = fopen(filePath.c_str(), "wt");
-    fprintf(fp, "");
+    fprintf(fp, "0\n0\n0\n0\n0\n0\n0\n0\n");
     fclose(fp);
 
     filePath = folderPath + "/goldInv.txt";

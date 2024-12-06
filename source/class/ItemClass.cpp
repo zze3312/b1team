@@ -400,7 +400,7 @@ void ItemClass::equipInventory() // 완성
         cout << "  q. 뒤로가기\n";
         cout << "========================================\n";
 
-        // string choice;
+        string choice;
         inv->equipmentID = 0;
 
         for (i = 0; i < 100; i++)
@@ -415,19 +415,16 @@ void ItemClass::equipInventory() // 완성
         }
 
         cout << "========================================\n";
-        // cin >> choice;
-
-        char choice[3];
-        read(0, &choice, sizeof(choice));
+        cin >> choice;
         system("clear");
 
-        // string choiceTwo;
+        string choiceTwo;
 
-        if (choice[0] == 'q')
+        if (choice == "q")
         {
             break;
         }
-        else if (choice[0] <= inv->equipmentID + '0' && choice[0] > '0')
+        else if (stoi(choice) <= inv->equipmentID && stoi(choice) > 0)
         {
             while (1)
             {
@@ -445,15 +442,16 @@ void ItemClass::equipInventory() // 완성
                 cout << "========================================\n";
 
                 // cin >> choiceTwo;
-                read(0, &choice, sizeof(choice));
+                char choice2;
+                read(0, &choice2, sizeof(choice2));
                 system("clear");
 
-                if (choice[0] == '1')
+                if (choice2 == '1')
                 {
                     wearEquip(tryEquip);
                     break;
                 }
-                else if (choice[0] == '2')
+                else if (choice2 == '2')
                 {
                     cout << "========================================\n";
                     cout << "세트 이름: " << inv->setEffectNameList[inv->equipSetNumList[tryEquip]-1] << endl;
@@ -462,7 +460,7 @@ void ItemClass::equipInventory() // 완성
 
                     continue;
                 }
-                else if (choice[0] == 'q')
+                else if (choice2 == 'q')
                 {
                     break;
                 }
@@ -541,6 +539,7 @@ void ItemClass::consumableInventory() // 완성
                 if (choice[0] == '1')
                 {
                     useConsumable(tryConsumable);
+                    sleep(1);
                     continue;
                 }
                 else if (choice[0] == 'q')
