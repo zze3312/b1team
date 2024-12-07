@@ -45,6 +45,7 @@ void ItemClass::updateInventory() // 완성
 
     fclose(fp3);
 
+
 }
 
 void ItemClass::dropItem() // 완성, 얻은 아이템이 뭔지 확정하고, 인벤토리에 추가까지 해주는 함수
@@ -484,7 +485,7 @@ void ItemClass::showNowEquip() // 완성
 
         for (int i = 0; i < 5; i++)
         {
-            current[i] = inv->equipSetNumList[user->nowEquipmentId[i]-1];
+            current[i] = inv->equipSetNumList[(user->nowEquipmentId[i]-1) % 100];
         }
         
         
@@ -504,12 +505,12 @@ void ItemClass::showNowEquip() // 완성
         cout << "========================================\n";
         cout << "  착용중인 장비       (q. 뒤로가기)\n";
         cout << "========================================\n";
-        cout << "1. 마스크:" << user->nowEquipmentId[0] << endl;
-        cout << "2. 갑옷:" << user->nowEquipmentId[1] << endl;
-        cout << "3. 신발:" << user->nowEquipmentId[2] << endl;
-        cout << "4. 장갑:" << user->nowEquipmentId[3] << endl;
-        cout << "5. 망토:" << user->nowEquipmentId[4] << endl;
-        cout << "6. 무기:" << user->nowWeaponId << endl;
+        cout << "1. 마스크:" << inv->equipNameList[(user->nowEquipmentId[0]-1) % 100] << "+" << (user->nowEquipmentId[0]-1) / 100 << endl;
+        cout << "2. 갑옷:" << inv->equipNameList[(user->nowEquipmentId[1]-1) % 100] << "+" << (user->nowEquipmentId[1]-1) / 100 << endl;
+        cout << "3. 신발:" << inv->equipNameList[(user->nowEquipmentId[2]-1) % 100] << "+" << (user->nowEquipmentId[2]-1) / 100 << endl;
+        cout << "4. 장갑:" << inv->equipNameList[(user->nowEquipmentId[3]-1) % 100] << "+" << (user->nowEquipmentId[3]-1) / 100 << endl;
+        cout << "5. 망토:" << inv->equipNameList[(user->nowEquipmentId[4]-1) % 100] << "+" << (user->nowEquipmentId[4]-1) / 100 << endl;
+        cout << "6. 무기:" << inv->equipNameList[(user->nowWeaponId-1) % 100] << "+" << (user->nowWeaponId-1) / 100 << endl;
         cout << "========================================\n";
         cout << "적용중인 세트: " << set[0] << endl;
         cout << "효과: " << set[1] << endl;
@@ -533,7 +534,7 @@ void ItemClass::showNowEquip() // 완성
 
             if (user->nowEquipmentId[num] != 0)
             {
-                cout << "방어구 " << inv->equipNameList[user->nowEquipmentId[num]-1] << " 장착 해제\n";
+                cout << "방어구 " << inv->equipNameList[(user->nowEquipmentId[num]-1) % 100] << " 장착 해제\n";
                 inv->equipmentList[user->nowEquipmentId[num]-1]++;
                 user->nowEquipmentId[num] = 0;
                 continue;
@@ -551,7 +552,7 @@ void ItemClass::showNowEquip() // 완성
         {
             if (user->nowWeaponId != 0)
             {
-                cout << "무기 " << inv->equipNameList[user->nowWeaponId-1] << " 장착 해제\n";
+                cout << "무기 " << inv->equipNameList[(user->nowWeaponId-1) % 100] << " 장착 해제\n";
                 inv->equipmentList[user->nowWeaponId-1]++;
                 user->nowWeaponId = 0;
                 continue;
@@ -568,6 +569,59 @@ void ItemClass::showNowEquip() // 완성
         {
             continue;
         }
+    }
+}
+
+void ItemClass::equipJob(int tryEquip)
+{
+    switch (inv->equipJobList[tryEquip % 100])
+    {
+    case 1:
+        cout << "검술사\n";
+        break;
+    case 2:
+        cout << "마법사\n";
+        break;
+    case 3:
+        cout << "궁술사\n";
+        break;
+    case 4:
+        cout << "창술사\n";
+        break;
+    case 5:
+        cout << "암살자\n";
+        break;
+
+    default:
+        break;
+    }
+}
+
+void ItemClass::equipType(int tryEquip)
+{
+    switch (inv->equipTypeList[tryEquip % 100])
+    {
+    case 0:
+        cout << "마스크\n";
+        break;
+    case 1:
+        cout << "갑옷\n";
+        break;
+    case 2:
+        cout << "신발\n";
+        break;
+    case 3:
+        cout << "장갑\n";
+        break;
+    case 4:
+        cout << "망토\n";
+        break;
+    case 5:
+        cout << "무기\n";
+        break;
+
+    default:
+        break;
     }
 }
 
@@ -592,7 +646,7 @@ void ItemClass::equipInventory() // 완성
             {
                 inv->equipmentID++;
                 inv->haveEquip[inv->equipmentID - 1] = i;
-                cout << inv->equipmentID << ". " << inv->equipNameList[i%100] << "+";
+                cout << inv->equipmentID << ". " << inv->equipNameList[i % 100] << "+";
                 enhanceInfo(i);
                 cout << " " << inv->equipmentList[i] << "개" << endl;
             }
@@ -624,8 +678,10 @@ void ItemClass::equipInventory() // 완성
                 cout << "장비 번호: " << inv->equipNumList[tryEquip % 100] << endl;
                 cout << "장비 티어: " << inv->equipTierList[tryEquip % 100] << endl;
                 cout << "효과: " << inv->equipSpecList[tryEquip % 100] << endl;
-                cout << "종류: " << inv->equipTypeList[tryEquip % 100] << endl;
-                cout << "착용 가능한 직업: " << inv->equipJobList[tryEquip % 100] << endl;
+                cout << "종류: ";
+                equipType(tryEquip);
+                cout << "착용 가능한 직업: ";
+                equipJob(tryEquip);
                 cout << "========================================\n";
                 cout << "1. 착용하기  2. 세트효과 확인  q. 뒤로가기\n";
                 cout << "========================================\n";
@@ -818,7 +874,7 @@ void ItemClass::closeInven()
 
     FILE * fp = fopen(folderPath.c_str(), "wt");
 
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 1100; i++)
     {
         fprintf(fp, "%d\n", inv->equipmentList[i]);
     }

@@ -89,7 +89,11 @@ class ItemClass {
         int getGold();
         void useTeleportHome();
         void useTeleportAny();
-        void useGold(int);
+        void useGold(int useGold);
+
+        // 장비 직업, 종류 출력
+        void equipJob(int tryEquip);
+        void equipType(int tryEquip);
 };
 
 
