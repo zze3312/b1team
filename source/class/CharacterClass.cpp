@@ -66,6 +66,13 @@ bool CharacterClass::characterSelect(Login *loginUser, Character *loginCharacter
             loginCharacter -> userStat.intl = atoi(strtok(NULL, ","));
             loginCharacter -> statPoint = atoi(strtok(NULL, "\n"));
 
+            for (int i = 0; i < 7; i ++) {
+                fgets(bfr, sizeof(bfr), fp);
+                loginCharacter -> savePos[i].floor = atoi(strtok(bfr, ","));
+                loginCharacter -> savePos[i].floor = atoi(strtok(NULL, ","));
+                loginCharacter -> savePos[i].floor = atoi(strtok(NULL, "\n"));
+            }
+
             fclose(fp);
 
             //레벨별 정보 불러오기
@@ -122,14 +129,23 @@ void CharacterClass::characterAccount(Login *loginUser)
     fp = fopen(filePath.c_str(), "wt");
     // 캐릭터 생성 초기 값
     // lvl, exp, 장비1, 장비2, 장비3, 장비4, 장비5, 무기, 직업ID, 사망여부, hp, sp, 좌표row, 좌표col, 층, 힘, 민첩, 지능, 보유스탯포인트
+    // 줄바꿈 이 후 portal정보(floor,row,col 순서로 7개)
     fprintf(fp, "1,0,10,6,7,8,9,1,0,N,100,100,18,25,0,0,0,0,0\n");
+    fprintf(fp, "0,0,0\n");
+    fprintf(fp, "0,0,0\n");
+    fprintf(fp, "0,0,0\n");
+    fprintf(fp, "0,0,0\n");
+    fprintf(fp, "0,0,0\n");
+    fprintf(fp, "0,0,0\n");
+    fprintf(fp, "0,0,0\n");
+
     fclose(fp);
 
     //캐릭터 인벤토리 정보 저장 파일
     filePath = folderPath + "/equipInv.txt";
     fp = fopen(filePath.c_str(), "wt");
     string fileText = "";
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 1100; i++) {
         fileText += "0\n";
     }
     fprintf(fp, fileText.c_str());
@@ -196,6 +212,9 @@ void CharacterClass::gameSave(Character *loginCharacter) {
         , loginCharacter -> userStat.dex
         , loginCharacter -> userStat.intl
         , loginCharacter -> statPoint);
+    for (int i = 0; i < 7; i++) {
+        fprintf(fp, "%d,%d,%d\n", loginCharacter -> savePos[i].floor, loginCharacter -> savePos[i].row, loginCharacter -> savePos[i].col);
+    }
     fclose(fp);
 }
 
@@ -267,5 +286,152 @@ void CharacterClass::statWindow(Character *loginCharacter) {
             }
         }
     }
+}
 
+//텔레포트 주문서
+void CharacterClass::teleportItem(Character *loginCharacter) {
+    //type == 1이면 마을이동 / type == 2이면 순간이동
+    char inputKey = NULL;
+    while (1){
+        system("clear");
+        cout << "==================================================" << endl;
+        cout << " 주문서 사용" << endl;
+        cout << " 1. 마을이동 주문서" << endl;
+        cout << " 2. 순간이동 주문서" << endl;
+        cout << " q. 닫기" << endl;
+        read(0, &inputKey, sizeof(inputKey));
+        while (1) {
+            if (inputKey == '1') {
+                system("clear");
+                cout << "==================================================" << endl;
+                cout << "마을이동 주문서를 사용하시겠습니까?" << endl;
+                cout << "1. 사용하기" << endl;
+                cout << "q. 뒤로가기" << endl;
+                read(0, &inputKey, sizeof(inputKey));
+                cout << "==================================================" << endl;
+                if (inputKey == '1') {
+                    cout << "마을로 이동합니다.." << endl;
+                    usleep(1000000);
+                    // 좌표 row 45, col 14, floor 0
+                    loginCharacter -> pos.row = 45;
+                    loginCharacter -> pos.col = 14;
+                    loginCharacter -> lastPos.row = 45;
+                    loginCharacter -> lastPos.col = 14;
+                    loginCharacter -> beforeBlock = '0';
+                    loginCharacter -> pos.floor = 0;
+                    return;
+                }else if (inputKey == 'q') {
+                    break;
+                }
+            }else if (inputKey == '2') {
+                system("clear");
+                cout << "==================================================" << endl;
+                cout << "순간이동 주문서를 사용하시겠습니까?" << endl;
+                cout << "1. 사용하기" << endl;
+                cout << "2. 위치 저장하기" << endl;
+                cout << "q. 뒤로가기" << endl;
+                read(0, &inputKey, sizeof(inputKey));
+
+                while (1) {
+                    system("clear");
+                    cout << "==================================================" << endl;
+                    if (inputKey == '1') {
+                        cout << "이동하실 위치를 선택해 주세요." << endl;
+                        for (int i = 0; i < 7; i ++ ) {
+                            cout << i + 1 << ". ";
+                            if (loginCharacter -> savePos[i].col != 0 && loginCharacter -> savePos[i].row != 0) {
+                                if (loginCharacter -> savePos[i].floor != 0) {
+                                    cout << loginCharacter -> savePos[i].floor << "층";
+                                }else {
+                                    cout << "마을" ;
+                                }
+                                cout << " [ " << loginCharacter -> savePos[i].row << " , " << loginCharacter -> savePos[i].col << " ]" << endl;
+                            }
+                            else {
+                                cout << "저장된 좌표 없음" << endl;
+                            }
+                        }
+                        cout << "q : 뒤로가기" << endl;
+                        read(0, &inputKey, sizeof(inputKey));
+                        while (1) {
+                            if (isdigit(inputKey) && inputKey - '0' <= 7 ) {
+                                inputKey = inputKey - '0';
+                                cout << "==================================================" << endl;
+                                cout << "선택한 위치 : ";
+                                if (loginCharacter -> savePos[inputKey - 1].floor != 0) {
+                                    cout << loginCharacter -> savePos[inputKey - 1].floor  << "층";
+                                }else {
+                                    cout << "마을" ;
+                                }
+                                cout << " [ " << loginCharacter -> savePos[inputKey - 1].row << " , " << loginCharacter -> savePos[inputKey - 1].col << " ]";
+                                cout << " 로 이동합니다..." << endl;
+                                usleep(1000000);
+                                loginCharacter -> pos.row = loginCharacter -> savePos[inputKey - 1].row;
+                                loginCharacter -> pos.col = loginCharacter -> savePos[inputKey - 1].col;
+                                loginCharacter -> lastPos.row = loginCharacter -> savePos[inputKey - 1].row;
+                                loginCharacter -> lastPos.col = loginCharacter -> savePos[inputKey - 1].col;
+                                loginCharacter -> beforeBlock = '0';
+                                loginCharacter -> pos.floor = loginCharacter -> savePos[inputKey - 1].floor;
+
+                                return;
+                            }
+                            else if (inputKey == 'q') {
+                                break;
+                            }
+                            else {
+                                cout << "잘못된 입력입니다." << endl;
+                                break;
+                            }
+                        }
+                    }
+                    else if (inputKey == '2') {
+                        while (1) {
+                            system("clear");
+                            cout << "==================================================" << endl;
+                            cout << "저장시킬 번호를 입력해주세요." << endl;
+                            for (int i = 0; i < 7; i ++ ) {
+                                cout << i + 1 << ". ";
+                                if (loginCharacter -> savePos[i].col != 0 && loginCharacter -> savePos[i].row != 0) {
+                                    if (loginCharacter -> savePos[i].floor != 0) {
+                                        cout << loginCharacter -> savePos[i].floor << "층";
+                                    }else {
+                                        cout << "마을" ;
+                                    }
+                                    cout << " [ " << loginCharacter -> savePos[i].row << " , " << loginCharacter -> savePos[i].col << " ]" << endl;
+                                }else {
+                                    cout << "저장된 좌표 없음" << endl;
+                                }
+                            }
+                            read(0, &inputKey, sizeof(inputKey));
+                            if (isdigit(inputKey) && inputKey - '0' <= 7 ) {
+                                loginCharacter -> savePos[inputKey - '0' - 1].floor = loginCharacter -> pos.floor;
+                                loginCharacter -> savePos[inputKey - '0' - 1].row = loginCharacter -> pos.row;
+                                loginCharacter -> savePos[inputKey - '0' - 1].col = loginCharacter -> pos.col;
+                                cout << "저장되었습니다..." << endl;
+                                usleep(1000000);
+                                return;
+                            }else if (inputKey == 'q') {
+                                break ;
+                            }else {
+                                cout << "잘못된 입력입니다." << endl;
+                                continue;
+                            }
+                        }
+                    }
+                    else if (inputKey == 'q') {
+                        break ;
+                    }
+                    else {
+                        cout << "잘못된 입력입니다." << endl;
+                        break;
+                    }
+                }
+            }else if (inputKey == 'q') {
+                break;
+            }else {
+                cout << "잘못된 입력입니다." << endl;
+                break;
+            }
+        }
+    }
 }

@@ -4,12 +4,13 @@
 #include "types.h"
 
 class CharacterClass{
-    public:
-        bool characterSelect(Login *, Character *);
-        void characterAccount(Login *);
-        void move(Character *, char);
-        void gameSave(Character *);
-        void statWindow(Character *);
+public:
+    bool characterSelect(Login *, Character *);
+    void characterAccount(Login *);
+    void move(Character *, char);
+    void gameSave(Character *);
+    void statWindow(Character *);
+    void teleportItem(Character *);
 };
 
 

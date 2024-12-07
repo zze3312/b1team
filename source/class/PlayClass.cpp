@@ -32,6 +32,7 @@ void PlayClass::play(Character *loginCharacter) {
             cout << "동작할 작업" << endl;
             cout << " i : 인벤토리" << endl;
             cout << " s : 능력치" << endl;
+            cout << " t : 텔레포트" << endl;
             cout << " q : 종료" << endl;
             read(0, &inputKey, sizeof(inputKey));
             //cout << inputKey << endl;
@@ -41,11 +42,13 @@ void PlayClass::play(Character *loginCharacter) {
                 delete itemFunc;
             }else if (inputKey[0] == 's') {
                 charFunc.statWindow(loginCharacter);
-            }if (inputKey[0] == 'q') {
+            }else if (inputKey[0] == 't') {
+                charFunc.teleportItem(loginCharacter);
+                mapFunc.setMap(loginCharacter -> pos.floor);
+            }else if (inputKey[0] == 'q') {
                 charFunc.gameSave(loginCharacter);
                 return;
             }
-
             ////sleep(1);
             usleep(500000);
         }
@@ -57,6 +60,9 @@ void PlayClass::play(Character *loginCharacter) {
 
         mapFunc.printMap(loginCharacter);
         mapFunc.printStatus(loginCharacter);
+
+
+
     }
 }
 
