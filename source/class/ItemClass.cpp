@@ -242,12 +242,10 @@ void ItemClass::tryEnhance(int tryConsumable) // 완성
         cout << "               강화할 장비를 선택해주세요.\n";
         cout << "                                         q. 뒤로가기\n";
         cout << "=======================================================\n";
-        cout << "1. " << inv->equipNameList[(user->nowEquipmentId[0]-1) % 100] << endl;
-        cout << "2. " << inv->equipNameList[(user->nowEquipmentId[1]-1) % 100] << endl;
-        cout << "3. " << inv->equipNameList[(user->nowEquipmentId[2]-1) % 100] << endl;
-        cout << "4. " << inv->equipNameList[(user->nowEquipmentId[3]-1) % 100] << endl;
-        cout << "5. " << inv->equipNameList[(user->nowEquipmentId[4]-1) % 100] << endl;
-        cout << "6. " << inv->equipNameList[(user->nowWeaponId-1) % 100] << endl;
+        for (int i = 0; i < 6; i++)
+        {
+            printEquip(i);
+        }
         cout << "=======================================================\n";
 
         //string choice;
@@ -258,13 +256,13 @@ void ItemClass::tryEnhance(int tryConsumable) // 완성
 
         int prob; // 확률
 
-        if (tryConsumable == 5) // 엘릭서일 경우 확률 100퍼
+        if (tryConsumable == 4) // 엘릭서일 경우 확률 100퍼
         {
             prob = 0;
         }
-        else if (tryConsumable == 6) // 강화 주문서일 경우 20퍼
+        else if (tryConsumable == 5) // 강화 주문서일 경우 20퍼
         {
-            prob = rand() & 5;
+            prob = rand() % 5;
         }
 
 
@@ -301,7 +299,7 @@ void ItemClass::tryEnhance(int tryConsumable) // 완성
 
         if (prob == 0) // 0 - 강화 성공
         {
-            if (choice[0] = 'q')
+            if (choice[0] == 'q')
             {
                 system("clear");
                 break;
@@ -343,7 +341,7 @@ void ItemClass::tryEnhance(int tryConsumable) // 완성
         }
         else // 1, 2, 3, 4 - 강화 실패
         {
-            if (choice[0] = 'q')
+            if (choice[0] == 'q')
             {
                 system("clear");
                 break;
@@ -532,7 +530,7 @@ void ItemClass::printEquip(int num)
     }
     else if (num == 5)
     {
-        if (user->nowEquipmentId[num] == 0)
+        if (user->nowWeaponId == 0)
         {
             cout << "6. 무기:없음" << endl;
         }
@@ -553,19 +551,20 @@ void ItemClass::showNowEquip() // 완성
 
         for (int i = 0; i < 5; i++)
         {
-            current[i] = inv->equipSetNumList[(user->nowEquipmentId[i]-1) % 100];
+            current[i] = inv->equipSetNumList[user->nowEquipmentId[i]-1];
         }
-        
         
         if (current[0] == 0 || current[1] == 0 || current[2] == 0 || current[3] == 0 || current[4] == 0 || user->nowWeaponId == 0)
         {
             set[0] = "없음";
             set[1] = "없음";
         }
-        else if (current[0] == current[1] && current[1] == current[2] && current[2] == current[3] && current[3] == current[4] && current[4] == inv->equipSetNumList[user->nowWeaponId-1] % 100)
+        else if (current[0] == current[1] && current[1] == current[2] && current[2] == current[3] && current[3] == current[4] && current[4] == inv->equipSetNumList[user->nowWeaponId-1])
         {
-            set[0] = inv->setEffectNameList[current[0]];
-            set[1] = inv->setEffectEXList[current[0]];
+            set[0] = inv->setEffectNameList[inv->equipSetNumList[user->nowWeaponId]-1];
+            set[1] = inv->setEffectEXList[inv->equipSetNumList[user->nowWeaponId]-1];
+            // inv->setEffectNameList[current[0]];
+            // inv->setEffectEXList[current[0]];
         }
         
 
@@ -854,16 +853,17 @@ void ItemClass::consumableInventory() // 완성
                 cout << "========================================\n";
 
                 //cin >> choiceTwo;
-                read(0, &choice, sizeof(choice));
+                char choice2[3];
+                read(0, &choice2, sizeof(choice2));
                 system("clear");
 
-                if (choice[0] == '1')
+                if (choice2[0] == '1')
                 {
                     useConsumable(tryConsumable);
                     sleep(1);
                     continue;
                 }
-                else if (choice[0] == 'q')
+                else if (choice2[0] == 'q')
                 {
                     break;
                 }
