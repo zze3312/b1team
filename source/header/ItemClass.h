@@ -90,7 +90,7 @@ class ItemClass {
         string getItemName(int num);
         string getEquipName(int num);
         string getSpecName(int num);
-        string getEquipType(int num);
+        int getEquipType(int num);
         void useTeleportHome();
         void useTeleportAny();
         void useGold(int useGold);
