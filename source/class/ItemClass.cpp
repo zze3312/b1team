@@ -627,8 +627,9 @@ void ItemClass::equipInventory() // 완성
             {
                 int tryEquip = inv->haveEquip[stoi(choice)-1]; // 현재 선택한 장비의 씨리얼 넘버 의미
                 cout << "========================================\n";
-                cout << inv->equipNameList[tryEquip] << endl;
-                cout << "========================================\n";
+                cout << inv->equipNameList[tryEquip];
+                enhanceInfo(tryEquip);
+                cout << "\n========================================\n";
                 cout << "장비 번호: " << inv->equipNumList[tryEquip] << endl;
                 cout << "장비 티어: " << inv->equipTierList[tryEquip] << endl;
                 cout << "효과: " << inv->equipSpecList[tryEquip] << endl;
