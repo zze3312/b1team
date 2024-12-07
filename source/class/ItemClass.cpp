@@ -242,12 +242,12 @@ void ItemClass::tryEnhance(int tryConsumable) // 완성
         cout << "               강화할 장비를 선택해주세요.\n";
         cout << "                                         q. 뒤로가기\n";
         cout << "=======================================================\n";
-        cout << "1. " << inv->equipmentList[user->nowEquipmentId[0]-1] << endl;
-        cout << "2. " << inv->equipmentList[user->nowEquipmentId[1]-1] << endl;
-        cout << "3. " << inv->equipmentList[user->nowEquipmentId[2]-1] << endl;
-        cout << "4. " << inv->equipmentList[user->nowEquipmentId[3]-1] << endl;
-        cout << "5. " << inv->equipmentList[user->nowEquipmentId[4]-1] << endl;
-        cout << "6. " << inv->equipmentList[user->nowWeaponId-1] << endl;
+        cout << "1. " << inv->equipNameList[(user->nowEquipmentId[0]-1) % 100] << endl;
+        cout << "2. " << inv->equipNameList[(user->nowEquipmentId[1]-1) % 100] << endl;
+        cout << "3. " << inv->equipNameList[(user->nowEquipmentId[2]-1) % 100] << endl;
+        cout << "4. " << inv->equipNameList[(user->nowEquipmentId[3]-1) % 100] << endl;
+        cout << "5. " << inv->equipNameList[(user->nowEquipmentId[4]-1) % 100] << endl;
+        cout << "6. " << inv->equipNameList[(user->nowWeaponId-1) % 100] << endl;
         cout << "=======================================================\n";
 
         //string choice;
@@ -258,11 +258,11 @@ void ItemClass::tryEnhance(int tryConsumable) // 완성
 
         int prob; // 확률
 
-        if (tryConsumable == 7) // 엘릭서일 경우 확률 100퍼
+        if (tryConsumable == 5) // 엘릭서일 경우 확률 100퍼
         {
             prob = 0;
         }
-        else if (tryConsumable == 8) // 강화 주문서일 경우 20퍼
+        else if (tryConsumable == 6) // 강화 주문서일 경우 20퍼
         {
             prob = rand() & 5;
         }
@@ -385,11 +385,11 @@ void ItemClass::tryEnhance(int tryConsumable) // 완성
 
 void ItemClass::wearEquip(int tryEquip) // 완성
 {
-    if (user->jobId == inv->equipJobList[tryEquip] || inv->equipJobList[tryEquip] == 0)
+    if (user->jobId == inv->equipJobList[tryEquip % 100] || inv->equipJobList[tryEquip % 100] == 0)
     {
         for (int i = 0; i < 6; i++)
         {
-            if (i == inv->equipTypeList[tryEquip])
+            if (i == inv->equipTypeList[tryEquip % 100])
             {
                 if (user->nowEquipmentId[i] == 0)
                 {
@@ -402,8 +402,8 @@ void ItemClass::wearEquip(int tryEquip) // 완성
                 }
                 else if (user->nowWeaponId == 0)
                 {
-                    user->nowWeaponId = inv->equipNumList[tryEquip];
-                    cout << inv->equipNameList[tryEquip] << " 착용 완료! \n";
+                    user->nowWeaponId = inv->equipNumList[tryEquip % 100];
+                    cout << inv->equipNameList[tryEquip % 100] << " 착용 완료! \n";
                     sleep(2);
                     system("clear");
                     inv->equipmentList[tryEquip]--;
@@ -423,8 +423,6 @@ void ItemClass::wearEquip(int tryEquip) // 완성
     {
         cout << "=======================================================\n";
         cout << "직업에 맞는 장비를 착용해주세요!!\n";
-        cout << "현재 직업: " << user->jobId << endl;
-        cout << "선택한 아이템의 착용 조건 : " << inv->equipJobList[tryEquip] << endl;
         sleep(2);
         system("clear");
     }
@@ -461,13 +459,6 @@ void ItemClass::useConsumable(int tryConsumable) // 미완성
     case 5: // 장비강화주문서
         tryEnhance(tryConsumable);
         break;
-    case 6: // 마을이동주문서
-    // 좌표 row 45, col 14, floor 0
-    inv->consumableList[4]--;
-    break;
-    case 7: // 순간이동주문서
-    // 새 좌표 생성 / 좌표 이동 / 뒤로가기 함수 필요
-    break;
     default:
         break;
     }
@@ -478,6 +469,7 @@ void ItemClass::useConsumable(int tryConsumable) // 미완성
 
 void ItemClass::printEquip(int num)
 {
+    int result;
     if (num == 0)
     {
         if (user->nowEquipmentId[num] == 0)
@@ -485,8 +477,9 @@ void ItemClass::printEquip(int num)
             cout << "1. 마스크:없음" << endl;
         }
         else
-        {
-            cout << "1. 마스크:" << inv->equipNameList[(user->nowEquipmentId[0]-1) % 100] << "+" << (user->nowEquipmentId[0]-1) / 100 << endl;
+        {   
+            result = (user->nowEquipmentId[0]-1) / 100;
+            cout << "1. 마스크:" << inv->equipNameList[(user->nowEquipmentId[0]-1) % 100] << "+" << result << endl;
         }
     }
     else if (num == 1)
@@ -497,7 +490,8 @@ void ItemClass::printEquip(int num)
         }
         else
         {
-            cout << "2. 갑옷:" << inv->equipNameList[(user->nowEquipmentId[1]-1) % 100] << "+" << (user->nowEquipmentId[1]-1) / 100 << endl;
+            result = (user->nowEquipmentId[1]-1) / 100;
+            cout << "2. 갑옷:" << inv->equipNameList[(user->nowEquipmentId[1]-1) % 100] << "+" << result << endl;
         }
     }
     else if (num == 2)
@@ -508,7 +502,8 @@ void ItemClass::printEquip(int num)
         }
         else
         {
-            cout << "3. 신발:" << inv->equipNameList[(user->nowEquipmentId[2]-1) % 100] << "+" << (user->nowEquipmentId[2]-1) / 100 << endl;
+            result = (user->nowEquipmentId[2]-1) / 100;
+            cout << "3. 신발:" << inv->equipNameList[(user->nowEquipmentId[2]-1) % 100] << "+" << result << endl;
         }
     }
     else if (num == 3)
@@ -519,7 +514,8 @@ void ItemClass::printEquip(int num)
         }
         else
         {
-            cout << "4. 장갑:" << inv->equipNameList[(user->nowEquipmentId[3]-1) % 100] << "+" << (user->nowEquipmentId[3]-1) / 100 << endl;
+            result = (user->nowEquipmentId[3]-1) / 100;
+            cout << "4. 장갑:" << inv->equipNameList[(user->nowEquipmentId[3]-1) % 100] << "+" << result << endl;
         }
     }
     else if (num == 4)
@@ -530,7 +526,8 @@ void ItemClass::printEquip(int num)
         }
         else
         {
-            cout << "5. 망토:" << inv->equipNameList[(user->nowEquipmentId[4]-1) % 100] << "+" << (user->nowEquipmentId[4]-1) / 100 << endl;
+            result = (user->nowEquipmentId[4]-1) / 100;
+            cout << "5. 망토:" << inv->equipNameList[(user->nowEquipmentId[4]-1) % 100] << "+" << result << endl;
         }
     }
     else if (num == 5)
@@ -541,7 +538,8 @@ void ItemClass::printEquip(int num)
         }
         else
         {
-            cout << "6. 무기:" << inv->equipNameList[(user->nowWeaponId-1) % 100] << "+" << (user->nowWeaponId-1) / 100 << endl;
+            result = (user->nowWeaponId-1) / 100;
+            cout << "6. 무기:" << inv->equipNameList[(user->nowWeaponId-1) % 100] << "+" << result << endl;
         }
     }   
 }
@@ -564,7 +562,7 @@ void ItemClass::showNowEquip() // 완성
             set[0] = "없음";
             set[1] = "없음";
         }
-        else if (current[0] == current[1] && current[1] == current[2] && current[2] == current[3] && current[3] == current[4] && current[4] == inv->equipSetNumList[user->nowWeaponId-1])
+        else if (current[0] == current[1] && current[1] == current[2] && current[2] == current[3] && current[3] == current[4] && current[4] == inv->equipSetNumList[user->nowWeaponId-1] % 100)
         {
             set[0] = inv->setEffectNameList[current[0]];
             set[1] = inv->setEffectEXList[current[0]];
@@ -844,7 +842,7 @@ void ItemClass::consumableInventory() // 완성
         {
             while (1)
             {
-                int tryConsumable = inv->haveConsum[stoi(choice)-1]; // 선택한 소모품의 씨리얼 넘버
+                int tryConsumable = inv->haveConsum[choice[0]-'0'-1]; // 선택한 소모품의 씨리얼 넘버
                 cout << "========================================\n";
                 cout << inv->consumableNameList[tryConsumable] << endl;
                 cout << "========================================\n";
