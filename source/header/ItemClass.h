@@ -52,6 +52,8 @@ typedef struct {
     string setEffectNumList[15];
     string setEffectNameList[15];
     string setEffectEXList[15];
+    // 강화 장비
+    string enhancedEquipList[1000];
 
 } Inventory;
 

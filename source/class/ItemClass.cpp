@@ -45,6 +45,22 @@ void ItemClass::updateInventory() // 미완성
     inv->gold = atoi(str3);
 
     fclose(fp3);
+
+    // 강화된 장비 불러오기
+    string folderPath4 = ROOT_PATH + "userData/" + user->id + "/" + user->nickname + "/enhancedEquipInfo.txt";
+
+    FILE * fp4 = fopen(folderPath.c_str(), "rt");
+
+    char str4[10];
+    i = 0;
+
+    while (fgets(str4,sizeof(str),fp4))
+    {
+        inv->enhancedEquipList[i] = atoi(str);
+        i++;
+    }
+
+    fclose(fp4);
 }
 
 void ItemClass::dropItem(Inventory inv) // 완성, 얻은 아이템이 뭔지 확정하고, 인벤토리에 추가까지 해주는 함수
@@ -195,6 +211,7 @@ void ItemClass::tryEnhance(int tryConsumable) // 미완성
     while (1)
     {
         cout << "               강화할 장비를 선택해주세요.\n";
+        cout << "                                         q. 뒤로가기\n";
         cout << "=======================================================\n";
         cout << "1. " << user->nowEquipmentId[0] << endl;
         cout << "2. " << user->nowEquipmentId[1] << endl;
@@ -221,32 +238,100 @@ void ItemClass::tryEnhance(int tryConsumable) // 미완성
             prob = rand() & 5;
         }
 
-        if (prob == 0)
+
+        if (choice[0] == '6') // 아무것도 안 낀거 강화 못하게
         {
-            if (choice[0] == '6')
+            if (user->nowWeaponId == 0)
             {
-                cout << "강화 성공!\n"; // TODO : 구현 예정
+                cout << "맨 손을 강화할 수는 없습니다!\n";
+                continue;
+            }
+        }
+        else if (choice[0] > '0' && choice[0] < '6')
+        {
+            if (user->nowEquipmentId[choice[0]-'0'-1] == 0)
+            {
+                cout << "맨 몸을 강화할 수는 없습니다!\n";
+                continue;
+            }
+        }
+        
+        
+
+        if (prob == 0) // 0 - 강화 성공
+        {
+            if (choice[0] = 'q')
+            {
+                system("clear");
+                break;
+            }
+            else if (choice[0] == '6')
+            {   
+                cout << "강화중";
+                for (int i = 0; i < 10; i++)
+                {
+                    cout << ".";
+                    usleep(300000);    
+                }
+                system("clear");
+                cout << "강화 성공!\n";
+                // TODO : 구현 예정
+                sleep(1);
+                system("clear");
+                break;
             }
             else if (choice[0] > '0' && choice[0] < '6')
             {
-                cout << "강화 성공!\n"; // TODO : 구현 예정
+                cout << "강화중";
+                for (int i = 0; i < 10; i++)
+                {
+                    cout << ".";
+                    usleep(300000);
+                }
+                system("clear");
+                cout << "강화 성공!\n";
+                // TODO : 구현 예정
+                sleep(1);
+                system("clear");
+                break;
             }
             else
             {
                 continue;
             }
         }
-        else
+        else // 1, 2, 3, 4 - 강화 실패
         {
-            if (choice[0] == '6')
+            if (choice[0] = 'q')
             {
+                system("clear");
+                break;
+            }
+            else if (choice[0] == '6')
+            {
+                cout << "강화중";
+                for (int i = 0; i < 10; i++)
+                {
+                    cout << ".";
+                    usleep(300000);    
+                }
                 cout << inv->equipmentList[user->nowWeaponId] << "가 파괴되었습니다...\n";
+                sleep(1);
+                system("clear");
                 user->nowWeaponId = 0;
             }
             else if (choice[0] > '0' && choice[0] < '6')
             {
-                cout << inv->equipmentList[user->nowEquipmentId[stoi(choice)-1]] << "가 파괴되었습니다...\n";
-                user->nowEquipmentId[stoi(choice)-1] = 0;
+                cout << "강화중";
+                for (int i = 0; i < 10; i++)
+                {
+                    cout << ".";
+                    usleep(300000);    
+                }
+                cout << inv->equipmentList[user->nowEquipmentId[choice[0]-'0'-1]] << "가 파괴되었습니다...\n";
+                sleep(1);
+                system("clear");
+                user->nowEquipmentId[choice[0]-'0'-1] = 0;
             }
             else
             {
@@ -455,7 +540,7 @@ void ItemClass::equipInventory() // 완성
         cout << "========================================\n";
         cout << "  보유한 장비 (입력 후 엔터)\n";
         cout << "========================================\n";
-        cout << "  q. 뒤로가기\n";
+        cout << "  e. 강화된 장비 보기  q. 뒤로가기\n";
         cout << "========================================\n";
 
         char choice[4];
@@ -481,6 +566,10 @@ void ItemClass::equipInventory() // 완성
         if (choice[0] == 'q')
         {
             break;
+        }
+        else if (choice[0] = 'e')
+        {
+            // 강화된 장비 인벤토리, 구현 예정
         }
         else if (!isdigit(choice[0]) || (!isdigit(choice[1]) && choice[1] == ' ') || (!isdigit(choice[2]) && choice[2] == ' '))
         {
