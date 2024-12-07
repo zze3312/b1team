@@ -761,7 +761,7 @@ void ItemClass::equipInventory() // 완성
 
                 if (choice2 == '1')
                 {
-                    wearEquip(tryEquip % 100);
+                    wearEquip(tryEquip);
                     break;
                 }
                 else if (choice2 == '2')
