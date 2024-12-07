@@ -10,7 +10,7 @@ typedef struct {
     int haveConsum[8]; // 1개 이상인 장비 출력용
     string name; 
 
-    int equipmentList[100]; // "rt"로 기존 파일에 있는 보유개수 불러옴, 현재 유저 인벤
+    int equipmentList[1100]; // "rt"로 기존 파일에 있는 보유개수 불러옴, 현재 유저 인벤
     int consumableList[8]; // 똑같이 기존 파일에 있는 거 담아옴, 현재 유저 인벤벤
     int gold;
 
@@ -83,6 +83,8 @@ class ItemClass {
         void openInventory(); // 인벤토리 오픈
         void closeInven(); // 인벤토리 저장 기능
         void ifDeathInven(); // 죽었을 때 아이템 잃는 기능
+        void enhanceSuccess(char * choice);
+        void enhanceInfo(int i);
 };
 
 
