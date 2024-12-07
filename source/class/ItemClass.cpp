@@ -476,6 +476,19 @@ void ItemClass::useConsumable(int tryConsumable) // 미완성
 
 }
 
+void ItemClass::printEquip(int num)
+{
+    for (num = 0; i < count; i++)
+    {
+        /* code */
+    }
+    
+    {
+        inv->equipNameList[(user->nowEquipmentId[num]-1) % 100] << "+" << (user->nowEquipmentId[num]-1) / 100 << endl;
+    }
+    
+    
+}
 
 void ItemClass::showNowEquip() // 완성
 {
@@ -1162,9 +1175,19 @@ string ItemClass::getItemName(int num)
     return inv->consumableNameList[num];
 }
 
+string ItemClass::getSpecName(int num)
+{
+    return inv->equipSpecList[num];
+}
+
 string ItemClass::getEquipName(int num)
 {
     return inv->equipNameList[num];
+}
+
+string ItemClass::getEquipType(int num)
+{
+    return inv->equipTypeList[num];
 }
 
 int  ItemClass::getTeleportHome() {

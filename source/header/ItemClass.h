@@ -89,6 +89,8 @@ class ItemClass {
         int getGold();
         string getItemName(int num);
         string getEquipName(int num);
+        string getSpecName(int num);
+        string getEquipType(int num);
         void useTeleportHome();
         void useTeleportAny();
         void useGold(int useGold);
@@ -98,7 +100,7 @@ class ItemClass {
         void equipType(int tryEquip);
         
         // 출력용
-        void printEquip();
+        void printEquip(int num);
 };
 
 
