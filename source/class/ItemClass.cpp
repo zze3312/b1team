@@ -1,6 +1,6 @@
 #include "../header/ItemClass.h"
 
-void ItemClass::updateInventory() // 미완성
+void ItemClass::updateInventory() // 완성
 {
     // 장비 불러오기
     string folderPath = ROOT_PATH + "userData/" + user->id + "/" + user->nickname + "/equipInv.txt";
@@ -97,26 +97,27 @@ void ItemClass::dropItem() // 완성, 얻은 아이템이 뭔지 확정하고, �
         cout << inv -> consumableNameList[3] << "을 획득하셨습니다." << endl;
         usleep(500000);
     }
+    if (inv->elixir == 1)
+    {
+        elixir = rand() % 3 + 1;
+        inv->consumableList[4] += elixir;
+        cout << inv -> consumableNameList[4] << "을 획득하셨습니다." << endl;
+        usleep(500000);
+    }
     if (inv->teleportHome == 1)
     {
-        inv->consumableList[4] += 1;
-        cout << inv -> consumableNameList[4] << "을 획득하셨습니다." << endl;
+        inv->consumableList[6] += 1;
+        cout << inv -> consumableNameList[6] << "을 획득하셨습니다." << endl;
         usleep(500000);
     }
     if (inv->teleportAny == 1)
     {
         teleportAny = rand() % 3 + 1;
-        inv->consumableList[5] += teleportAny;
-        cout << inv -> consumableNameList[5] << "을 획득하셨습니다." << endl;
+        inv->consumableList[7] += teleportAny;
+        cout << inv -> consumableNameList[7] << "을 획득하셨습니다." << endl;
         usleep(500000);
     }
-    if (inv->elixir == 1)
-    {
-        elixir = rand() % 3 + 1;
-        inv->consumableList[6] += elixir;
-        cout << inv -> consumableNameList[6] << "을 획득하셨습니다." << endl;
-        usleep(500000);
-    }
+    
 
 }
 
@@ -215,48 +216,21 @@ void ItemClass::enhanceSuccess(char * choice) // 강화 성공시 강화된 장�
     if (choice[0] == '6') // 무기 강화 성공
     {
         num = user->nowWeaponId - 1;
-        if (num < 100)
-        {
-            num = num * 10 + 100;
-            user->nowWeaponId = inv->equipmentList[num];
-        }
-        else
-        {
-            num++;
-            user->nowWeaponId = inv->equipmentList[num];
-        }
+        num = num + 100;
+        user->nowWeaponId = inv->equipmentList[num];
     }
     else // 방어구 강화 성공
     {
         num = user->nowEquipmentId[choice[0] - '0' - 1] - 1;
-        if (num < 100) // 0강인 장비일 경우
-        {
-            num = num * 10 + 100;
-            user->nowEquipmentId[choice[0] - '0' - 1] = inv->equipmentList[num];
-        }
-        else // 1강 이상
-        {
-            num++;
-            user->nowEquipmentId[choice[0] - '0' - 1] = inv->equipmentList[num];
-        }
+        num = num + 100;
+        user->nowEquipmentId[choice[0] - '0' - 1] = inv->equipmentList[num];
     }
 }
 
 void ItemClass::enhanceInfo(int i)
 {
-    user->nowEquipmentId;
-    user->nowWeaponId;
-
-    if (i < 100) // 강화 x 장비의 경우 0강 출력
-    {
-        cout << "+0";
-    }
-    else // 강화 o 장비의 경우 그에 걸맞는 강화 수치 출력
-    {
-        int result = i % 10 + 1;
-        cout << result;
-    }
-    
+    int result = i / 100;
+    cout << result;
 }
 
 
@@ -460,39 +434,39 @@ void ItemClass::useConsumable(int tryConsumable) // 미완성
 {
     switch (tryConsumable)
     {
-    case 1: // 빨간물약 > 포션은 쿹타임 있어야 할까요
+    case 0: // 빨간물약 > 포션은 쿹타임 있어야 할까요
         user->hp += user->maxHp / 10;
         cout << "체력을 " << user->maxHp / 10 << "만큼 회복했다!\n";
         inv->consumableList[0]--;
         break;
-    case 2: // 주황물약
+    case 1: // 주황물약
         user->hp += user->maxHp * (3/10); // 소수점 괜찮나..?
         cout << "체력을 " << user->maxHp * (3/10) << "만큼 회복했다!\n";
         inv->consumableList[1]--;
         break;
-    case 3: // 맑은물약
+    case 2: // 맑은물약
         user->hp += user->maxHp / 2;
         cout << "체력을 " << user->maxHp / 2 << "만큼 회복했다!\n";
         inv->consumableList[2]--;
         break;
-    case 4: // 고농도물약
+    case 3: // 고농도물약
         user->hp += user->maxHp;
         cout << "체력을 모두 회복했다!\n";
         inv->consumableList[3]--;
         break;
-    case 5: // 마을이동주문서
-        // 좌표 row 45, col 14, floor 0
-        inv->consumableList[4]--;
-        break;
-    case 6: // 순간이동주문서
-        // 새 좌표 생성 / 좌표 이동 / 뒤로가기 함수 필요
-        break;
-    case 7: // 엘릭서
+    case 4: // 엘릭서
         tryEnhance(tryConsumable);
         break;
-    case 8: // 장비강화주문서
+    case 5: // 장비강화주문서
         tryEnhance(tryConsumable);
         break;
+    case 6: // 마을이동주문서
+    // 좌표 row 45, col 14, floor 0
+    inv->consumableList[4]--;
+    break;
+    case 7: // 순간이동주문서
+    // 새 좌표 생성 / 좌표 이동 / 뒤로가기 함수 필요
+    break;
     default:
         break;
     }
@@ -618,7 +592,7 @@ void ItemClass::equipInventory() // 완성
             {
                 inv->equipmentID++;
                 inv->haveEquip[inv->equipmentID - 1] = i;
-                cout << inv->equipmentID << ". " << inv->equipNameList[i];
+                cout << inv->equipmentID << ". " << inv->equipNameList[i%100] << "+";
                 enhanceInfo(i);
                 cout << " " << inv->equipmentList[i] << "개" << endl;
             }
@@ -719,7 +693,7 @@ void ItemClass::consumableInventory() // 완성
         // string choice;
         inv->consumableID = 0;
 
-        for (i = 0; i < 8; i++)
+        for (i = 0; i < 6; i++)
         {
             if (inv->consumableList[i] != 0)
             {
