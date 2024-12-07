@@ -234,7 +234,7 @@ void ItemClass::enhanceInfo(int i)
 }
 
 
-void ItemClass::tryEnhance(int tryConsumable) // 미완성
+void ItemClass::tryEnhance(int tryConsumable) // 완성
 {
     while (1)
     {
@@ -274,7 +274,7 @@ void ItemClass::tryEnhance(int tryConsumable) // 미완성
                 cout << "맨 손을 강화할 수는 없습니다!\n";
                 continue;
             }
-            else if ((user->nowWeaponId-1) % 10 + 100 == 9)
+            else if ((user->nowWeaponId-1) / 100 == 10)
             {
                 cout << "이미 최대 강화입니다!\n";
                 continue;
@@ -288,7 +288,7 @@ void ItemClass::tryEnhance(int tryConsumable) // 미완성
                 cout << "맨 몸을 강화할 수는 없습니다!\n";
                 continue;
             }
-            else if ((user->nowEquipmentId[choice[0]-'0'-1]-1) % 10 + 100 == 9)
+            else if ((user->nowEquipmentId[choice[0]-'0'-1]-1) / 100 == 10)
             {
                 cout << "이미 최대 강화입니다!\n";
                 continue;
@@ -618,14 +618,14 @@ void ItemClass::equipInventory() // 완성
             {
                 int tryEquip = inv->haveEquip[stoi(choice)-1]; // 현재 선택한 장비의 씨리얼 넘버 의미
                 cout << "========================================\n";
-                cout << inv->equipNameList[tryEquip];
+                cout << inv->equipNameList[tryEquip % 100];
                 enhanceInfo(tryEquip);
                 cout << "\n========================================\n";
-                cout << "장비 번호: " << inv->equipNumList[tryEquip] << endl;
-                cout << "장비 티어: " << inv->equipTierList[tryEquip] << endl;
-                cout << "효과: " << inv->equipSpecList[tryEquip] << endl;
-                cout << "종류: " << inv->equipTypeList[tryEquip] << endl;
-                cout << "착용 가능한 직업: " << inv->equipJobList[tryEquip] << endl;
+                cout << "장비 번호: " << inv->equipNumList[tryEquip % 100] << endl;
+                cout << "장비 티어: " << inv->equipTierList[tryEquip % 100] << endl;
+                cout << "효과: " << inv->equipSpecList[tryEquip % 100] << endl;
+                cout << "종류: " << inv->equipTypeList[tryEquip % 100] << endl;
+                cout << "착용 가능한 직업: " << inv->equipJobList[tryEquip % 100] << endl;
                 cout << "========================================\n";
                 cout << "1. 착용하기  2. 세트효과 확인  q. 뒤로가기\n";
                 cout << "========================================\n";
@@ -637,12 +637,12 @@ void ItemClass::equipInventory() // 완성
 
                 if (choice2 == '1')
                 {
-                    wearEquip(tryEquip);
+                    wearEquip(tryEquip % 100);
                     break;
                 }
                 else if (choice2 == '2')
                 {
-                    if (inv->equipSetNumList[tryEquip] == 0)
+                    if (inv->equipSetNumList[tryEquip % 100] == 0)
                     {
                         cout << "========================================\n";
                         cout << "세트 이름: " << "없음" << endl;
@@ -653,8 +653,8 @@ void ItemClass::equipInventory() // 완성
                     else
                     {
                         cout << "========================================\n";
-                        cout << "세트 이름: " << inv->setEffectNameList[inv->equipSetNumList[tryEquip]-1] << endl;
-                        cout << "세트효과: " << inv->setEffectEXList[inv->equipSetNumList[tryEquip]-1] << endl;
+                        cout << "세트 이름: " << inv->setEffectNameList[inv->equipSetNumList[tryEquip % 100]-1] << endl;
+                        cout << "세트효과: " << inv->setEffectEXList[inv->equipSetNumList[tryEquip % 100]-1] << endl;
                         cout << "========================================\n";
                         continue;
                     }
