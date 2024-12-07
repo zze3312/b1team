@@ -82,6 +82,14 @@ class ItemClass {
         void enhanceInfo(int i);
 
         void setMonsterItemAndGold(char);
+
+        //값입출력 함수
+        int getTeleportHome();
+        int getTeleportAny();
+        int getGold();
+        void useTeleportHome();
+        void useTeleportAny();
+        void useGold(int);
 };
 
 

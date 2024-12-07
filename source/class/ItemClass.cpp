@@ -1092,5 +1092,35 @@ void ItemClass::setMonsterItemAndGold(char monsterChar) {
     inv -> potionC = potionC;
     inv -> potionB = potionB;
     inv -> potionA = potionA;
+}
 
+
+//값입출력 함수
+//아이템번호 6 : 마을이동 주문서
+//아이템번호 7 : 텔레포트 주문서
+int  ItemClass::getTeleportHome() {
+    return inv -> consumableList[6];
+}
+int  ItemClass::getTeleportAny() {
+    return inv -> consumableList[7];
+}
+int  ItemClass::getGold() {
+    return inv -> gold;
+}
+
+void ItemClass::useTeleportHome() {
+    if (this -> inv -> consumableList[6] > 0) {
+        (this -> inv -> consumableList[6]) -- ;
+    }
+}
+
+void ItemClass::useTeleportAny() {
+    if (this -> inv -> consumableList[7] > 0) {
+        (this -> inv -> consumableList[7]) -- ;
+    }
+}
+void ItemClass::useGold(int useGold) {
+    if (this -> inv -> gold > 0) {
+        (this -> inv -> gold) -=  useGold;
+    }
 }

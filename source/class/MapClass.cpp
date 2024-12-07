@@ -9,6 +9,8 @@ void MapClass::mapInit(Character *loginCharacter) {
     setMap(loginCharacter -> pos.floor);
     if (loginCharacter -> pos.floor > 0) {
         setMonster(loginCharacter);
+        setPortal();
+        setDownFloor(setPortal());
     }
 }
 

@@ -12,10 +12,6 @@ void PlayClass::play(Character *loginCharacter) {
     mapFunc.mapInit(loginCharacter);
     // 맵 및 상태창
     system("clear");
-    if (loginCharacter -> pos.floor > 0) {
-        mapFunc.setPortal();
-        mapFunc.setDownFloor(mapFunc.setPortal());
-    }
     mapFunc.setCharacter(loginCharacter);
     mapFunc.printMap(loginCharacter);
     mapFunc.printStatus(loginCharacter);
@@ -44,13 +40,15 @@ void PlayClass::play(Character *loginCharacter) {
                 charFunc.statWindow(loginCharacter);
             }else if (inputKey[0] == 't') {
                 charFunc.teleportItem(loginCharacter);
-                mapFunc.setMap(loginCharacter -> pos.floor);
+                mapFunc.mapInit(loginCharacter);
             }else if (inputKey[0] == 'q') {
                 charFunc.gameSave(loginCharacter);
                 return;
             }
             ////sleep(1);
             usleep(500000);
+        }else {
+            continue;
         }
         mapFunc.setCharacter(loginCharacter);
         mapFunc.mapEvent(loginCharacter);

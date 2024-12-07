@@ -1,5 +1,7 @@
 #include "../header/CharacterClass.h"
 
+#include "../header/ItemClass.h"
+
 bool CharacterClass::characterSelect(Login *loginUser, Character *loginCharacter) {
     char str[30] = "";
 
@@ -69,8 +71,8 @@ bool CharacterClass::characterSelect(Login *loginUser, Character *loginCharacter
             for (int i = 0; i < 7; i ++) {
                 fgets(bfr, sizeof(bfr), fp);
                 loginCharacter -> savePos[i].floor = atoi(strtok(bfr, ","));
-                loginCharacter -> savePos[i].floor = atoi(strtok(NULL, ","));
-                loginCharacter -> savePos[i].floor = atoi(strtok(NULL, "\n"));
+                loginCharacter -> savePos[i].row = atoi(strtok(NULL, ","));
+                loginCharacter -> savePos[i].col = atoi(strtok(NULL, "\n"));
             }
 
             fclose(fp);
@@ -291,15 +293,17 @@ void CharacterClass::statWindow(Character *loginCharacter) {
 //텔레포트 주문서
 void CharacterClass::teleportItem(Character *loginCharacter) {
     //type == 1이면 마을이동 / type == 2이면 순간이동
+    ItemClass *userItem = new ItemClass(loginCharacter);
     char inputKey = NULL;
-    while (1){
+    while (1) {
         system("clear");
         cout << "==================================================" << endl;
         cout << " 주문서 사용" << endl;
-        cout << " 1. 마을이동 주문서" << endl;
-        cout << " 2. 순간이동 주문서" << endl;
+        cout << " 1. 마을이동 주문서 (" << userItem -> getTeleportHome() << ")" << endl;
+        cout << " 2. 순간이동 주문서 (" << userItem -> getTeleportAny() << ")" << endl;
         cout << " q. 닫기" << endl;
         read(0, &inputKey, sizeof(inputKey));
+        if (inputKey == 'q') return;
         while (1) {
             if (inputKey == '1') {
                 system("clear");
@@ -310,16 +314,24 @@ void CharacterClass::teleportItem(Character *loginCharacter) {
                 read(0, &inputKey, sizeof(inputKey));
                 cout << "==================================================" << endl;
                 if (inputKey == '1') {
-                    cout << "마을로 이동합니다.." << endl;
-                    usleep(1000000);
-                    // 좌표 row 45, col 14, floor 0
-                    loginCharacter -> pos.row = 45;
-                    loginCharacter -> pos.col = 14;
-                    loginCharacter -> lastPos.row = 45;
-                    loginCharacter -> lastPos.col = 14;
-                    loginCharacter -> beforeBlock = '0';
-                    loginCharacter -> pos.floor = 0;
-                    return;
+                    if (userItem -> getTeleportHome() > 0){
+                        cout << "마을로 이동합니다.." << endl;
+                        usleep(1000000);
+                        // 좌표 row 45, col 14, floor 0
+                        userItem -> useTeleportHome();
+                        userItem -> closeInven();
+                        loginCharacter -> pos.row = 45;
+                        loginCharacter -> pos.col = 14;
+                        loginCharacter -> lastPos.row = 45;
+                        loginCharacter -> lastPos.col = 14;
+                        loginCharacter -> beforeBlock = '0';
+                        loginCharacter -> pos.floor = 0;
+                        return;
+                    }else {
+                        cout << "주문서가 부족합니다" << endl;
+                        usleep(1000000);
+                        return;
+                    }
                 }else if (inputKey == 'q') {
                     break;
                 }
@@ -333,55 +345,62 @@ void CharacterClass::teleportItem(Character *loginCharacter) {
                 read(0, &inputKey, sizeof(inputKey));
 
                 while (1) {
-                    system("clear");
                     cout << "==================================================" << endl;
                     if (inputKey == '1') {
-                        cout << "이동하실 위치를 선택해 주세요." << endl;
-                        for (int i = 0; i < 7; i ++ ) {
-                            cout << i + 1 << ". ";
-                            if (loginCharacter -> savePos[i].col != 0 && loginCharacter -> savePos[i].row != 0) {
-                                if (loginCharacter -> savePos[i].floor != 0) {
-                                    cout << loginCharacter -> savePos[i].floor << "층";
-                                }else {
-                                    cout << "마을" ;
+                        if (userItem -> getTeleportAny() > 0) {
+                            cout << "이동하실 위치를 선택해 주세요." << endl;
+                            for (int i = 0; i < 7; i ++ ) {
+                                cout << i + 1 << ". ";
+                                if (loginCharacter -> savePos[i].col != 0 && loginCharacter -> savePos[i].row != 0) {
+                                    if (loginCharacter -> savePos[i].floor != 0) {
+                                        cout << loginCharacter -> savePos[i].floor << "층";
+                                    }else {
+                                        cout << "마을" ;
+                                    }
+                                    cout << " [ " << loginCharacter -> savePos[i].row << " , " << loginCharacter -> savePos[i].col << " ]" << endl;
                                 }
-                                cout << " [ " << loginCharacter -> savePos[i].row << " , " << loginCharacter -> savePos[i].col << " ]" << endl;
-                            }
-                            else {
-                                cout << "저장된 좌표 없음" << endl;
-                            }
-                        }
-                        cout << "q : 뒤로가기" << endl;
-                        read(0, &inputKey, sizeof(inputKey));
-                        while (1) {
-                            if (isdigit(inputKey) && inputKey - '0' <= 7 ) {
-                                inputKey = inputKey - '0';
-                                cout << "==================================================" << endl;
-                                cout << "선택한 위치 : ";
-                                if (loginCharacter -> savePos[inputKey - 1].floor != 0) {
-                                    cout << loginCharacter -> savePos[inputKey - 1].floor  << "층";
-                                }else {
-                                    cout << "마을" ;
+                                else {
+                                    cout << "저장된 좌표 없음" << endl;
                                 }
-                                cout << " [ " << loginCharacter -> savePos[inputKey - 1].row << " , " << loginCharacter -> savePos[inputKey - 1].col << " ]";
-                                cout << " 로 이동합니다..." << endl;
-                                usleep(1000000);
-                                loginCharacter -> pos.row = loginCharacter -> savePos[inputKey - 1].row;
-                                loginCharacter -> pos.col = loginCharacter -> savePos[inputKey - 1].col;
-                                loginCharacter -> lastPos.row = loginCharacter -> savePos[inputKey - 1].row;
-                                loginCharacter -> lastPos.col = loginCharacter -> savePos[inputKey - 1].col;
-                                loginCharacter -> beforeBlock = '0';
-                                loginCharacter -> pos.floor = loginCharacter -> savePos[inputKey - 1].floor;
+                            }
+                            cout << "q : 뒤로가기" << endl;
+                            read(0, &inputKey, sizeof(inputKey));
+                            while (1) {
+                                if (isdigit(inputKey) && inputKey - '0' <= 7 ) {
+                                    inputKey = inputKey - '0';
+                                    cout << "==================================================" << endl;
+                                    cout << "선택한 위치 : ";
+                                    if (loginCharacter -> savePos[inputKey - 1].floor != 0) {
+                                        cout << loginCharacter -> savePos[inputKey - 1].floor  << "층";
+                                    }else {
+                                        cout << "마을" ;
+                                    }
+                                    cout << " [ " << loginCharacter -> savePos[inputKey - 1].row << " , " << loginCharacter -> savePos[inputKey - 1].col << " ]";
+                                    cout << " 로 이동합니다..." << endl;
+                                    usleep(1000000);
+                                    userItem -> useTeleportAny();
+                                    userItem -> closeInven();
+                                    loginCharacter -> pos.row = loginCharacter -> savePos[inputKey - 1].row;
+                                    loginCharacter -> pos.col = loginCharacter -> savePos[inputKey - 1].col;
+                                    loginCharacter -> lastPos.row = loginCharacter -> savePos[inputKey - 1].row;
+                                    loginCharacter -> lastPos.col = loginCharacter -> savePos[inputKey - 1].col;
+                                    loginCharacter -> beforeBlock = '0';
+                                    loginCharacter -> pos.floor = loginCharacter -> savePos[inputKey - 1].floor;
 
-                                return;
+                                    return;
+                                }
+                                else if (inputKey == 'q') {
+                                    break;
+                                }
+                                else {
+                                    cout << "잘못된 입력입니다." << endl;
+                                    break;
+                                }
                             }
-                            else if (inputKey == 'q') {
-                                break;
-                            }
-                            else {
-                                cout << "잘못된 입력입니다." << endl;
-                                break;
-                            }
+                        }else {
+                            cout << "주문서가 부족합니다" << endl;
+                            usleep(1000000);
+                            return;
                         }
                     }
                     else if (inputKey == '2') {
@@ -403,6 +422,7 @@ void CharacterClass::teleportItem(Character *loginCharacter) {
                                 }
                             }
                             read(0, &inputKey, sizeof(inputKey));
+                            cout << "==================================================" << endl;
                             if (isdigit(inputKey) && inputKey - '0' <= 7 ) {
                                 loginCharacter -> savePos[inputKey - '0' - 1].floor = loginCharacter -> pos.floor;
                                 loginCharacter -> savePos[inputKey - '0' - 1].row = loginCharacter -> pos.row;
