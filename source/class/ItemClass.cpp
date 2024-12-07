@@ -1092,6 +1092,7 @@ void ItemClass::setMonsterItemAndGold(char monsterChar) {
     inv -> potionC = potionC;
     inv -> potionB = potionB;
     inv -> potionA = potionA;
+
 }
 
 
