@@ -23,11 +23,6 @@ typedef struct {
     int enhanceEquip;
     int elixir;
 
-    int equipD; 
-    int equipC; // 도감 번호중에 랜덤으로 드랍
-    int equipB;
-    int equipA;
-
     int potionD; // 포션 드랍 유무 결정
     int potionC;
     int potionB;
@@ -70,7 +65,7 @@ class ItemClass {
             readInfoItemName();
         }
         void updateInventory();
-        void dropItem(Inventory inv);
+        void dropItem();
         void readInfoItemName();
         void tryEnhance(int tryConsumable);
         void wearEquip(int tryEquip);
@@ -85,6 +80,8 @@ class ItemClass {
         void ifDeathInven(); // 죽었을 때 아이템 잃는 기능
         void enhanceSuccess(char * choice);
         void enhanceInfo(int i);
+
+        void setMonsterItemAndGold(char);
 };
 
 

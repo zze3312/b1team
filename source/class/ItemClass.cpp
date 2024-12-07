@@ -20,7 +20,6 @@ void ItemClass::updateInventory() // 미완성
 
     // 소모품 불러오기
     string folderPath2 = ROOT_PATH + "userData/" + user->id + "/" + user->nickname + "/consumableInv.txt";
-    cout << folderPath2 << endl;
 
     FILE * fp2 = fopen(folderPath2.c_str(), "rt");
 
@@ -48,7 +47,7 @@ void ItemClass::updateInventory() // 미완성
 
 }
 
-void ItemClass::dropItem(Inventory inv) // 완성, 얻은 아이템이 뭔지 확정하고, 인벤토리에 추가까지 해주는 함수
+void ItemClass::dropItem() // 완성, 얻은 아이템이 뭔지 확정하고, 인벤토리에 추가까지 해주는 함수
 {
 
 
@@ -59,46 +58,64 @@ void ItemClass::dropItem(Inventory inv) // 완성, 얻은 아이템이 뭔지 �
     int teleportAny;
     int elixir;
 
-    if (inv.tierC == 1) // 0 - 못얻음, 1 - 얻음
+    if (inv->tierC == 1) // 0 - 못얻음, 1 - 얻음
     {
         equipC = rand() % 30 + 11;
-        inv.equipmentList[equipC - 1] += 1;
+        inv->equipmentList[equipC - 1] += 1;
+        cout << inv -> equipNameList[equipC - 1] << "을 획득하셨습니다." << endl;
+        usleep(500000);
     }
-    if (inv.tierB == 1)
+    if (inv->tierB == 1)
     {
         equipB = rand() % 30 + 41;
-        inv.equipmentList[equipB - 1] += 1;
+        inv->equipmentList[equipB - 1] += 1;
+        cout << inv -> equipNameList[equipB - 1] << "을 획득하셨습니다." << endl;
+        usleep(500000);
     }
-    if (inv.tierA == 1)
+    if (inv->tierA == 1)
     {
         equipA = rand() % 30 + 71;
-        inv.equipmentList[equipA - 1] += 1;
+        inv->equipmentList[equipA - 1] += 1;
+        cout << inv -> equipNameList[equipA - 1] << "을 획득하셨습니다." << endl;
+        usleep(500000);
     }
-    if (inv.potionC == 1)
+    if (inv->potionC == 1)
     {
-        inv.consumableList[1] += 1;
+        inv->consumableList[1] += 1;
+        cout << inv -> consumableNameList[1] << "을 획득하셨습니다." << endl;
+        usleep(500000);
     }
-    if (inv.potionB == 1)
+    if (inv->potionB == 1)
     {
-        inv.consumableList[2] += 1;
+        inv->consumableList[2] += 1;
+        cout << inv -> consumableNameList[2] << "을 획득하셨습니다." << endl;
+        usleep(500000);
     }
-    if (inv.potionA == 1)
+    if (inv->potionA == 1)
     {
-        inv.consumableList[3] += 1;
+        inv->consumableList[3] += 1;
+        cout << inv -> consumableNameList[3] << "을 획득하셨습니다." << endl;
+        usleep(500000);
     }
-    if (inv.teleportHome == 1)
+    if (inv->teleportHome == 1)
     {
-        inv.consumableList[4] += 1;
+        inv->consumableList[4] += 1;
+        cout << inv -> consumableNameList[4] << "을 획득하셨습니다." << endl;
+        usleep(500000);
     }
-    if (inv.teleportAny == 1)
+    if (inv->teleportAny == 1)
     {
         teleportAny = rand() % 3 + 1;
-        inv.consumableList[5] += teleportAny;
+        inv->consumableList[5] += teleportAny;
+        cout << inv -> consumableNameList[5] << "을 획득하셨습니다." << endl;
+        usleep(500000);
     }
-    if (inv.elixir == 1)
+    if (inv->elixir == 1)
     {
         elixir = rand() % 3 + 1;
-        inv.consumableList[6] += elixir;
+        inv->consumableList[6] += elixir;
+        cout << inv -> consumableNameList[6] << "을 획득하셨습니다." << endl;
+        usleep(500000);
     }
 
 }
@@ -885,4 +902,221 @@ void ItemClass::ifDeathInven()
             }
         }
     }
+}
+
+void ItemClass::setMonsterItemAndGold(char monsterChar) {
+    int randomNum;
+    int gold = 0;
+
+    int tierC = 0; // 2티어
+    int tierB = 0; // 3티어
+    int tierA = 0; // 4티어 얻었을 때 드랍 유무 담아주는 변수
+    int teleportHome = 0;
+    int teleportAny = 0;
+    int enhanceEquip = 0;
+    int elixir = 0;
+
+    // 포션 드랍 유무 결정
+    int potionC = 0;
+    int potionB = 0;
+    int potionA = 0;
+
+    if (monsterChar == 'O') {
+        gold = rand() % 25 + 5;
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            teleportHome = 1;
+        }
+    }
+    else if (monsterChar == 'Z') {
+        gold = rand() % 55 + 5;
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            teleportHome = 1;
+        }
+    }
+    else if (monsterChar == 'G') {
+        gold = rand() % 95 + 5;
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            teleportHome = 1;
+        }
+    }
+    else if (monsterChar == 'S') {
+        gold = rand() % 125 + 5;
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            teleportHome = 1;
+        }
+
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            tierC = 1;
+        }
+
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            potionC = 1;
+        }
+    }
+    else if (monsterChar == 'T') {
+        gold = rand() % 195 + 5;
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            teleportHome = 1;
+        }
+
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            tierC = 1;
+        }
+
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            potionC = 1;
+
+        }
+    }
+    else if (monsterChar == 'L') {
+        gold = rand() % 495 + 5;
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            teleportHome = 1;
+        }
+
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            tierC = 1;
+        }
+
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            potionC = 1;
+        }
+
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            tierB = 1;
+        }
+
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            potionB = 1;
+        }
+
+        randomNum = rand() % 10;
+        if (randomNum < 3) {
+            teleportAny = 1;
+        }
+    }
+    else if (monsterChar == 'B') {
+        gold = rand() % 695 + 5;
+
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            tierB = 1;
+        }
+
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            potionB = 1;
+        }
+
+        randomNum = rand() % 20;
+        if (randomNum == 0) {
+            tierA = 1;
+        }
+
+        randomNum = rand() % 20;
+        if (randomNum == 0) {
+            potionA = 1;
+        }
+
+        randomNum = rand() % 10;
+        if (randomNum < 3) {
+            teleportAny = 1;
+        }
+    }
+    else if (monsterChar == 'D') {
+        gold = rand() % 995 + 5;
+
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            tierB = 1;
+        }
+
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            potionB = 1;
+        }
+
+        randomNum = rand() % 10;
+        if (randomNum == 0) {
+            tierA = 1;
+        }
+
+        randomNum = rand() % 10;
+        if (randomNum == 0) {
+            potionA = 1;
+        }
+
+        randomNum = rand() % 10;
+        if (randomNum < 3) {
+            teleportAny = 1;
+        }
+
+        randomNum = rand() % 10;
+        if (randomNum == 0) {
+            elixir = 1;
+        }
+    }
+    else if (monsterChar == 'C') {
+        gold = rand() % 2995 + 5;
+
+        randomNum = rand() % 10;
+        if (randomNum < 3) {
+            tierB = 1;
+        }
+
+        randomNum = rand() % 10;
+        if (randomNum < 3) {
+            potionB = 1;
+        }
+
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            tierA = 1;
+        }
+
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            potionA = 1;
+        }
+
+        randomNum = rand() % 10;
+        if (randomNum < 3) {
+            teleportAny = 1;
+        }
+
+        randomNum = rand() % 5;
+        if (randomNum == 0) {
+            elixir = 1;
+        }
+    }
+
+    inv -> gold += gold;
+    cout << gold << "골드를 획득하셨습니다." << endl;
+    usleep(500000);
+
+    inv -> tierC = tierC; // 2티어
+    inv -> tierB = tierB; // 3티어
+    inv -> tierA = tierA; // 4티어 얻었을 때 드랍 유무 담아주는 변수
+    inv -> teleportHome = teleportHome;
+    inv -> teleportAny = teleportAny;
+    inv -> enhanceEquip = enhanceEquip;
+    inv -> elixir = elixir;
+    inv -> potionC = potionC;
+    inv -> potionB = potionB;
+    inv -> potionA = potionA;
+
 }

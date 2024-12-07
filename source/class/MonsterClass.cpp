@@ -35,22 +35,22 @@ void MonsterClass::getMonsterName() {
         break;
         case SOLDIER_NUM:
             monster -> name = SOLDIER_NAME[randomSoldierName];
-            monster -> hp   = user -> hp * 200;
+            monster -> hp   = user -> hp * 2;
             monster -> exp  = user -> maxExp * 0.1;
         break;
         case BAPHOMET_NUM:
             monster -> name = "바포메트";
-            monster -> hp   = user -> hp * 500;
+            monster -> hp   = user -> hp * 5;
             monster -> exp  = user -> maxExp * 0.15;
         break;
         case LDNK_NUM:
             monster -> name = "이동녀크";
-            monster -> hp   = user -> hp * 700;
+            monster -> hp   = user -> hp * 7;
             monster -> exp  = user -> maxExp * 0.2;
         break;
         case CSD_NUM:
             monster -> name = "최상달";
-            monster -> hp   = user -> hp * 1000;
+            monster -> hp   = user -> hp * 10;
             monster -> exp  = user -> maxExp * 0.3;
         break;
         default: break;
@@ -62,6 +62,8 @@ void MonsterClass::meetMonster() {
     int attack = 0;
     int randomSoldier = rand() % 20;
     char soldierYn = 'N';
+    Monster *newMonster = new Monster();
+    newMonster -> id = 0;
     getMonsterName();
     system("clear");
 
@@ -211,26 +213,11 @@ void MonsterClass::meetMonster() {
         cout << monster -> name << "에게 당했습니다!!" << endl;
         //sleep(1);
         usleep(500000);
-        if (user -> hp < 0) {
-            user -> hp = 0;
-            user -> dieYn = 'Y';
-            user -> pos.row = RESET_ROW;
-            user -> pos.col = RESET_COL;
-            user -> lastPos.row = RESET_ROW;
-            user -> lastPos.col = RESET_COL;
-            user -> beforeBlock = '0';
-            user -> pos.floor = 0;
-            user -> dieYn = 'Y';
-        }
-        //TODO : 보상부분 (약탈)
-
-        return;
     }else if (monster -> hp <= 0){
         cout << monster -> name << "을 해치웠습니다!!" << endl;
         if (!(isdigit(user -> beforeBlock))) {
             user -> beforeBlock = '0';
         }
-
         //sleep(1);
         usleep(500000);
         user -> exp += monster -> exp;
@@ -239,7 +226,6 @@ void MonsterClass::meetMonster() {
         usleep(500000);
         cout << "---------------------------------------" << endl;
         if (soldierYn == 'Y') {
-            Monster *newMonster = new Monster();
             newMonster -> id = SOLDIER_NUM;
             getMonsterName();
             cout << "다른 용사가 당신이 " << monster -> name << "을(를) 무찌른 걸 보고 빼앗으러 왔습니다." << endl;
@@ -351,21 +337,34 @@ void MonsterClass::meetMonster() {
             }
         }
 
-        if (user -> hp < 0) {
-            user -> hp = 0;
-            user -> dieYn = 'Y';
-            user -> pos.row = RESET_ROW;
-            user -> pos.col = RESET_COL;
-            user -> lastPos.row = RESET_ROW;
-            user -> lastPos.col = RESET_COL;
-            user -> beforeBlock = '0';
-            user -> pos.floor = 0;
-            user -> dieYn = 'Y';
-        }
-
-        //sleep(1);
-        usleep(500000);
-        //TODO : 보상부분 (획득)
     }
+
+    if (user -> hp < 0) {
+        user -> hp = 0;
+        user -> dieYn = 'Y';
+        user -> pos.row = RESET_ROW;
+        user -> pos.col = RESET_COL;
+        user -> lastPos.row = RESET_ROW;
+        user -> lastPos.col = RESET_COL;
+        user -> beforeBlock = '0';
+        user -> pos.floor = 0;
+        user -> dieYn = 'Y';
+
+        ItemClass *userItem = new ItemClass(user);
+        userItem -> ifDeathInven();
+        userItem -> closeInven();
+        delete userItem;
+    }else {
+        ItemClass *userItem = new ItemClass(user);
+        userItem -> setMonsterItemAndGold(monster -> id);
+        userItem -> dropItem();
+        if (newMonster -> id != 0) {
+            userItem -> setMonsterItemAndGold(newMonster -> id);
+            userItem -> dropItem();
+        }
+        userItem -> closeInven();
+        delete userItem;
+    }
+    usleep(2000000);
 }
 
