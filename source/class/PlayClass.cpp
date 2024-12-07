@@ -86,8 +86,3 @@ void PlayClass::echoOff(){
 void PlayClass::echoOn(){
     tcsetattr(STDIN_FILENO, TCSANOW, &orig_termios);
 }
-
-void PlayClass::clearBuffer()
-{
-    while (getchar() != '\n');
-}

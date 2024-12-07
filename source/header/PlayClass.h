@@ -10,7 +10,6 @@ class PlayClass {
         void beforePlay (Login *, Character *);
         void echoOff();
         void echoOn();
-        void clearBuffer();
 };
 
 #endif //PLAYCLASS_H
