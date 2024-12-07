@@ -87,6 +87,8 @@ class ItemClass {
         int getTeleportHome();
         int getTeleportAny();
         int getGold();
+        string getItemName(int num);
+        string getEquipName(int num);
         void useTeleportHome();
         void useTeleportAny();
         void useGold(int useGold);
@@ -94,6 +96,9 @@ class ItemClass {
         // 장비 직업, 종류 출력
         void equipJob(int tryEquip);
         void equipType(int tryEquip);
+        
+        // 출력용
+        void printEquip();
 };
 
 

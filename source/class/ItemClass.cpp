@@ -476,6 +476,7 @@ void ItemClass::useConsumable(int tryConsumable) // 미완성
 
 }
 
+
 void ItemClass::showNowEquip() // 완성
 {
     while (1)
@@ -1155,6 +1156,17 @@ void ItemClass::setMonsterItemAndGold(char monsterChar) {
 //값입출력 함수
 //아이템번호 6 : 마을이동 주문서
 //아이템번호 7 : 텔레포트 주문서
+
+string ItemClass::getItemName(int num)
+{
+    return inv->consumableNameList[num];
+}
+
+string ItemClass::getEquipName(int num)
+{
+    return inv->equipNameList[num];
+}
+
 int  ItemClass::getTeleportHome() {
     return inv -> consumableList[6];
 }
