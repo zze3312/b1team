@@ -533,48 +533,48 @@ void enhanceAct()
 
                 if (choice == "1")
                 {
-                    if ("inv->gold" < 10000)
-                    {
-                        cout << "인첸트마법사: 골드가 모자라시네요..\n";
-                        sleep(1);
-                        break;
-                    }
-                    cout << "강화중";
-                    for (int i = 0; i < 10; i++)
-                    {
-                        cout << ".";
-                        usleep(300000);    
-                    }
+                    // if ("inv->gold" < 10000)
+                    // {
+                    //     cout << "인첸트마법사: 골드가 모자라시네요..\n";
+                    //     sleep(1);
+                    //     break;
+                    // }
+                    // cout << "강화중";
+                    // for (int i = 0; i < 10; i++)
+                    // {
+                    //     cout << ".";
+                    //     usleep(300000);    
+                    // }
                     system("clear");
                     cout << "=================================================================\n";
                     cout << "                           강화 완료!\n";
                     cout << "=================================================================\n";
                     sleep(3);
-                    if ((user->nowWeaponId-1) % 10 + prob < 0) 
-                    {
-                        cout << prob << " 당첨!\n";
-                        sleep(1);
-                        cout << "장비 레벨이 0 아래로 내려가서 장비가 파괴됩니다...\n";
-                        sleep(2);
-                        system("clear");
-                        user->nowWeaponId = 0;
-                    }
-                    else if ((user->nowWeaponId-1) % 10 + prob > 10)
-                    {
-                        cout << prob << " 당첨!\n";
-                        sleep(1);
-                        cout << "축하합니다! 최대 강화에 도달하였습니다.\n";
-                        sleep(2);
-                        system("clear");
-                        if (user->nowWeaponId <= 100)
-                        {
-                            user->nowWeaponId = user->nowWeaponId * 10 + 99;
-                        }
-                        else
-                        {   
-                            user->nowWeaponId = user->nowWeaponId - (user->nowWeaponId % 10) + 10; 
-                        }
-                    }
+                    // if ((user->nowWeaponId-1) % 10 + prob < 0) 
+                    // {
+                    //     cout << prob << " 당첨!\n";
+                    //     sleep(1);
+                    //     cout << "장비 레벨이 0 아래로 내려가서 장비가 파괴됩니다...\n";
+                    //     sleep(2);
+                    //     system("clear");
+                    //     user->nowWeaponId = 0;
+                    // }
+                    // else if ((user->nowWeaponId-1) % 10 + prob > 10)
+                    // {
+                    //     cout << prob << " 당첨!\n";
+                    //     sleep(1);
+                    //     cout << "축하합니다! 최대 강화에 도달하였습니다.\n";
+                    //     sleep(2);
+                    //     system("clear");
+                    //     if (user->nowWeaponId <= 100)
+                    //     {
+                    //         user->nowWeaponId = user->nowWeaponId * 10 + 99;
+                    //     }
+                    //     else
+                    //     {   
+                    //         user->nowWeaponId = user->nowWeaponId - (user->nowWeaponId % 10) + 10; 
+                    //     }
+                    // }
                     
                 }
                 else if (choice == "2")
@@ -609,18 +609,18 @@ void enhanceAct()
 
                 if (choice == "1")
                 {
-                    if ("inv->gold" < 10000)
-                    {
-                        cout << "인첸트마법사: 골드가 모자라시네요..\n";
-                        sleep(1);
-                        break;
-                    }
-                    cout << "강화중";
-                    for (int i = 0; i < 10; i++)
-                    {
-                        cout << ".";
-                        usleep(300000);    
-                    }
+                    // if ("inv->gold" < 10000)
+                    // {
+                    //     cout << "인첸트마법사: 골드가 모자라시네요..\n";
+                    //     sleep(1);
+                    //     break;
+                    // }
+                    // cout << "강화중";
+                    // for (int i = 0; i < 10; i++)
+                    // {
+                    //     cout << ".";
+                    //     usleep(300000);    
+                    // }
                     system("clear");
                     cout << "=================================================================\n";
                     cout << "                           강화 완료!\n";
