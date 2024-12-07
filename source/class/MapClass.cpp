@@ -9,7 +9,9 @@ void MapClass::mapInit(Character *loginCharacter) {
     setMap(loginCharacter -> pos.floor);
     if (loginCharacter -> pos.floor > 0) {
         setMonster(loginCharacter);
-        setPortal();
+        if (loginCharacter -> pos.floor < 7) {
+            setPortal();
+        }
         setDownFloor(setPortal());
     }
 }
@@ -287,16 +289,21 @@ void MapClass::mapEvent(Character *loginCharacter) {
         MonsterClass *monFunc = new MonsterClass(loginCharacter, loginCharacter -> beforeBlock);
         monFunc->meetMonster();
         delete monFunc;
+        //죽었다면
+        if (loginCharacter -> dieYn == 'Y') {
+            mapInit(loginCharacter);
+            setCharacter(loginCharacter);
+            return;
+        }
     }
     //npc_성직자를 만나면
     else if (loginCharacter -> beforeBlock == MAP_ICON_NUM_8) {
         NpcClass * npcFunc = new NpcClass(loginCharacter);
-        npcFunc->meetPriest();
+        npcFunc -> meetPriest();
         delete npcFunc;
     }
     //npc_결투장소환사를 만나면
     else if (loginCharacter -> beforeBlock == MAP_ICON_NUM_5) {
-        int userGold = 10000;
         char mon = NULL;
 
         int randomMon = rand() % 7;
@@ -325,18 +332,22 @@ void MapClass::mapEvent(Character *loginCharacter) {
         }
         NpcClass * npcFunc = new NpcClass(loginCharacter);
         MonsterClass *monster = new MonsterClass(loginCharacter, mon);
-        npcFunc->meetFight(monster, &userGold);
+        npcFunc -> meetFight(monster);
         delete npcFunc;
         delete monster;
     }
-
-    //죽었다면
-    if (loginCharacter -> dieYn == 'Y') {
-        mapInit(loginCharacter);
-        setCharacter(loginCharacter);
+    //npc_잡화상을 만나면
+    else if (loginCharacter -> beforeBlock == MAP_ICON_NUM_7) {
+        NpcClass * npcFunc = new NpcClass(loginCharacter);
+        npcFunc -> shopNPC();
+        delete npcFunc;
     }
-
-
+    //npc_잡화상을 만나면
+    else if (loginCharacter -> beforeBlock == MAP_ICON_NUM_9) {
+        NpcClass * npcFunc = new NpcClass(loginCharacter);
+        npcFunc -> smithNPC();
+        delete npcFunc;
+    }
 }
 
 void MapClass::moveFloor(Character *loginCharacter) {
@@ -350,18 +361,12 @@ void MapClass::moveFloor(Character *loginCharacter) {
     //던전 안
     mapInit(loginCharacter);
     if (loginCharacter -> pos.floor == 7) {
-        *downFloor = setPortal();
-
         //해당층 입구포탈 위치로 간다
         loginCharacter -> pos.row = downFloor -> row;
         loginCharacter -> pos.col = downFloor -> col;
         loginCharacter -> lastPos.row = downFloor -> row;
         loginCharacter -> lastPos.col = downFloor -> col;
     }else if (loginCharacter -> pos.floor != 0) {
-        //포탈의 위치 바꾸고
-        setPortal();
-        *downFloor = setPortal();
-
         //해당층 입구포탈 위치로 간다
         loginCharacter -> pos.row = downFloor -> row;
         loginCharacter -> pos.col = downFloor -> col;

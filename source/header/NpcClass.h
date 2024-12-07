@@ -7,15 +7,26 @@
 class NpcClass {
     Character *user = new Character();
 
-    void rebirth(int *);
+    void rebirth();
     void heal();
-    void levelUp(int *);
+    void levelUp();
     void getWork();
+    void grinNPC();
+    void psychoNPC();
+    void boredNPC();
+    void sosoSmithNPC();
+    void angrySmithNPC();
+    void buyEquip();
+    void buyConsumable();
+    void enhanceAct();
+    void enhanceWizzard();
 public:
     NpcClass(Character *loginCharacter) : user(loginCharacter) {}
     void meetPriest();
-    void meetFight(MonsterClass *, int *);
+    void meetFight(MonsterClass *);
     void getInfo();
+    void shopNPC();
+    void smithNPC();
 };
 
 #endif //NPCCLASS_H
