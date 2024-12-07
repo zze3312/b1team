@@ -494,6 +494,199 @@ void smithNPC()
     }
 }
 
+void enhanceAct()
+{
+    while (1)
+    {
+        cout << "인첸트마법사: 강화 하시려구요..? 어떤 장비를 강화 하실 건가요?\n";
+        cout << "1. 마스크   2. 갑옷   3. 신발   4. 장갑   5. 망토   6. 무기\n";
+        cout << "=================================================================\n";
+
+        string choice;
+        cin >> choice;
+        system("clear");
+
+        if (choice == "q")
+        {
+            cout << "인첸트마법사: 또 오세요...\n";
+            break;
+        }
+        else if (choice == "6")
+        {
+            while (1)
+            {
+                cout << "인첸트마법사: 강화 비용은 10000골드입니다...\n";
+                cout << "보유한 골드: " << "inv->gold" << endl;
+                cout << "=================================================================\n";
+                cout << "나레이션: 강화 레벨이 -10 ~ +10 됩니다.";
+                cout << "<경고!> 강화 수치가 0보다 낮아지면 장비가 파괴됩니다.\n";
+                cout << "=================================================================\n";
+                cout << "정말 강화를 진행하시겠습니까?\n";
+                cout << "1. 예   2. 아니오\n";
+                cout << "=================================================================\n";
+
+                string choice;
+                cin >> choice;
+                system("clear");
+
+                int prob = rand() % 21 -10;
+
+                if (choice == "1")
+                {
+                    if ("inv->gold" < 10000)
+                    {
+                        cout << "인첸트마법사: 골드가 모자라시네요..\n";
+                        sleep(1);
+                        break;
+                    }
+                    cout << "강화중";
+                    for (int i = 0; i < 10; i++)
+                    {
+                        cout << ".";
+                        usleep(300000);    
+                    }
+                    system("clear");
+                    cout << "=================================================================\n";
+                    cout << "                           강화 완료!\n";
+                    cout << "=================================================================\n";
+                    sleep(3);
+                    if ((user->nowWeaponId-1) % 10 + prob < 0) 
+                    {
+                        cout << prob << " 당첨!\n";
+                        sleep(1);
+                        cout << "장비 레벨이 0 아래로 내려가서 장비가 파괴됩니다...\n";
+                        sleep(2);
+                        system("clear");
+                        user->nowWeaponId = 0;
+                    }
+                    else if ((user->nowWeaponId-1) % 10 + prob > 10)
+                    {
+                        cout << prob << " 당첨!\n";
+                        sleep(1);
+                        cout << "축하합니다! 최대 강화에 도달하였습니다.\n";
+                        sleep(2);
+                        system("clear");
+                        if (user->nowWeaponId <= 100)
+                        {
+                            user->nowWeaponId = user->nowWeaponId * 10 + 99;
+                        }
+                        else
+                        {   
+                            user->nowWeaponId = user->nowWeaponId - (user->nowWeaponId % 10) + 10; 
+                        }
+                    }
+                    
+                }
+                else if (choice == "2")
+                {
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+        }
+        else if (choice == "1" || choice == "2" || choice == "3" || choice == "4" || choice == "5")
+        {
+            while (1)
+            {
+                cout << "인첸트마법사: 강화 비용은 10000골드입니다...\n";
+                cout << "보유한 골드: " << "inv->gold" << endl;
+                cout << "=================================================================\n";
+                cout << "나레이션: 강화 레벨이 -10 ~ +10 됩니다.";
+                cout << "<경고!> 강화 수치가 0보다 낮아지면 장비가 파괴됩니다.\n";
+                cout << "=================================================================\n";
+                cout << "정말 강화를 진행하시겠습니까?\n";
+                cout << "1. 예   2. 아니오\n";
+                cout << "=================================================================\n";
+
+                string choice;
+                cin >> choice;
+                system("clear");
+
+                int prob = rand() % 21 -10;
+
+                if (choice == "1")
+                {
+                    if ("inv->gold" < 10000)
+                    {
+                        cout << "인첸트마법사: 골드가 모자라시네요..\n";
+                        sleep(1);
+                        break;
+                    }
+                    cout << "강화중";
+                    for (int i = 0; i < 10; i++)
+                    {
+                        cout << ".";
+                        usleep(300000);    
+                    }
+                    system("clear");
+                    cout << "=================================================================\n";
+                    cout << "                           강화 완료!\n";
+                    cout << "=================================================================\n";
+                    sleep(3);
+                    // if ()
+                    // {
+                        
+                    // }
+                    
+
+                }
+                else if (choice == "2")
+                {
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+        }
+        else
+        {
+            continue;
+        }   
+    }
+    
+}
+
+void enhanceWizzard()
+{
+    while(1)
+    {
+        sosoSmithNPC();
+        cout << "인첸트마법사: 어서오세요..\n";
+        cout << "1. 강화하기  q. 나가기\n";
+        cout << "=================================================================\n";
+
+        string choice;
+        cin >> choice;
+        system("clear");
+
+        if (choice == "q")
+        {
+            sosoSmithNPC();
+            cout << "인첸트마법사: 또 오세요..\n";
+            cout << "=================================================================\n";
+            sleep(2);
+            system("clear");
+            // closeInven();
+            break;
+        }
+        else if (choice == "1")
+        {
+            enhanceAct();
+            continue;
+        }
+        else
+        {
+            continue;
+        }
+    }
+    
+}
+
 
 // int main()
 // {
