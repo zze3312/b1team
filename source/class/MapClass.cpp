@@ -176,11 +176,11 @@ void MapClass::printMap(Character *loginCharacter) {
         endRow = loginCharacter -> pos.row + 8;
     }
 
-    // for (int i = startRow; i < endRow; i++) {
-    //     for (int j = startCol; j < endCol; j++) {
+    for (int i = startRow; i < endRow; i++) {
+        for (int j = startCol; j < endCol; j++) {
 
-    for (int i = 0; i < 50; i++) {
-        for (int j = 0; j < 50; j++) {
+    // for (int i = 0; i < 50; i++) {
+    //     for (int j = 0; j < 50; j++) {
             //printf("%c", map[i][j]);
             switch (map[i][j]) {
                 case MAP_ICON_NUM_0: // 0. 바닥
