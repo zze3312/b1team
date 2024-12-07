@@ -720,3 +720,40 @@ void ItemClass::closeInven()
     fclose(fp3);
 
 }
+
+void ItemClass::ifDeathInven()
+{
+    int loseItem = rand() % 200; // 장비 모두 있으면 50% 확률로 템 잃는 거고, 하나만 있으면 0.5%
+
+    
+    for (int i = 0; i < 100; i++)
+    {
+        if (i == loseItem) // (0 ~ 99) 템 잃음
+        {
+            if (inv->equipmentList[i] > 0) // 랜덤 숫자가 장비 개수 1개 이상인 곳이라면
+            {
+                inv->equipmentList[i]--;
+                cout << inv->equipNameList[i] << "를 1개 잃었습니다...\n";
+                sleep(2);
+                system("clear");
+                break;
+            }
+            else // 랜덤 숫자가 장비 개수 0개인 곳일 때
+            {
+                cout << "몬스터가 " << inv->equipNameList[i] << "를 가져가려고 했으나 없어서 그냥 돌아갑니다!\n";
+                sleep(1);
+                cout << "장비를 잃지 않았습니다.\n";
+                sleep(1);
+                system("clear");
+                break;
+            }
+        }
+        else // (100 ~ 199) 템 잃지 않음
+        {
+            cout << "다행히 장비를 잃지 않고 구조되었습니다!\n";
+            sleep(1);
+            system("clear");
+            break;
+        }
+    }
+}

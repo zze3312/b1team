@@ -74,10 +74,13 @@ class ItemClass {
         void wearEquip(int tryEquip);
         void useConsumable(int tryConsumable);
         void showNowEquip();
-        void equipInventory();
+
+        void equipInventory();        
         void consumableInventory();
-        void openInventory();
-        void closeInven();
+
+        void openInventory(); // 인벤토리 오픈
+        void closeInven(); // 인벤토리 저장 기능
+        void ifDeathInven(); // 죽었을 때 아이템 잃는 기능
 };
 
 
