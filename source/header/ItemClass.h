@@ -91,6 +91,8 @@ class ItemClass {
         string getEquipName(int num);
         string getSpecName(int num);
         int getEquipType(int num);
+        string getConsumableName(int num);
+        string getConsumableEX(int num);
         void useTeleportHome();
         void useTeleportAny();
         void useGold(int useGold);

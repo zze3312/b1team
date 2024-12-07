@@ -393,8 +393,8 @@ void ItemClass::wearEquip(int tryEquip) // 완성
             {
                 if (user->nowEquipmentId[i] == 0)
                 {
-                    user->nowEquipmentId[i] = inv->equipNumList[tryEquip];
-                    cout << inv->equipNameList[tryEquip] << " 착용 완료! \n";
+                    user->nowEquipmentId[i] = inv->equipNumList[tryEquip % 100];
+                    cout << inv->equipNameList[tryEquip % 100] << " 착용 완료! \n";
                     sleep(2);
                     system("clear");
                     inv->equipmentList[tryEquip]--;
@@ -1242,6 +1242,16 @@ string ItemClass::getEquipName(int num)
 int ItemClass::getEquipType(int num)
 {
     return inv->equipTypeList[num];
+}
+
+string ItemClass::getConsumableName(int num)
+{
+    return inv->consumableNameList[num];
+}
+
+string ItemClass::getConsumableEX(int num)
+{
+    return inv->consumableEXList[num];
 }
 
 int  ItemClass::getTeleportHome() {
